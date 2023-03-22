@@ -33,20 +33,19 @@ class Controller:
 
     def get_players(self):
         
-        add_player = "Y"
+        player_informations = View().get_player_informations()
 
-        while add_player == "Y":
+        first_name = player_informations[0]
+        family_name = player_informations[1]
+        birth_date = player_informations[2]
+        add_player = player_informations[3]
 
-            player_informations = View().get_player_informations()
+        player = Player(first_name, family_name, birth_date)
+        self.players.append(player)
 
-            first_name = player_informations[0]
-            family_name = player_informations[1]
-            birth_date = player_informations[2]
-            add_player = player_informations[3]
-
-            player = Player(first_name, family_name, birth_date)
-            self.players.append(player)
-
+        if add_player == "y":
+            self.get_players()
+            
         return self.players
 
 
