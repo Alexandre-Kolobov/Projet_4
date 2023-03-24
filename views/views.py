@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class View():
-    """Player view - input from user"""
+    """input from user"""
     def get_player_informations(self):
 
         while True:
@@ -36,9 +36,18 @@ class View():
                 break
             else:
                 print ("Merci d'indiquer votre choix par (y/n)")
+            
+        return first_name, family_name, birth_date, add_player
 
+    def show_players(self, players):
+        print("Voici la liste des joueurs participants:")
+        for i in players:
+            print(i)
+    
+    def get_game_informations(self):
+        pass
 
         
-        return first_name, family_name, birth_date, add_player
+
 
     
