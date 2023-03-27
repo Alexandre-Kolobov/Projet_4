@@ -122,23 +122,29 @@ class Controller:
         return date_finish
 
     def generate_pairs(self, players):
+        for player in players:
+            player.in_game = False
+
         i = 0
         list_games = []
         while i < len(players):
+            print(f"joueur {players[i]}")
             if players[i].in_game:
                 print(f"joueur {players[i]} joue déja")
             else:
                 players[i].in_game = True
-                p = i
+                p = 0
                 while p < len(players):
                     if players[p] in players[i].already_played_with:
                         print(f"joueur {players[i]} et jouer {players[p]} ont déja joué")
                     else:
-                        if players[i] != players[p]:
+                        if players[i] != players[p] and players[p].in_game == False:
                             print(f"joueur {players[i]} et jouer {players[p]} vont jouer ensemble")
                             players[i].already_played_with.append(players[p])
                             players[p].already_played_with.append(players[i])
                             players[p].in_game = True
+                            players[i].score = input(f"entre le score pour {players[i]}:")
+                            players[p].score = input(f"entre le score pour {players[p]}:")
                             game = Game(players[i], players[i].score, players[p], players[p].score)
                             list_games.append(game)
 
