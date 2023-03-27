@@ -1,6 +1,10 @@
 from models.player import Player
 from views.views import View
 from itertools import combinations
+from datetime import datetime
+from models.tournament import Round
+from models.tournament import Game
+import random
 
 class Controller:
     def __init__(self):
@@ -90,5 +94,77 @@ class Controller:
         print(self.round_dict)
         return self.round_dict
 
-    def play_game(self):
-        show_rounds = View().show_round_informations(self.round_dict)
+    def generate_list_round(self, round_proposition):
+        list_rounds = []
+        i = 0
+        while i <= round_proposition:
+            i += 1
+            round_name = ("Round_" + str(i))
+            
+            list_rounds.append(Round(round_name))
+
+        return list_rounds
+    
+    def play_rounds(self, list_rounds):
+        bool_first_round = True
+        for round in list_rounds:
+            self.players = self.shuffle_players(bool_first_round, self.players)
+            bool_first_round = False
+            # ajouter input
+            round.date_start = "05052023"
+        
+            self.generate_pairs(self.players)
+
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+        date_finish = current_time
+
+        return date_finish
+
+    def generate_pairs(self, players):
+        i = 0
+        list_games = []
+        while i < len(players):
+            if players[i].in_game:
+                print(f"joueur {players[i]} joue déja")
+            else:
+                players[i].in_game = True
+                p = i
+                while p < len(players):
+                    if players[p] in players[i].already_played_with:
+                        print(f"joueur {players[i]} et jouer {players[p]} ont déja joué")
+                    else:
+                        if players[i] != players[p]:
+                            print(f"joueur {players[i]} et jouer {players[p]} vont jouer ensemble")
+                            players[i].already_played_with.append(players[p])
+                            players[p].already_played_with.append(players[i])
+                            players[p].in_game = True
+                            game = Game(players[i], players[i].score, players[p], players[p].score)
+                            list_games.append(game)
+
+                            break
+                    p += 1
+            i +=1
+        print(list_games)
+                        
+
+
+    def shuffle_players(self, bool_first_round, players):
+
+        if bool_first_round:
+            random.shuffle(players)
+        else:
+            players.sort(key=lambda p: p.score, reverse=True) # p reprensent objet Player
+        
+        print (players)
+        return players
+
+        
+        
+
+        
+
+
+    
+    
+
