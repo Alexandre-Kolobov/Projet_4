@@ -1,3 +1,7 @@
+from models.player import Player
+from views.views import View
+from itertools import combinations
+
 class Controller:
     def __init__(self):
         self.players = []
@@ -16,10 +20,35 @@ class Controller:
         self.players.append(player)
 
         if add_player == "y":
-            self.get_players() 
+            self.get_players()
+
+        if len(self.players) <= 1:
+            add_more_players = View().add_more_players()
+            self.get_players()
 
         return self.players
     
+    def round_estimation(self):
+        participants = self.get_players()
+        show_players = View().show_players(self.players)
+
+        if (len(participants) % 2) == 0:  #Si nombre des participant est paire il y a N-1 tours possibles
+            max_round = int(len(participants) - 1)
+            show_round_estimation = View().show_round_estimation(max_round)
+            return max_round
+        else:  #Si nombre des participant est impaire il y a N tours possibles
+            max_round = int(len(participants))
+            show_round_estimation = View().show_round_estimation(max_round)
+            return max_round
+        
+    def round_proposition(self, max_round):
+        round_proposition = View().get_round_proposition()
+
+        while 0 > round_proposition >= max_round:
+            round_proposition = View().get_round_proposition_error(max_round)
+            round_proposition = View().get_round_proposition()
+
+        return round_proposition
 
     def create_pairs(self):
         
