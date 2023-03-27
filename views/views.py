@@ -1,5 +1,6 @@
 """View"""
 from datetime import datetime
+import pprint
 
 
 class View():
@@ -44,8 +45,10 @@ class View():
         for i in players:
             print(i)
     
-    def get_game_informations(self):
-        pass
+    def show_round_informations(self, rounds):
+        print("Voici la liste des rounds:")
+        for i in rounds:
+            print(f"{i}: {rounds[i]}")
 
         
 

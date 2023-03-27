@@ -4,6 +4,7 @@ class Player:
         self.family_name = family_name
         self.birth_date = birth_date
         self.score = score
+        self.already_played_with = []
         #Penser à verifier les inputs client
 
     def __repr__(self):

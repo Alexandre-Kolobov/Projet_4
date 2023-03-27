@@ -1,14 +1,3 @@
-# import json
-from models.player import Player
-from models import tournament
-from views.views import View
-from itertools import combinations
-
-class Club:
-    def __init__(self, id):
-        self.id = id  # l'identifiant national d’échecs
-
-
 class Controller:
     def __init__(self):
         self.players = []
@@ -74,14 +63,3 @@ class Controller:
 
     def play_game(self):
         show_rounds = View().show_round_informations(self.round_dict)
-
-
-
-def main():
-    test = Controller()
-    # test.create_pairs()
-    # test.play_game()
-
-    tournament_instance = tournament.Tournament(name = "T1", place = "Paris", date_start = "14082023")
-    print (tournament_instance.__dict__)
-main()
