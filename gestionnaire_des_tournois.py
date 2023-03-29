@@ -2,13 +2,16 @@
 from models.tournament import Tournament
 from controller.controller import Controller
 from models.player import Player
+from views.views import View
 
 
 def main():
    
-    tournament_instance = Controller()
-    tournament_instance.creat_tournament()
-    tournament_instance.test()
+    play_tournament = Controller()
+    play_tournament.creat_tournament()
+    play_tournament.get_players()
+    play_tournament.round_estimation()
+
 
 
 

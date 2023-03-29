@@ -8,41 +8,44 @@ from models.match import Match
 
 import random
 
+
 class Controller:
     def __init__(self):
-        self.tournaments = []
+        self.tournament = Tournament()
+        self.view = View()
 
     def creat_tournament(self):
-        tournament_informations = View().get_tournament_start_informations()
+        tournament_informations = self.view.get_tournament_start_informations()
         name = tournament_informations[0]
         place = tournament_informations[1]
         date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
-        tournament = Tournament(name, place, date_start)
-        self.tournaments.append(tournament)
+        self.tournament.modify_start_information(name, place, date_start)
+
 
     def get_players(self):
+        while True:
+            player_informations = self.view.get_player_informations()
 
-        player_informations = View().get_player_informations()
+            first_name = player_informations[0]
+            family_name = player_informations[1]
+            birth_date = player_informations[2]
+            add_player = player_informations[3]
 
-        first_name = player_informations[0]
-        family_name = player_informations[1]
-        birth_date = player_informations[2]
-        add_player = player_informations[3]
+            player = Player(first_name, family_name, birth_date)
+            players = self.tournament.add_player(player)
 
-        player = Player(first_name, family_name, birth_date)
-        Tournament().add_player(player)
+            if (add_player == "n") and (players < 2):
+                self.view.add_more_players()
+            elif (add_player == "n") and (players >= 2):
+                break
 
-        if add_player == "y":
-            self.get_players()
-
-        if len(self.players) <= 1:
-            View().add_more_players()
-            self.get_players()
-
-        print(Tournament.players_list)
-    
+        
     def round_estimation(self):
+        print(self.tournament.__dict__)
+
+        participants = self.tournament.give_list_players()
+        
         
         # player_1 = Player(first_name = "aa", family_name ="aa", birth_date = "05101992", score = 0)
         # player_2 = Player(first_name = "bb", family_name ="bb", birth_date = "05101992", score = 0)
@@ -53,17 +56,15 @@ class Controller:
 
         # self.players = [player_1, player_2, player_3, player_4, player_5, player_6]
 
-        participants = self.get_players()
-        participants = self.players
-        show_players = View().show_players(self.players)
+        show_players = self.view.show_players(participants)
 
         if (len(participants) % 2) == 0:  #Si nombre des participant est paire il y a N-1 tours possibles
             max_round = int(len(participants) - 1)
-            show_round_estimation = View().show_round_estimation(max_round)
+            self.view.show_round_estimation(max_round)
             return max_round
         else:  #Si nombre des participant est impaire il y a N tours possibles
             max_round = int(len(participants))
-            show_round_estimation = View().show_round_estimation(max_round)
+            self.view.show_round_estimation(max_round)
             return max_round
         
     def round_proposition(self, max_round):

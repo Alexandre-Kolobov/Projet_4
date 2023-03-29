@@ -20,9 +20,11 @@ class View():
                 break
             else:
                 print ("L'endroit du tournoi ne dois pas être vide. Merci de le reinsegner.")
+        
+        
+        description = input("Entrer la description du tournoi: ")
 
-
-        return name, place
+        return name, place, description
 
     def get_player_informations(self):
 
