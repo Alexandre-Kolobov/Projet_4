@@ -9,10 +9,7 @@ class Player:
         #Penser à verifier les inputs client
 
     def __repr__(self):
-        # return(f"Prenom: {self.first_name}\nNom: {self.family_name}\nDate de naissance: {self.birth_date}\n")
         return(f"{self.first_name} {self.family_name}")
-    # def __str__(self):
-    #     return("TEST 2")
 
     def save_players_json(self):
         pass

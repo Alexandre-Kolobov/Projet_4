@@ -5,6 +5,25 @@ import pprint
 
 class View():
     """input from user"""
+
+    def get_tournament_start_informations(self):
+        while True:
+            name = input("Entrer le titre du tournoi: ")
+            if len(name) >= 1:
+                break
+            else:
+                print ("Le titre du tournoi ne dois pas être vide. Merci de le reinsegner.")
+
+        while True:
+            place = input("Entrer l'endroit du tournoi: ")
+            if len(place) >= 1:
+                break
+            else:
+                print ("L'endroit du tournoi ne dois pas être vide. Merci de le reinsegner.")
+
+
+        return name, place
+
     def get_player_informations(self):
 
         while True:
