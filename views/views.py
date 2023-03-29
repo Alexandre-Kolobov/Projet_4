@@ -66,10 +66,17 @@ class View():
         print("Merci d'ajouter un joueur.")
 
     def show_players(self, players):
+        print("\n")
         print("Voici la liste des joueurs participants:")
         for i in players:
             print(i)
     
+    def add_player_repos(self):
+        print("\n")
+        print("Comme le nombre des joueurs est impaires, nous ajoutons un joueur fictif.")
+        print("Ce joueur donne doroit à la victoire automatiqeu pour celui qui joue avec.")
+
+
     def show_round_estimation(self, max_round):
         print("\n")
         print(f"Avec ce nombre de joueur il est possible de faire au maximum: {max_round} rounds")
@@ -85,7 +92,7 @@ class View():
                 print ("Merci d'indiquer un nombre")
 
     def get_round_proposition_error(self, max_round):
-        print(f"Le nombre des tours ne peut pas être superieur à {max_round} rounds")
+        print(f"Le nombre des tours ne peut pas être égale à 0 ou superieur à {max_round} rounds")
 
     def show_round_informations(self, rounds):
         print("Voici la liste des rounds:")

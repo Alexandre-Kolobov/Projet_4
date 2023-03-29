@@ -16,15 +16,23 @@ class Tournament:
         self.name = name
         self.place = place
         self.date_start = date_start
+    
+    def modify_all_round_information(self, round_all):
+        self.round_all = round_all
+        
 
     def add_player(self, player):
         self.players_list.append(player)
 
+    def give_len_list_players(self):
         return len(self.players_list)
 
 
     def give_list_players(self):
         return self.players_list
+    
+    def give_round_all_information(self):
+        return self.round_all
 
     #add player
     #add round

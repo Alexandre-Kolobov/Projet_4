@@ -33,7 +33,9 @@ class Controller:
             add_player = player_informations[3]
 
             player = Player(first_name, family_name, birth_date)
-            players = self.tournament.add_player(player)
+            self.tournament.add_player(player)
+
+            players = self.tournament.give_len_list_players()
 
             if (add_player == "n") and (players < 2):
                 self.view.add_more_players()
@@ -42,52 +44,71 @@ class Controller:
 
         
     def round_estimation(self):
-        print(self.tournament.__dict__)
+
+        # participants = self.tournament.give_list_players()
+        
+        
+        player_1 = Player(first_name = "aa", family_name ="aa", birth_date = "05101992", score = 0)
+        player_2 = Player(first_name = "bb", family_name ="bb", birth_date = "05101992", score = 0)
+        player_3 = Player(first_name = "cc", family_name ="cc", birth_date = "05101992", score = 0)
+        player_4 = Player(first_name = "dd", family_name ="dd", birth_date = "05101992", score = 0)
+        player_5 = Player(first_name = "ee", family_name ="ee", birth_date = "05101992", score = 0)
+
+        self.tournament.players_list = [player_1, player_2, player_3, player_4, player_5]
+        participants_len = self.tournament.give_len_list_players()
+
+        
+
+        if (participants_len % 2) == 0:  #Si nombre des participant est paire il y a N-1 tours possibles
+            max_round = participants_len - 1
+            self.view.show_round_estimation(max_round)
+        else:  #Si nombre des participant est impaire il y a N tours possibles, il faut ajouter un joueur fictif 
+            max_round = participants_len
+            self.view.show_round_estimation(max_round)
+
+            player_repos = Player("Repos", "Repos", datetime.now().strftime("%d%m%Y"))
+            self.view.add_player_repos()
+            self.tournament.add_player(player_repos)
 
         participants = self.tournament.give_list_players()
+        self.view.show_players(participants)
+
+
+        return max_round
         
-        
-        # player_1 = Player(first_name = "aa", family_name ="aa", birth_date = "05101992", score = 0)
-        # player_2 = Player(first_name = "bb", family_name ="bb", birth_date = "05101992", score = 0)
-        # player_3 = Player(first_name = "cc", family_name ="cc", birth_date = "05101992", score = 0)
-        # player_4 = Player(first_name = "dd", family_name ="dd", birth_date = "05101992", score = 0)
-        # player_5 = Player(first_name = "ee", family_name ="ee", birth_date = "05101992", score = 0)
-        # player_6 = Player(first_name = "Repos", family_name ="Repos", birth_date = "05101992", score = 0)
-
-        # self.players = [player_1, player_2, player_3, player_4, player_5, player_6]
-
-        show_players = self.view.show_players(participants)
-
-        if (len(participants) % 2) == 0:  #Si nombre des participant est paire il y a N-1 tours possibles
-            max_round = int(len(participants) - 1)
-            self.view.show_round_estimation(max_round)
-            return max_round
-        else:  #Si nombre des participant est impaire il y a N tours possibles
-            max_round = int(len(participants))
-            self.view.show_round_estimation(max_round)
-            return max_round
         
     def round_proposition(self, max_round):
-        round_proposition = View().get_round_proposition()
+        while True:
+            round_proposition = self.view.get_round_proposition()
 
-        while 0 > round_proposition >= max_round:
-            round_proposition = View().get_round_proposition_error(max_round)
-            round_proposition = View().get_round_proposition()
+            if round_proposition <= 0 or round_proposition > int(max_round):
+                round_proposition = self.view.get_round_proposition_error(max_round)
+            else:
+                self.tournament.modify_all_round_information(round_proposition)
+                break
 
-        return round_proposition
+    def generate_round_name(self, i):
+        name = "Round_" + str(i)
+        return name
 
-    
-
-    def generate_list_round(self, round_proposition):
-        list_rounds = []
-        i = 0
-        while i <= round_proposition:
+    def create_rounds(self):
+        rounds = self.tournament.give_len_list_players()
+        i = 1
+        while i <= rounds:
+            if i == 1:
+                create_name = self.generate_round_name(i)
+                create_date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                round = Round(name = create_name, date_start = create_date_start)
+                players = self.tournament.give_list_players()
+                self.shuffle_players(i, players)
+                print(players)
             i += 1
-            round_name = ("Round_" + str(i))
-            
-            list_rounds.append(Round(round_name))
 
-        return list_rounds
+
+
+    def play_round(self):
+        pass
+
     
     def play_rounds(self, list_rounds):
         bool_first_round = True
@@ -124,15 +145,12 @@ class Controller:
 
         return list_match
 
-    def shuffle_players(self, bool_first_round, players):
+    def shuffle_players(self, round, players):
 
-        if bool_first_round:
+        if round == 1:
             random.shuffle(players)
         else:
             players.sort(key=lambda p: p.score, reverse=True) # p reprensent objet Player
-            
-        
-        print (players)
         return players
 
         
