@@ -1,9 +1,10 @@
 class Player:
-    def __init__ (self, first_name, family_name, birth_date, score = 0):
+    def __init__ (self, first_name, family_name, birth_date, score = 0, random_number = 0):
         self.first_name = first_name
         self.family_name = family_name
         self.birth_date = birth_date
         self.score = score
+        self.random_number = random_number
         #Penser à verifier les inputs client
 
     def __repr__(self):
@@ -11,3 +12,6 @@ class Player:
 
     def save_players_json(self):
         pass
+
+    def add_random_number(self, random_number):
+        self.random_number = random_number

@@ -48,11 +48,11 @@ class Controller:
         # participants = self.tournament.give_list_players()
         
         
-        player_1 = Player(first_name = "aa", family_name ="aa", birth_date = "05101992", score = 0)
-        player_2 = Player(first_name = "bb", family_name ="bb", birth_date = "05101992", score = 0)
-        player_3 = Player(first_name = "cc", family_name ="cc", birth_date = "05101992", score = 0)
-        player_4 = Player(first_name = "dd", family_name ="dd", birth_date = "05101992", score = 0)
-        player_5 = Player(first_name = "ee", family_name ="ee", birth_date = "05101992", score = 0)
+        player_1 = Player(first_name = "aa", family_name ="aa", birth_date = "05101992", score = 1)
+        player_2 = Player(first_name = "bb", family_name ="bb", birth_date = "05101992", score = 1)
+        player_3 = Player(first_name = "cc", family_name ="cc", birth_date = "05101992", score = 1)
+        player_4 = Player(first_name = "dd", family_name ="dd", birth_date = "05101992", score = 1)
+        player_5 = Player(first_name = "ee", family_name ="ee", birth_date = "05101992", score = 5)
 
         self.tournament.players_list = [player_1, player_2, player_3, player_4, player_5]
         participants_len = self.tournament.give_len_list_players()
@@ -92,18 +92,30 @@ class Controller:
         return name
 
     def create_rounds(self):
-        rounds = self.tournament.give_len_list_players()
+        rounds = self.tournament.give_round_all_information()
         i = 1
         while i <= rounds:
-            if i == 1:
-                create_name = self.generate_round_name(i)
-                create_date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                round = Round(name = create_name, date_start = create_date_start)
-                players = self.tournament.give_list_players()
-                self.shuffle_players(i, players)
-                print(players)
+            create_name = self.generate_round_name(i)
+            create_date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            round = Round(name = create_name, date_start = create_date_start)
+            
+            players = self.shuffle_players(i)
+            print(players)
+
+            self.create_matchs(players)
+
             i += 1
 
+
+
+    def create_matchs(self, players):
+        len_players = len(players)
+        i = 0
+        while i < len_players:
+            print(f"{players[i]} joue avec {players[i+1]} ")
+            i += 2
+            
+        
 
 
     def play_round(self):
@@ -145,12 +157,18 @@ class Controller:
 
         return list_match
 
-    def shuffle_players(self, round, players):
+    def shuffle_players(self, round):
+        players = self.tournament.give_list_players()
+        players_len = self.tournament.give_len_list_players()
 
         if round == 1:
             random.shuffle(players)
         else:
-            players.sort(key=lambda p: p.score, reverse=True) # p reprensent objet Player
+            random_numbers = random.sample(range(0,players_len),players_len)
+            for player in players:
+                player.add_random_number(random_numbers.pop())
+            
+            players.sort(key=lambda p: (p.score, p.random_number), reverse=True) # p reprensent objet Player
         return players
 
         
