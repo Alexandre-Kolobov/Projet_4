@@ -8,5 +8,8 @@ class Round: # pas d'heritage
     def __repr__(self):
         return f"{self.name}"
     
-    def add_match(self):
-        pass
+    def add_match(self, match):
+        self.matchs.append(match)
+    
+    def give_match_list(self):
+        return self.matchs

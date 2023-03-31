@@ -90,72 +90,65 @@ class Controller:
     def generate_round_name(self, i):
         name = "Round_" + str(i)
         return name
+    
+    def generate_match_name(self, i):
+        name = "Match_" + str(i)
+        return name
 
     def create_rounds(self):
         rounds = self.tournament.give_round_all_information()
         i = 1
+    
         while i <= rounds:
-            create_name = self.generate_round_name(i)
-            create_date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            round = Round(name = create_name, date_start = create_date_start)
-            
-            players = self.shuffle_players(i)
-            print(players)
+            create_round_name = self.generate_round_name(i)
+            create_round_date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            round = Round(name = create_round_name, date_start = create_round_date_start)
 
-            self.create_matchs(players)
+            matchs = self.create_matchs(i)
+            
+            for match in matchs:
+                round.add_match(match)
+        
+            print(round.__dict__)
+
+            self.tournament.add_round(round)
 
             i += 1
 
-
-
-    def create_matchs(self, players):
-        len_players = len(players)
-        i = 0
-        while i < len_players:
-            print(f"{players[i]} joue avec {players[i+1]} ")
-            i += 2
+    def create_matchs(self, round):
+        while True:
+            players = self.shuffle_players(round)
+            len_players = len(players)
+            i = 0
+            matchs = []
+            while i < len_players:
+                # print(f"{players[i]} joue avec {players[i+1]} ")
+                create_match_name = self.generate_match_name(i)
+                match = Match(create_match_name, players[i], players[i+1])
+                matchs.append(match)
+                i += 2
             
+            if self.check_played_match(matchs):
+                del matchs
+            else:
+                break
+
+        return matchs
+            
+    def check_played_match(self, matchs):
         
+        for round in self.tournament.give_round_list():
+            for match in round.give_match_list():
+                for i in matchs:
+                    if match == i:
+                        return True
+
+                
+
 
 
     def play_round(self):
         pass
-
-    
-    def play_rounds(self, list_rounds):
-        bool_first_round = True
-        list_match = []
-        for round in list_rounds:
-            self.players = self.shuffle_players(bool_first_round, self.players)
-            bool_first_round = False
-            # ajouter input
-            round.date_start = "05052023"
-        
-            self.generate_pairs(self.players, list_match)
-
-        now = datetime.now()
-        current_time = now.strftime("%H:%M:%S")
-        date_finish = current_time
-
-        return date_finish
-
-    def generate_pairs(self, players, list_match):
-        
-        i = 0 
-        while i < len(players):
-            if (players[i], players[i+1]) or (players[i+1], players[i]) in list_match:
-                players = self.shuffle_players(False, players)
-            else:
-                list_match.append((players[i], players[i+1]))
-                i += 2
-                print(f"joueur {players[i]} et jouer {players[p]} vont jouer ensemble")
-                players[i].score = players[i].score + int(input(f"entre le score pour {players[i]}:"))
-                players[p].score = players[p].score + int(input(f"entre le score pour {players[p]}:"))
-        
-        
-        print (list_match)
-
-        return list_match
 
     def shuffle_players(self, round):
         players = self.tournament.give_list_players()

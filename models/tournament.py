@@ -34,5 +34,11 @@ class Tournament:
     def give_round_all_information(self):
         return self.round_all
 
+    def give_round_list(self):
+        return self.round_list
+    
+    def add_round(self, round):
+        self.round_list.append(round)
+
     #add player
     #add round
