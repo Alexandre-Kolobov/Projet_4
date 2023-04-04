@@ -8,11 +8,10 @@ from views.views import View
 def main():
    
     play_tournament = Controller()
-    # play_tournament.creat_tournament()
-    # play_tournament.get_players()
-    max_round = play_tournament.round_estimation()
-    play_tournament.round_proposition(5)
-    play_tournament.create_rounds()
+    play_tournament.creat_tournament()
+    play_tournament.get_players()
+    # play_tournament.round_proposition()
+    play_tournament.play_rounds()
 
 
 

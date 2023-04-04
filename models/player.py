@@ -15,3 +15,9 @@ class Player:
 
     def add_random_number(self, random_number):
         self.random_number = random_number
+
+    def give_player_name(self):
+        return(f"{self.first_name} {self.family_name}")
+    
+    def update_player_score(self, score):
+        self.score += int(score)

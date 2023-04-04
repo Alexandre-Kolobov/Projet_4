@@ -77,9 +77,14 @@ class View():
         print("Ce joueur donne doroit à la victoire automatiqeu pour celui qui joue avec.")
 
 
-    def show_round_estimation(self, max_round):
+    def show_round_estimation(self, round_all):
         print("\n")
-        print(f"Avec ce nombre de joueur il est possible de faire au maximum: {max_round} rounds")
+        print(f"Avec ce nombre de joueur il est possible de faire: {round_all} rounds")
+
+    def show_round_negative_estimation(self, round_all):
+        print("\n")
+        print(f"Avec ce nombre de joueur il n'est pas possible de faire: {round_all} rounds")
+        print("Merci d'ajouter d'autre participants")
 
     def get_round_proposition(self):
         while True:
@@ -94,12 +99,34 @@ class View():
     def get_round_proposition_error(self, max_round):
         print(f"Le nombre des tours ne peut pas être égale à 0 ou superieur à {max_round} rounds")
 
-    def show_round_informations(self, rounds):
-        print("Voici la liste des rounds:")
-        for i in rounds:
-            print(f"{i}: {rounds[i]}")
+    # def show_round_informations(self, rounds):
+    #     print("Voici la liste des rounds:")
+    #     for i in rounds:
+    #         print(f"{i}: {rounds[i]}")
 
+    def show_round(self, matchs, name):
+        print(f"Voici les paires dans {name}:")
+        for i in matchs:
+            print(i)
+
+    def update_player_1_score(self, player_1):
+        while True:
+            score_1 = input(f"Entrer le score du joueur {player_1} (0 - perdant, 0.5 - égalité, 1 - gagnant): ")
+            if int(score_1) in [0, 0.5, 1]:
+                break
+            else:
+                print(f"Merci de rentrer le score du joueur {player_1} correctemment.")
         
+        return score_1
 
+    def play_match(self, player_1_name, player_2_name):
+        print("\n")
+        print(f"{player_1_name} et {player_2_name} jouent.")
+        while True:
+            match_result = input("Entrer nom et prenom du gagnat ou \"égalité\": ")
+            if match_result.strip() in [player_1_name, player_2_name, "égalité"]:
+                break
+            else:
+                print(f"Le resultat n'a pas été entré correctemment. Merci de reesayer.")
 
-    
+        return match_result

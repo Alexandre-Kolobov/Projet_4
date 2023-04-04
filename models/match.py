@@ -9,17 +9,30 @@ class Match: # match
         # gerer les joueurs qui se sont déja rencotré
 
     def __repr__(self):
-        return f"{self.player_1}:{self.score_1} vs {self.player_2}:{self.score_2}"
+        return f"{self.player_1} vs {self.player_2}"
     
     def __eq__(self, other):
         if isinstance(other, Match):
             if self.player_1 == other.player_2 and self.player_2 == other.player_1:
-                print (f"Cas 1: {self.player_1} : {self.player_2} et {other.player_1} : {other.player_2}" )
+                # print (f"Cas 1: {self.player_1} : {self.player_2} et {other.player_1} : {other.player_2}" )
                 return self.player_1 == other.player_2 and self.player_2 == other.player_1
             elif self.player_1 == other.player_1 and self.player_2 == other.player_2:
-                print (f"Cas 2: {self.player_1} : {self.player_2} et {other.player_1} : {other.player_2}")
+                # print (f"Cas 2: {self.player_1} : {self.player_2} et {other.player_1} : {other.player_2}")
                 return self.player_1 == other.player_1 and self.player_2 == other.player_2
             else:
-                print (f"Cas 3: {self.player_1} : {self.player_2} et {other.player_1} : {other.player_2}")
+                # print (f"Cas 3: {self.player_1} : {self.player_2} et {other.player_1} : {other.player_2}")
                 return False
         return False
+    
+    def give_player_1(self):
+        return self.player_1
+    
+    def give_player_2(self):
+        return self.player_2
+    
+    def update_player_score(self, score_1, score_2):
+            self.score_1 = score_1
+            self.score_2 = score_2
+
+    def give_match_result(self):
+         return f"{self.player_1}:{self.score_1} vs {self.player_2}:{self.score_2}"

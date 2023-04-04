@@ -13,3 +13,6 @@ class Round: # pas d'heritage
     
     def give_match_list(self):
         return self.matchs
+    
+    def give_round_name(self):
+        return self.name
