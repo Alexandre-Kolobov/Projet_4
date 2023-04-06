@@ -1,4 +1,4 @@
-class Round: # pas d'heritage
+class Round:
     def __init__(self, name, date_start = "", date_finish = ""):
         self.name = name
         self.matchs = []
@@ -16,3 +16,6 @@ class Round: # pas d'heritage
     
     def give_round_name(self):
         return self.name
+    
+    def add_date_finish(self, date_finish):
+        self.date_finish = date_finish

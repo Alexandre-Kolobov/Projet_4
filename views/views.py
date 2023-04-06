@@ -8,42 +8,42 @@ class View():
 
     def get_tournament_start_informations(self):
         while True:
-            name = input("Entrer le titre du tournoi: ")
+            name = input("Entrer le titre du tournoi: ").strip()
             if len(name) >= 1:
                 break
             else:
                 print ("Le titre du tournoi ne dois pas être vide. Merci de le reinsegner.")
 
         while True:
-            place = input("Entrer l'endroit du tournoi: ")
+            place = input("Entrer l'endroit du tournoi: ").strip()
             if len(place) >= 1:
                 break
             else:
                 print ("L'endroit du tournoi ne dois pas être vide. Merci de le reinsegner.")
         
         
-        description = input("Entrer la description du tournoi: ")
+        description = input("Entrer la description du tournoi: ").strip()
 
         return name, place, description
 
     def get_player_informations(self):
 
         while True:
-            first_name = input("Tapez le prénom du joueur: ")
+            first_name = input("Tapez le prénom du joueur: ").strip()
             if first_name.isalpha():
                 break
             else:
                 print ("Le prénom du joueur doit contenir que des lettres et ne pas être vide")
         
         while True:
-            family_name = input("Tapez le nom du joueur: ")
+            family_name = input("Tapez le nom du joueur: ").strip()
             if family_name.isalpha():
                 break
             else:
                 print ("Le nom du joueur doit contenir que des lettres et ne pas être vide")
         
         while True:
-            birth_date = input("Tapez la date de naissance du joueur (DDMMYYYY): ")
+            birth_date = input("Tapez la date de naissance du joueur (DDMMYYYY): ").strip()
             try:
                 datetime.strptime(birth_date, "%d%m%Y")
                 break
@@ -51,7 +51,7 @@ class View():
                 print ("La date de naissance du joueur doit être au format DDMMYYYY")
 
         while True:
-            add_player = input("Voulez vous ajouter un autre joueur (y/n)? ")
+            add_player = input("Voulez vous ajouter un autre joueur (y/n)? ").strip()
             print("\n")
             add_player = str.lower(add_player)
             if add_player in["y", "n"]:
@@ -60,10 +60,6 @@ class View():
                 print ("Merci d'indiquer votre choix par (y/n)")
             
         return first_name, family_name, birth_date, add_player
-
-    def add_more_players(self):
-        print("Il faut avoir au minimum 2 participants pour povoir lancer le tournois.")
-        print("Merci d'ajouter un joueur.")
 
     def show_players(self, players):
         print("\n")
@@ -84,11 +80,11 @@ class View():
     def show_round_negative_estimation(self, round_all):
         print("\n")
         print(f"Avec ce nombre de joueur il n'est pas possible de faire: {round_all} rounds")
-        print("Merci d'ajouter d'autre participants")
+        print("Merci d'ajouter d'autres participants")
 
     def get_round_proposition(self):
         while True:
-            round_proposition = input("Merci d'indiquer combien de tours voulez vous jouer: ")
+            round_proposition = input("Merci d'indiquer combien de tours voulez vous jouer: ").strip()
             try:
                 int(round_proposition)
                 return int(round_proposition)
@@ -99,11 +95,6 @@ class View():
     def get_round_proposition_error(self, max_round):
         print(f"Le nombre des tours ne peut pas être égale à 0 ou superieur à {max_round} rounds")
 
-    # def show_round_informations(self, rounds):
-    #     print("Voici la liste des rounds:")
-    #     for i in rounds:
-    #         print(f"{i}: {rounds[i]}")
-
     def show_round(self, matchs, name):
         print(f"Voici les paires dans {name}:")
         for i in matchs:
@@ -111,7 +102,7 @@ class View():
 
     def update_player_1_score(self, player_1):
         while True:
-            score_1 = input(f"Entrer le score du joueur {player_1} (0 - perdant, 0.5 - égalité, 1 - gagnant): ")
+            score_1 = input(f"Entrer le score du joueur {player_1} (0 - perdant, 0.5 - égalité, 1 - gagnant): ").strip()
             if int(score_1) in [0, 0.5, 1]:
                 break
             else:
@@ -123,10 +114,17 @@ class View():
         print("\n")
         print(f"{player_1_name} et {player_2_name} jouent.")
         while True:
-            match_result = input("Entrer nom et prenom du gagnat ou \"égalité\": ")
-            if match_result.strip() in [player_1_name, player_2_name, "égalité"]:
+            match_result = input("Entrer nom et prenom du gagnat ou \"égalité\": ").strip()
+            if match_result in [player_1_name, player_2_name, "égalité"]:
                 break
             else:
                 print(f"Le resultat n'a pas été entré correctemment. Merci de reesayer.")
 
         return match_result
+    
+    def show_classment(self, player, place, score):
+        if place == 1:
+            print("Voici le classement du tournois:")
+            print (f"Place {place}: {player} - score {score}")
+        else:
+            print (f"Place {place}: {player} - score {score}")

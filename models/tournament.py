@@ -40,5 +40,5 @@ class Tournament:
     def add_round(self, round):
         self.round_list.append(round)
 
-    #add player
-    #add round
+    def add_date_finish(self, date_finish):
+        self.date_finish = date_finish
