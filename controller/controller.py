@@ -105,10 +105,115 @@ class Controller:
     def play_rounds(self):
         rounds = self.tournament.give_round_list()
         for round in rounds:
-            if not round.finish_status:
+            if not round.give_finish_status():
                 round_date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                 round.add_date_start(round_date_start)
+
+                round_name = round.give_round_name()
+                players = []
+                players = self.shuffle_players(round_name)
+
+                matchs = []
+                matchs = self.create_matchs(players)
                 
+                self.view.show_round(matchs, round_name)
+
+                for match in matchs:
+
+                    player_1 = match[0]
+                    player_2 = match[1]
+                
+                    player_1_name = player_1.give_player_name()
+                    player_2_name = player_2.give_player_name()
+
+                    match_result = self.view.play_match(player_1_name, player_2_name)
+                    match_result_dict = self.give_score(player_1_name, player_2_name, match_result)
+                    
+                    match_name = self.generate_match_name()
+
+
+                    match = Match(match_name, player_1, player_2, match_result_dict[player_1_name], match_result_dict[player_2_name])
+                    round.add_match(match)
+                    print (match)
+
+            for player in players:
+                print (f"{player} - {self.give_player_score(player)}")
+            
+
+
+
+    def shuffle_players(self, round_name):
+        players = self.tournament.give_list_players()
+        # players_len = self.tournament.give_len_list_players()
+
+        if round_name == "Round_1":
+            random.shuffle(players)
+        else:
+            players.sort(key=lambda p: self.give_player_score(p), reverse=True) # p reprensent objet Player
+        return players
+    
+
+    def create_matchs(self, players):
+        matchs = []
+        players_tmp = players[:]  #players_tmp = players.copy() -- meme signification
+
+        for player_1 in players:
+            for player_2 in players:
+                if player_1 in players_tmp and player_2 in players_tmp:
+                    if player_1 != player_2 and not self.check_alredy_played(player_1, player_2):
+
+                        try:
+                            index_player_1 = players_tmp.index(player_1)
+                            players_tmp.pop(index_player_1)
+
+                        except ValueError:
+                            pass
+
+                        try:
+                            index_player_2 = players_tmp.index(player_2)
+                            players_tmp.pop(index_player_2)
+
+                        except ValueError:
+                            pass
+                        
+                        matchs.append((player_1, player_2))
+
+        if len(players_tmp) != 0:
+            i = 0
+            while i < len(players_tmp):
+                matchs.append((players_tmp[0], players_tmp[1]))
+                i += 2
+        
+        return matchs
+
+                
+
+    def check_alredy_played(self, player_1, player_2):
+        for round in self.tournament.give_round_list():
+            for match in round.give_match_list():
+                checked_player_1 = match.give_player_1()
+                checked_player_2 = match.give_player_2()
+                if player_1 == checked_player_1 or player_1 == checked_player_2:
+                    if player_2 == checked_player_1 or player_2 == checked_player_2:
+                        return True
+
+        return False
+    
+    def give_player_score(self, player):
+        player_score = 0
+        for round in self.tournament.give_round_list():
+            for match in round.give_match_list():
+                checked_player_1 = match.give_player_1()
+                checked_player_2 = match.give_player_2()
+
+                if player == checked_player_1:
+                    player_score = int(player_score) + int(match.give_player_1_score())
+                elif player == checked_player_2:
+                    player_score = int(player_score) + int(match.give_player_2_score())
+
+        return player_score
+                
+
 
     # def play_rounds_old(self):
     #     rounds = self.tournament.give_round_all_information()
@@ -155,61 +260,49 @@ class Controller:
     #     self.tournament.add_date_finish(tournament_date_finish)
     #     # print(self.tournament.__dict__)
 
-    def create_matchs(self, round):
-        matchs = []
-        while True:
-            players = self.shuffle_players(round)
+    # def create_matchs_old(self, round):
+    #     matchs = []
+    #     while True:
+    #         players = self.shuffle_players(round)
 
-            for player in players:
-                player.update_ingame_status(False)
-                temp_pairs_list = []
+    #         for player in players:
+    #             player.update_ingame_status(False)
+    #             temp_pairs_list = []
 
-            for i in players:
-                if i.give_ingame_status() == False:
-                    for p in players:
-                        if (i != p) and (p.give_ingame_status() == False) and (i.give_ingame_status() == False):
-                            if (i.check_played_with(p) == False) and (p.check_played_with(i) == False):
+    #         for i in players:
+    #             if i.give_ingame_status() == False:
+    #                 for p in players:
+    #                     if (i != p) and (p.give_ingame_status() == False) and (i.give_ingame_status() == False):
+    #                         if (i.check_played_with(p) == False) and (p.check_played_with(i) == False):
                                 
-                                i.update_ingame_status(True)
-                                p.update_ingame_status(True)
-                                temp_pairs_list.append([i, p])
+    #                             i.update_ingame_status(True)
+    #                             p.update_ingame_status(True)
+    #                             temp_pairs_list.append([i, p])
             
 
-            pairs_by_round = len(players)/2
-            if len(temp_pairs_list) == pairs_by_round:  #on obtiens nombre de pairs max par round
+    #         pairs_by_round = len(players)/2
+    #         if len(temp_pairs_list) == pairs_by_round:  #on obtiens nombre de pairs max par round
                    
-                for temp in temp_pairs_list:
-                    temp[0].add_played_with(temp[1])
-                    temp[1].add_played_with(temp[0])
+    #             for temp in temp_pairs_list:
+    #                 temp[0].add_played_with(temp[1])
+    #                 temp[1].add_played_with(temp[0])
 
-                    create_match_name = self.generate_match_name()
-                    match = Match(create_match_name, temp[0], temp[1], temp[0].give_player_score(), temp[1].give_player_score())
-                    matchs.append(match)
+    #                 create_match_name = self.generate_match_name()
+    #                 match = Match(create_match_name, temp[0], temp[1], temp[0].give_player_score(), temp[1].give_player_score())
+    #                 matchs.append(match)
                  
-                return matchs
+    #             return matchs
 
 
-    def check_played_match(self, matchs):
-        for round in self.tournament.give_round_list():
-            for match in round.give_match_list():
-                for i in matchs:
-                    if match == i:
-                        return True
+    # def check_played_match(self, matchs):
+    #     for round in self.tournament.give_round_list():
+    #         for match in round.give_match_list():
+    #             for i in matchs:
+    #                 if match == i:
+    #                     return True
 
 
-    def shuffle_players(self, round):
-        players = self.tournament.give_list_players()
-        players_len = self.tournament.give_len_list_players()
 
-        if round == 1:
-            random.shuffle(players)
-        else:
-            random_numbers = random.sample(range(0,players_len),players_len)
-            for player in players:
-                player.add_random_number(random_numbers.pop())
-            
-            players.sort(key=lambda p: (p.score, p.random_number), reverse=True) # p reprensent objet Player
-        return players
 
         
     def give_score(self, player_1_name, player_2_name, match_result):
@@ -224,14 +317,14 @@ class Controller:
                 match_result_dict = {player_1_name : 0.5, player_2_name : 0.5}
                 return match_result_dict
     
-    def classement(self):
-        players = self.tournament.give_list_players()
-        players.sort(key=lambda p: (p.score, p.random_number), reverse=True)
+    # def classement(self):
+    #     players = self.tournament.give_list_players()
+    #     players.sort(key=lambda p: (p.score, p.random_number), reverse=True)
 
-        place = 1
-        for player in players:
-            score = player.give_player_score()
-            self.view.show_classment(player, place, score)
-            place += 1
+    #     place = 1
+    #     for player in players:
+    #         score = player.give_player_score()
+    #         self.view.show_classment(player, place, score)
+    #         place += 1
 
 

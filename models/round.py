@@ -23,3 +23,6 @@ class Round:
 
     def add_date_finish(self, date_finish):
         self.date_finish = date_finish
+
+    def give_finish_status(self):
+        return self.finish_status
