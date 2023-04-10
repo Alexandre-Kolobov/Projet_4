@@ -42,3 +42,8 @@ class Tournament:
 
     def add_date_finish(self, date_finish):
         self.date_finish = date_finish
+
+    def give_tournament_name(self):
+        return self.name
+    
+    

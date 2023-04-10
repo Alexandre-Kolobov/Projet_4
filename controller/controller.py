@@ -26,37 +26,41 @@ class Controller:
 
     def get_players(self):
         # while True:
-            # player_informations = self.view.get_player_informations()
+        #     player_informations = self.view.get_player_informations()
 
-            # first_name = player_informations[0]
-            # family_name = player_informations[1]
-            # birth_date = player_informations[2]
-            # add_player = player_informations[3]
+        #     first_name = player_informations[0]
+        #     family_name = player_informations[1]
+        #     birth_date = player_informations[2]
+        #     add_player = player_informations[3]
 
-            # player = Player(first_name, family_name, birth_date)
-            # self.tournament.add_player(player)
+        #     player = Player(first_name, family_name, birth_date)
+        #     self.tournament.add_player(player)
+        #     tournament_name = self.tournament.give_tournament_name()
+        #     player.save_players_json(tournament_name)
 
-            # if (add_player == "n"):
-            #     break
-        player_1 = Player("a", "a", "05101992", 0)
-        self.tournament.add_player(player_1)
-        player_2 = Player("b", "b", "05101992", 0)
-        self.tournament.add_player(player_2)
-        player_3 = Player("c", "c", "05101992", 0)
-        self.tournament.add_player(player_3)
-        player_4 = Player("d", "d", "05101992", 0)
-        self.tournament.add_player(player_4)
-        player_5 = Player("e", "e", "05101992", 0)
-        self.tournament.add_player(player_5)
-        player_6 = Player("f", "f", "05101992", 0)
-        self.tournament.add_player(player_6)
-        player_7 = Player("g", "g", "05101992", 0)
-        self.tournament.add_player(player_7)
-        player_8 = Player("h", "h", "05101992", 0)
-        self.tournament.add_player(player_8)
-        
+        #     if (add_player == "n"):
+        #         break
+
+        self.get_players_test()
         self.round_estimation()
 
+    def get_players_test(self):
+        player_1 = Player("a", "a", "05101992")
+        self.tournament.add_player(player_1)
+        player_2 = Player("b", "b", "05101992")
+        self.tournament.add_player(player_2)
+        player_3 = Player("c", "c", "05101992")
+        self.tournament.add_player(player_3)
+        player_4 = Player("d", "d", "05101992")
+        self.tournament.add_player(player_4)
+        player_5 = Player("e", "e", "05101992")
+        self.tournament.add_player(player_5)
+        player_6 = Player("f", "f", "05101992")
+        self.tournament.add_player(player_6)
+        player_7 = Player("g", "g", "05101992")
+        self.tournament.add_player(player_7)
+        player_8 = Player("h", "h", "05101992")
+        self.tournament.add_player(player_8)
         
     def round_estimation(self):
 
@@ -87,48 +91,69 @@ class Controller:
         match_counter += 1
         name = "Match_" + str(match_counter)
         return name
-
-    def play_rounds(self):
-        rounds = self.tournament.give_round_all_information()
-        i = 1
     
+    def create_list_rounds(self):
+        rounds = self.tournament.give_round_all_information()
+        i = 1 
+        
         while i <= rounds:
             round_name = self.generate_round_name(i)
-            round_date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            round = Round(name = round_name, date_start = round_date_start)
-
-            matchs = self.create_matchs(i)
-
-            self.view.show_round(matchs, round_name)
-            
-            for match in matchs:
-                player_1 = match.give_player_1()
-                player_2 = match.give_player_2()
-                
-                player_1_name = player_1.give_player_name()
-                player_2_name = player_2.give_player_name()
-
-                match_result = self.view.play_match(player_1_name, player_2_name)
-                match_result_dict = self.give_score(player_1_name, player_2_name, match_result)
-
-                player_1.update_player_score(match_result_dict[player_1_name])
-                player_2.update_player_score(match_result_dict[player_2_name])
-
-                match.update_player_score(match_result_dict[player_1_name], match_result_dict[player_2_name])
-
-                round_date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                round.add_date_finish(round_date_finish)
-
-                round.add_match(match)
-
-            # print(round.__dict__)
+            round = Round(name = round_name)
             self.tournament.add_round(round)
-            
             i += 1
 
-        tournament_date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        self.tournament.add_date_finish(tournament_date_finish)
-        # print(self.tournament.__dict__)
+    def play_rounds(self):
+        rounds = self.tournament.give_round_list()
+        for round in rounds:
+            if not round.finish_status:
+                round_date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                round.add_date_start(round_date_start)
+                
+
+    # def play_rounds_old(self):
+    #     rounds = self.tournament.give_round_all_information()
+    #     i = 1
+    
+    #     while i <= rounds:
+    #         round_name = self.generate_round_name(i)
+    #         round_date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    #         round = Round(name = round_name, date_start = round_date_start)
+
+    #         matchs = self.create_matchs(i)
+
+    #         self.view.show_round(matchs, round_name)
+            
+    #         for match in matchs:
+    #             player_1 = match.give_player_1()
+    #             player_2 = match.give_player_2()
+                
+    #             player_1_name = player_1.give_player_name()
+    #             player_2_name = player_2.give_player_name()
+
+    #             match_result = self.view.play_match(player_1_name, player_2_name)
+    #             match_result_dict = self.give_score(player_1_name, player_2_name, match_result)
+
+    #             player_1.update_player_score(match_result_dict[player_1_name])
+    #             player_2.update_player_score(match_result_dict[player_2_name])
+
+    #             match.update_player_score(match_result_dict[player_1_name], match_result_dict[player_2_name])
+
+    #             tournament_name = self.tournament.give_tournament_name()
+    #             match.save_matchs_json(tournament_name)
+
+    #             round.add_match(match)
+
+
+    #         # print(round.__dict__)
+    #         round_date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    #         round.add_date_finish(round_date_finish)
+    #         self.tournament.add_round(round)
+            
+    #         i += 1
+
+    #     tournament_date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    #     self.tournament.add_date_finish(tournament_date_finish)
+    #     # print(self.tournament.__dict__)
 
     def create_matchs(self, round):
         matchs = []

@@ -1,9 +1,10 @@
 class Round:
-    def __init__(self, name, date_start = "", date_finish = ""):
+    def __init__(self, name, date_start = "", date_finish = "", finish_status = False):
         self.name = name
         self.matchs = []
         self.date_start = date_start
         self.date_finish = date_finish
+        self.finish_status = finish_status
 
     def __repr__(self):
         return f"{self.name}"
@@ -17,5 +18,8 @@ class Round:
     def give_round_name(self):
         return self.name
     
+    def add_date_start(self, date_start):
+        self.date_start = date_start
+
     def add_date_finish(self, date_finish):
         self.date_finish = date_finish
