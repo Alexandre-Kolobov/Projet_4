@@ -1,32 +1,36 @@
+from views.view_tournament import View_tournament
+from views.view_player import View_player
+from views.view_match import View_match
+from views.view_round import View_round
 from models.player import Player
-from views.views import View
-from itertools import combinations
-from datetime import datetime
 from models.tournament import Tournament
 from models.round import Round
 from models.match import Match
-
+from datetime import datetime
 import random
 
 match_counter = 0
 
+
 class Controller:
     def __init__(self):
         self.tournament = Tournament()
-        self.view = View()
+        self.view_tournament = View_tournament()
+        self.view_player = View_player()
+        self.view_match = View_match()
+        self.view_round = View_round()
 
     def creat_tournament(self):
-        tournament_informations = self.view.get_tournament_start_informations()
+        tournament_informations = self.view_tournament.get_tournament_start_informations()
         name = tournament_informations[0]
         place = tournament_informations[1]
         date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
         self.tournament.modify_start_information(name, place, date_start)
 
-
     def get_players(self):
         # while True:
-        #     player_informations = self.view.get_player_informations()
+        #     player_informations = self.view_player.get_player_informations()
 
         #     first_name = player_informations[0]
         #     family_name = player_informations[1]
@@ -61,44 +65,42 @@ class Controller:
         self.tournament.add_player(player_7)
         player_8 = Player("h", "h", "05101992")
         self.tournament.add_player(player_8)
-        
-    def round_estimation(self):
 
+    def round_estimation(self):
         participants_len = self.tournament.give_len_list_players()
         round_all = self.tournament.give_round_all_information()
 
-        if (participants_len % 2) == 0:  #Si nombre des participant est paire il y a N-1 tours possibles
+        if (participants_len % 2) == 0:  # Si nombre des participant est paire il y a N-1 tours possibles
             max_round = participants_len - 1
             if max_round >= round_all:
-                self.view.show_round_estimation(round_all)
+                self.view_round.show_round_estimation(round_all)
             else:
-                self.view.show_round_negative_estimation(round_all)
+                self.view_round.show_round_negative_estimation(round_all)
                 self.get_players()
-        else:  #Si nombre des participant est impaire, il faut ajouter des joueurs
-            self.view.show_round_negative_estimation(round_all)
+        else:  # Si nombre des participant est impaire, il faut ajouter des joueurs
+            self.view_round.show_round_negative_estimation(round_all)
             self.get_players()
-            
 
         participants = self.tournament.give_list_players()
-        self.view.show_players(participants)
+        self.view_player.show_players(participants)
 
     def generate_round_name(self, i):
         name = "Round_" + str(i)
         return name
-    
+
     def generate_match_name(self):
         global match_counter
         match_counter += 1
         name = "Match_" + str(match_counter)
         return name
-    
+
     def create_list_rounds(self):
         rounds = self.tournament.give_round_all_information()
-        i = 1 
-        
+        i = 1
+
         while i <= rounds:
             round_name = self.generate_round_name(i)
-            round = Round(name = round_name)
+            round = Round(name=round_name)
             self.tournament.add_round(round)
             i += 1
 
@@ -121,22 +123,22 @@ class Controller:
                         match = Match(match_name, m[0], m[1])
                         round.add_match(match)
 
-                    self.view.show_round(matchs, round_name)
-                    matchs = round.give_match_list()        
+                    self.view_round.show_round(matchs, round_name)
+                    matchs = round.give_match_list()
                     for match in matchs:
 
                         player_1 = match.give_player_1()
                         player_2 = match.give_player_2()
-                    
+
                         player_1_name = player_1.give_player_name()
                         player_2_name = player_2.give_player_name()
 
-                        match_result = self.view.play_match(player_1_name, player_2_name)
+                        match_result = self.view_match.play_match(player_1_name, player_2_name)
                         match_result_dict = self.give_score(player_1_name, player_2_name, match_result)
 
                         match.update_player_score(match_result_dict[player_1_name], match_result_dict[player_2_name])
-                        
-                        print (match)
+
+                        print(match)
                 else:
                     for match in matchs:
                         match_score_player_1 = match.give_player_1_score()
@@ -144,35 +146,33 @@ class Controller:
                         if match_score_player_1 == 0 and match_score_player_2 == 0:
                             player_1 = match[0]
                             player_2 = match[1]
-                    
+
                             player_1_name = player_1.give_player_name()
                             player_2_name = player_2.give_player_name()
 
-                            match_result = self.view.play_match(player_1_name, player_2_name)
+                            match_result = self.view_match.play_match(player_1_name, player_2_name)
                             match_result_dict = self.give_score(player_1_name, player_2_name, match_result)
 
-                            match.update_player_score(match_result_dict[player_1_name], match_result_dict[player_2_name])
-                            print (match)
-                        else: 
+                            match.update_player_score(match_result_dict[player_1_name],
+                                                      match_result_dict[player_2_name])
+                            print(match)
+                        else:
                             player_1 = match.give_player_1()
                             player_2 = match.give_player_2()
                             player_1_name = player_1.give_player_name()
                             player_2_name = player_2.give_player_name()
 
-                            player_1_score = match.give_player_1_score()  
+                            player_1_score = match.give_player_1_score()
                             player_2_score = match.give_player_2_score()
 
-                            self.view.played_match(player_1_name, player_2_name, player_1_score, player_2_score)
-
+                            self.view_match.played_match(player_1_name, player_2_name, player_1_score, player_2_score)
 
             for player in players:
-                print (f"{player} - {self.give_player_score(player)}")
+                score = self.give_player_score(player)
+                self.view_player.show_player_score(player, score)
 
-            finish_status = self.view.get_finish_round(round_name)
+            finish_status = self.view_round.get_finish_round(round_name)
             round.update_finish_status(finish_status)
-            
-
-
 
     def shuffle_players(self, round_name):
         players = self.tournament.give_list_players()
@@ -181,13 +181,12 @@ class Controller:
         if round_name == "Round_1":
             random.shuffle(players)
         else:
-            players.sort(key=lambda p: self.give_player_score(p), reverse=True) # p reprensent objet Player
+            players.sort(key=lambda p: self.give_player_score(p), reverse=True)  # p reprensent objet Player
         return players
-    
 
     def create_matchs(self, players):
         matchs = []
-        players_tmp = players[:]  #players_tmp = players.copy() -- meme signification
+        players_tmp = players[:]  # players_tmp = players.copy() - même signification
 
         for player_1 in players:
             for player_2 in players:
@@ -207,7 +206,7 @@ class Controller:
 
                         except ValueError:
                             pass
-                        
+
                         matchs.append((player_1, player_2))
 
         if len(players_tmp) != 0:
@@ -215,10 +214,8 @@ class Controller:
             while i < len(players_tmp):
                 matchs.append((players_tmp[0], players_tmp[1]))
                 i += 2
-        
-        return matchs
 
-                
+        return matchs
 
     def check_alredy_played(self, player_1, player_2):
         for round in self.tournament.give_round_list():
@@ -230,7 +227,7 @@ class Controller:
                         return True
 
         return False
-    
+
     def give_player_score(self, player):
         player_score = 0
         for round in self.tournament.give_round_list():
@@ -244,119 +241,25 @@ class Controller:
                     player_score = int(player_score) + int(match.give_player_2_score())
 
         return player_score
-                
 
-
-    # def play_rounds_old(self):
-    #     rounds = self.tournament.give_round_all_information()
-    #     i = 1
-    
-    #     while i <= rounds:
-    #         round_name = self.generate_round_name(i)
-    #         round_date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    #         round = Round(name = round_name, date_start = round_date_start)
-
-    #         matchs = self.create_matchs(i)
-
-    #         self.view.show_round(matchs, round_name)
-            
-    #         for match in matchs:
-    #             player_1 = match.give_player_1()
-    #             player_2 = match.give_player_2()
-                
-    #             player_1_name = player_1.give_player_name()
-    #             player_2_name = player_2.give_player_name()
-
-    #             match_result = self.view.play_match(player_1_name, player_2_name)
-    #             match_result_dict = self.give_score(player_1_name, player_2_name, match_result)
-
-    #             player_1.update_player_score(match_result_dict[player_1_name])
-    #             player_2.update_player_score(match_result_dict[player_2_name])
-
-    #             match.update_player_score(match_result_dict[player_1_name], match_result_dict[player_2_name])
-
-    #             tournament_name = self.tournament.give_tournament_name()
-    #             match.save_matchs_json(tournament_name)
-
-    #             round.add_match(match)
-
-
-    #         # print(round.__dict__)
-    #         round_date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    #         round.add_date_finish(round_date_finish)
-    #         self.tournament.add_round(round)
-            
-    #         i += 1
-
-    #     tournament_date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    #     self.tournament.add_date_finish(tournament_date_finish)
-    #     # print(self.tournament.__dict__)
-
-    # def create_matchs_old(self, round):
-    #     matchs = []
-    #     while True:
-    #         players = self.shuffle_players(round)
-
-    #         for player in players:
-    #             player.update_ingame_status(False)
-    #             temp_pairs_list = []
-
-    #         for i in players:
-    #             if i.give_ingame_status() == False:
-    #                 for p in players:
-    #                     if (i != p) and (p.give_ingame_status() == False) and (i.give_ingame_status() == False):
-    #                         if (i.check_played_with(p) == False) and (p.check_played_with(i) == False):
-                                
-    #                             i.update_ingame_status(True)
-    #                             p.update_ingame_status(True)
-    #                             temp_pairs_list.append([i, p])
-            
-
-    #         pairs_by_round = len(players)/2
-    #         if len(temp_pairs_list) == pairs_by_round:  #on obtiens nombre de pairs max par round
-                   
-    #             for temp in temp_pairs_list:
-    #                 temp[0].add_played_with(temp[1])
-    #                 temp[1].add_played_with(temp[0])
-
-    #                 create_match_name = self.generate_match_name()
-    #                 match = Match(create_match_name, temp[0], temp[1], temp[0].give_player_score(), temp[1].give_player_score())
-    #                 matchs.append(match)
-                 
-    #             return matchs
-
-
-    # def check_played_match(self, matchs):
-    #     for round in self.tournament.give_round_list():
-    #         for match in round.give_match_list():
-    #             for i in matchs:
-    #                 if match == i:
-    #                     return True
-
-
-
-
-        
     def give_score(self, player_1_name, player_2_name, match_result):
-            match_result_dict = {}
-            if  match_result == player_1_name:
-                match_result_dict = {player_1_name : 1, player_2_name : 0}
-                return match_result_dict
-            elif  match_result == player_2_name:
-                match_result_dict = {player_1_name : 0, player_2_name : 1}
-                return match_result_dict
-            else:
-                match_result_dict = {player_1_name : 0.5, player_2_name : 0.5}
-                return match_result_dict
-    
-    # def classement(self):
-    #     players = self.tournament.give_list_players()
-    #     players.sort(key=lambda p: (p.score, p.random_number), reverse=True)
+        match_result_dict = {}
+        if match_result == player_1_name:
+            match_result_dict = {player_1_name: 1, player_2_name: 0}
+            return match_result_dict
+        elif match_result == player_2_name:
+            match_result_dict = {player_1_name: 0, player_2_name: 1}
+            return match_result_dict
+        else:
+            match_result_dict = {player_1_name: 0.5, player_2_name: 0.5}
+            return match_result_dict
 
-    #     place = 1
-    #     for player in players:
-    #         score = player.give_player_score()
-    #         self.view.show_classment(player, place, score)
-    #         place += 1
+    def classement(self):
+        players = self.tournament.give_list_players()
+        players.sort(key=lambda p: self.give_player_score(p), reverse=True)
 
-
+        place = 1
+        for player in players:
+            score = self.give_player_score(player)
+            self.view_tournament.show_classment(player, place, score)
+            place += 1
