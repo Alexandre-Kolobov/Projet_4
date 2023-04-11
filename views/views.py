@@ -128,3 +128,16 @@ class View():
             print (f"Place {place}: {player} - score {score}")
         else:
             print (f"Place {place}: {player} - score {score}")
+
+    def get_finish_round(self, round_name):
+        while True:
+            print("\n")
+            finish_round = input(f"Tous les matchs du {round_name} sont joués. Marquer {round_name} comme \"terminé\" (y/n)? ").strip()
+            finish_round = str.lower(finish_round)
+            if finish_round == "y":
+                return True
+            elif finish_round == "n":
+                print(f"Merci de marquer le {round_name} comme \"terminé\" pour passer au round suivant.")
+
+    def played_match(player_1_name, player_2_name, player_1_score, player_2_score):
+        print(f"Ce match ([{player_1_name},{player_1_score}], [{player_2_name},{player_2_score}] a déjà été joué lors de précédent lancement du logiciel.")

@@ -113,31 +113,63 @@ class Controller:
                 players = []
                 players = self.shuffle_players(round_name)
 
-                matchs = []
-                matchs = self.create_matchs(players)
-                
-                self.view.show_round(matchs, round_name)
+                matchs = round.give_match_list()
+                if len(matchs) == 0:
+                    matchs_tmp = self.create_matchs(players)
+                    for m in matchs_tmp:
+                        match_name = self.generate_match_name()
+                        match = Match(match_name, m[0], m[1])
+                        round.add_match(match)
 
-                for match in matchs:
+                    self.view.show_round(matchs, round_name)
+                    matchs = round.give_match_list()        
+                    for match in matchs:
 
-                    player_1 = match[0]
-                    player_2 = match[1]
-                
-                    player_1_name = player_1.give_player_name()
-                    player_2_name = player_2.give_player_name()
-
-                    match_result = self.view.play_match(player_1_name, player_2_name)
-                    match_result_dict = self.give_score(player_1_name, player_2_name, match_result)
+                        player_1 = match.give_player_1()
+                        player_2 = match.give_player_2()
                     
-                    match_name = self.generate_match_name()
+                        player_1_name = player_1.give_player_name()
+                        player_2_name = player_2.give_player_name()
 
+                        match_result = self.view.play_match(player_1_name, player_2_name)
+                        match_result_dict = self.give_score(player_1_name, player_2_name, match_result)
 
-                    match = Match(match_name, player_1, player_2, match_result_dict[player_1_name], match_result_dict[player_2_name])
-                    round.add_match(match)
-                    print (match)
+                        match.update_player_score(match_result_dict[player_1_name], match_result_dict[player_2_name])
+                        
+                        print (match)
+                else:
+                    for match in matchs:
+                        match_score_player_1 = match.give_player_1_score()
+                        match_score_player_2 = match.give_player_2_score()
+                        if match_score_player_1 == 0 and match_score_player_2 == 0:
+                            player_1 = match[0]
+                            player_2 = match[1]
+                    
+                            player_1_name = player_1.give_player_name()
+                            player_2_name = player_2.give_player_name()
+
+                            match_result = self.view.play_match(player_1_name, player_2_name)
+                            match_result_dict = self.give_score(player_1_name, player_2_name, match_result)
+
+                            match.update_player_score(match_result_dict[player_1_name], match_result_dict[player_2_name])
+                            print (match)
+                        else: 
+                            player_1 = match.give_player_1()
+                            player_2 = match.give_player_2()
+                            player_1_name = player_1.give_player_name()
+                            player_2_name = player_2.give_player_name()
+
+                            player_1_score = match.give_player_1_score()  
+                            player_2_score = match.give_player_2_score()
+
+                            self.view.played_match(player_1_name, player_2_name, player_1_score, player_2_score)
+
 
             for player in players:
                 print (f"{player} - {self.give_player_score(player)}")
+
+            finish_status = self.view.get_finish_round(round_name)
+            round.update_finish_status(finish_status)
             
 
 

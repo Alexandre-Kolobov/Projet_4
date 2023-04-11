@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Round:
     def __init__(self, name, date_start = "", date_finish = "", finish_status = False):
         self.name = name
@@ -21,8 +23,12 @@ class Round:
     def add_date_start(self, date_start):
         self.date_start = date_start
 
-    def add_date_finish(self, date_finish):
-        self.date_finish = date_finish
-
     def give_finish_status(self):
         return self.finish_status
+    
+    def update_finish_status(self, finish_status):
+        self.finish_status = finish_status
+        round_date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        self.date_finish = round_date_finish
+
+        

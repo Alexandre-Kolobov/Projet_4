@@ -41,6 +41,7 @@ class Match: # match
             self.score_1 = score_1
             self.score_2 = score_2
 
+
     def save_matchs_json(self, tournament_name):
         json_dict = {
             "name":self.name,
