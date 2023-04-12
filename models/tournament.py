@@ -41,3 +41,7 @@ class Tournament:
 
     def give_tournament_name(self):
         return self.name
+
+    def generate_round_name(self, round):
+        name = "Round_" + str(round)
+        return name

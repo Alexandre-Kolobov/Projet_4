@@ -1,4 +1,7 @@
 data_path = "data\\tournaments\\"
+winer_point = 1
+loser_point = 0
+equality_point = 0,5
 
 
 class Match:
@@ -24,6 +27,14 @@ class Match:
     def give_player_2_score(self):
         return self.score_2
 
-    def update_player_score(self, score_1, score_2):
-        self.score_1 = score_1
-        self.score_2 = score_2
+    def update_match_score(self, player_1_name, player_2_name, match_result):
+        if match_result == player_1_name:
+            self.score_1 = winer_point
+            self.score_2 = loser_point
+        elif match_result == player_2_name:
+            self.score_1 = loser_point
+            self.score_2 = winer_point
+        else:
+            self.score_1 = equality_point
+            self.score_2 = equality_point
+

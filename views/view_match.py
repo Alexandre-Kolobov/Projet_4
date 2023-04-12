@@ -16,8 +16,10 @@ class View_match():
 
         return match_result
 
-    def played_match(
-            player_1_name, player_2_name, player_1_score, player_2_score):
+    def show_match_result(self, player_1_name, player_2_name, player_1_score, player_2_score):
+        print(f"([{player_1_name},{player_1_score}], [{player_2_name},{player_2_score}])")
+        
+    def played_match(player_1_name, player_2_name, player_1_score, player_2_score):
 
         print(
             f"Ce match ([{player_1_name},{player_1_score}], [{player_2_name},{player_2_score}]) "
