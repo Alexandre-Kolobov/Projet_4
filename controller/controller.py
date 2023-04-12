@@ -20,13 +20,15 @@ class Controller:
 
     def creat_tournament(self):
         """Initialise un tournois"""
-
-        tournament_informations = self.view_tournament.get_tournament_start_informations()
+        round_all = self.tournament.give_round_all_information()
+        tournament_informations = self.view_tournament.get_tournament_start_informations(round_all)
         name = tournament_informations[0]
         place = tournament_informations[1]
+
+        round_all_update = tournament_informations[3]
         date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
-        self.tournament.modify_start_information(name, place, date_start)
+        self.tournament.modify_start_information(name, place, date_start, round_all_update)
 
     def get_players(self):
         """Création des participants"""

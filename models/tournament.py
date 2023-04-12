@@ -10,13 +10,11 @@ class Tournament:
         self.description = description
         self.round_all = round_all
 
-    def modify_start_information(self, name, place, date_start):
+    def modify_start_information(self, name, place, date_start, round_all):
         self.name = name
         self.place = place
         self.date_start = date_start
-
-    def modify_all_round_information(self, round_all):
-        self.round_all = round_all
+        self.round_all = int(round_all)
 
     def add_player(self, player):
         self.players_list.append(player)
