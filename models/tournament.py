@@ -1,4 +1,4 @@
-class Tournament:
+class Tournament():
     def __init__(self, name="", place="", date_start="", date_finish="", round_all=4, round_current="", description=""):
         self.name = name
         self.place = place
