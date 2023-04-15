@@ -15,13 +15,14 @@ class Player():
     def give_player_name(self):
         return (f"{self.first_name} {self.family_name}")
     
-    def save_player(self, player_name):
+    def save_player(self):
         # Si on dans l'objet qu'on serialize, on rencontre des objets imbriqués, method dumps ne sais pas le traiter.
         # Le parametre "default" nous permet de definir une fonction pour ces objets imbriqués. 
         # o represente l'objet imbriqué
         # json_string = json.dumps(self.tournament, default=lambda o: o.__dict__, indent=4)
 
-        with open (data_path + player_name, "a") as json_file:
+        file_name = (self.first_name + " " + self.family_name)
+        with open (data_path + file_name, "w") as json_file:
             json.dump(self.__dict__, json_file, indent=4)
 
     @classmethod

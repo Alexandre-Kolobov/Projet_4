@@ -15,10 +15,24 @@ class Controller_player:
         self.tournament = Tournament()
         self.view_tournament = View_tournament()
         self.view_player = View_player()
+    
+    def give_players_in_tournament(self):
+        """Affiche la liste des joueurs en temps réel"""
+        players_in_turnament = self.tournament.give_list_players()
+        player_name_in_turnament = []
+        for player in players_in_turnament:
+            name = player.give_player_name()
+            player_name_in_turnament.append(name)
+        
+        return player_name_in_turnament
 
     def get_players(self):
         """Création des participants"""
         while True:
+            player_name_in_turnament = self.give_players_in_tournament()
+            if len(player_name_in_turnament) != 0:
+                self.view_player.show_players(player_name_in_turnament)
+
             database_players = Player.give_database_players()
             answer = self.view_player.show_menu_player(database_players)
 
@@ -28,33 +42,24 @@ class Controller_player:
 
 
             if answer == "Selectionner":
-                players_in_turnament = self.tournament.give_list_players()
-                player_name_in_turnament = []
-                for player in players_in_turnament:
-                    name = player.give_player_name()
-                    player_name_in_turnament.append(name)
-
+                player_name_in_turnament = self.give_players_in_tournament()
                 selected_player = self.view_player.select_player_from_database(database_players, 
                                                                                player_name_in_turnament)
 
-                loaded_player = Player.load_player(selected_player)
-                self.tournament.add_player(loaded_player)
-                print(self.tournament.give_list_players())
+                if selected_player != None:
+                    loaded_player = Player.load_player(selected_player)
+                    self.tournament.add_player(loaded_player)
 
-            while True:
-                player_informations = self.view_player.get_player_informations()
+            if answer == "Ajouter":
+                player_informations = self.view_player.get_player_informations(database_players)
 
-                first_name = player_informations[0]
-                family_name = player_informations[1]
-                birth_date = player_informations[2]
-                add_player = player_informations[3]
+                if player_informations != None:
+                    first_name = player_informations[0]
+                    family_name = player_informations[1]
+                    birth_date = player_informations[2]
 
-                player = Player(first_name, family_name, birth_date)
-                self.tournament.add_player(player)
-                tournament_name = self.tournament.give_tournament_name()
-
-                if (add_player == "n"):
-                    break
+                    player_to_save = Player(first_name, family_name, birth_date)
+                    player_to_save.save_player()
 
         # self.get_players_test()
 
