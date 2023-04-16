@@ -43,3 +43,63 @@ class View_tournament():
             print(f"Place {place}: {player} - score {score}")
         else:
             print(f"Place {place}: {player} - score {score}")
+
+
+    def show_players(self, players):
+        print("----------------------------------------")
+        print("Voici la liste des joueurs participants:")
+        for i in players:
+            print(i)
+
+    def show_player_score(self, player, score):
+        print (f"{player} - {score}")
+
+    def show_menu_tournament(self, database_tournois):
+        print("----------------------------------------")
+        print("Menu du tournois:")
+        print("    1. Afficher la liste des tournois existants dans la base")
+        print("    2. Sélectionner un joueur dans la base des joueurs existants pour l'ajouter au tournois")
+        print("    3. Ajouter un nouveau joueur dans la base des joueurs")
+        print("    4. Finir la selection des joueurs")
+        print("    5. Sauvegarder et quitter")
+        answers = {}
+
+        while True:
+            answers = {"Afficher":"1" ,
+                       "Selectionner":"2",
+                       "Ajouter":"3",
+                       "Finir":"4", 
+                       "Sauvegarder":"5"}
+            print("----------------------------------------")
+            answer = input("Votre choix: ").strip()
+            if answer in answers.values() and answer != answers["Afficher"]:
+                for key, item in answers.items():
+                    if item == answer:
+                        return key
+            
+            elif answer in answers.values() and answer == answers["Afficher"]:
+                print("----------------------------------------")
+                print("Voici la list des joueurs existants dans la base:")
+
+                for player in database_players:
+                    print(player)
+
+                for key, item in answers.items():
+                    if item == answer:
+                        return key
+
+                return key
+                # print("----------------------------------------")
+                # print("Menu des joueurs:")
+                # print("    1. Afficher la liste des joueurs existants dans la base")
+                # print("    2. Sélectionner un joueur dans la base des joueurs existants pour l'ajouter au tournois")
+                # print("    3. Ajouter un nouveau joueur dans la base des joueurs")
+                # print("    4. Finir la selection des joueurs")
+                # print("    5. Sauvegarder et quitter")
+
+            else:
+                answers_list = []
+                for i in answers.values():
+                    answers_list.append(i)
+                answers_list.sort()
+                print(f"Merci de reesayer en choissisant parmis {answers_list}")

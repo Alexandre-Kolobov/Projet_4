@@ -3,11 +3,11 @@
 
 class View_round():
     def show_round_estimation(self, round_all):
-        print("\n")
+        print("----------------------------------------")
         print(f"Avec ce nombre de joueur il est possible de faire: {round_all} round")
 
     def show_round_negative_estimation(self, round_all):
-        print("\n")
+        print("----------------------------------------")
         print(f"Avec ce nombre de joueur il n'est pas possible de faire: {round_all} rounds")
         print("Merci d'ajouter d'autres participants")
 
@@ -18,7 +18,7 @@ class View_round():
 
     def get_finish_round(self, round_name):
         while True:
-            print("\n")
+            print("----------------------------------------")
             finish_round = input(f"Tous les matchs du {round_name} sont joués. "
                                  f"Marquer {round_name} comme \"terminé\" (y/n)? ").strip()
             finish_round = str.lower(finish_round)

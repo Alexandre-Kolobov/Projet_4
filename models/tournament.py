@@ -1,3 +1,7 @@
+import json
+import os
+data_path = "data\\tournaments\\"
+
 class Tournament():
     def __init__(self, name="", place="", date_start="", date_finish="", round_all=4, round_current="", description=""):
         self.name = name
@@ -43,3 +47,11 @@ class Tournament():
     def generate_round_name(self, round):
         name = "Round_" + str(round)
         return name
+
+    @classmethod
+    def give_database_tournaments(csl):
+        database_tournaments = []
+        for filename in os.listdir(data_path):
+            database_tournaments.append(filename)
+        
+        return(database_tournaments)

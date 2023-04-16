@@ -94,13 +94,18 @@ class View_player():
                 for player in database_players:
                     print(player)
 
-                print("----------------------------------------")
-                print("Menu des joueurs:")
-                print("    1. Afficher la liste des joueurs existants dans la base")
-                print("    2. Sélectionner un joueur dans la base des joueurs existants pour l'ajouter au tournois")
-                print("    3. Ajouter un nouveau joueur dans la base des joueurs")
-                print("    4. Finir la selection des joueurs")
-                print("    5. Sauvegarder et quitter")
+                for key, item in answers.items():
+                    if item == answer:
+                        return key
+
+                return key
+                # print("----------------------------------------")
+                # print("Menu des joueurs:")
+                # print("    1. Afficher la liste des joueurs existants dans la base")
+                # print("    2. Sélectionner un joueur dans la base des joueurs existants pour l'ajouter au tournois")
+                # print("    3. Ajouter un nouveau joueur dans la base des joueurs")
+                # print("    4. Finir la selection des joueurs")
+                # print("    5. Sauvegarder et quitter")
 
             else:
                 answers_list = []
@@ -118,6 +123,7 @@ class View_player():
             for player in database_players:
                 print(player)
 
+            print("----------------------------------------")
             player_selected = input("Merci de selectionner un joueur: ").strip()
             for i in range(len(player_name_in_turnament)):
                 player_name_in_turnament[i] = player_name_in_turnament[i].lower()
