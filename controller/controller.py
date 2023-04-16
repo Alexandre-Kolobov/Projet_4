@@ -18,20 +18,31 @@ class Controller_game:
         self.view_round = View_round()
 
     def creat_tournament(self):
-        database_tournois = Tournament.give_database_players()
-        answer = self.view_tournament.show_menu_tournament(database_tournois)
-
-
         """Initialise un tournois"""
-        round_all = self.tournament.give_round_all_information()
-        tournament_informations = self.view_tournament.get_tournament_start_informations(round_all)
-        name = tournament_informations[0]
-        place = tournament_informations[1]
+        while True:
+            database_tournois = Tournament.give_database_tournaments()
+            answer = self.view_tournament.show_menu_tournament(database_tournois)
+            
+            if answer == "Selectionner":
+                selected_tournament = self.view_tournament.select_tournament_from_database(database_tournois)
 
-        round_all_update = tournament_informations[3]
-        date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                if selected_tournament != None:
+                    loaded_tournament = self.tournament.load_tournament(selected_tournament)
+                    break
 
-        self.tournament.modify_start_information(name, place, date_start, round_all_update)
+
+            if answer == "Creer":
+
+                round_all = self.tournament.give_round_all_information()
+                tournament_informations = self.view_tournament.get_tournament_start_informations(round_all, database_tournois)
+                name = tournament_informations[0]
+                place = tournament_informations[1]
+                round_all_update = tournament_informations[3]
+                date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
+                self.tournament.modify_start_information(name, place, date_start, round_all_update)
+                self.tournament.save_tournament()
+                break
 
         return self.tournament
 

@@ -47,6 +47,15 @@ class Tournament():
     def generate_round_name(self, round):
         name = "Round_" + str(round)
         return name
+    
+    def save_tournament(self):
+        # Si on dans l'objet qu'on serialize, on rencontre des objets imbriqués, method dumps ne sais pas le traiter.
+        # Le parametre "default" nous permet de definir une fonction pour ces objets imbriqués. 
+        # o represente l'objet imbriqué
+        # json_string = json.dumps(self.tournament, default=lambda o: o.__dict__, indent=4)
+        file_name = (self.name)
+        with open (data_path + file_name, "w") as json_file:
+            json.dump(self.__dict__, json_file, indent=4)
 
     @classmethod
     def give_database_tournaments(csl):
@@ -55,3 +64,17 @@ class Tournament():
             database_tournaments.append(filename)
         
         return(database_tournaments)
+    
+    def load_tournament(self, tournois):    
+        with open (data_path + tournois) as myfile:
+            json_dict = json.load(myfile)
+
+        self.name = json_dict["name"]
+        self.place = json_dict["place"]
+        self.date_start = json_dict["date_start"]
+        self.date_finish = json_dict["date_finish"]
+        self.round_current = json_dict["round_current"]
+        self.round_list = json_dict["round_list"]
+        self.players_list = json_dict["players_list"]
+        self.description = json_dict["description"]
+        self.round_all = json_dict["round_all"]

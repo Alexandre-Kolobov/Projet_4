@@ -69,6 +69,7 @@ class Controller_player:
                 if selected_player != None:
                     loaded_player = Player.load_player(selected_player)
                     self.tournament.add_player(loaded_player)
+                    self.tournament.save_tournament()
 
             if answer == "Ajouter":
                 player_informations = self.view_player.get_player_informations(database_players)
