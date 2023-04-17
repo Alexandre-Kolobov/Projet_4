@@ -34,7 +34,7 @@ class Player():
         return(database_players)
     
     @classmethod
-    def load_player(csl, player):    
+    def load_player(csl, player):
         with open (data_path + player) as myfile:
             json_dict = json.load(myfile)
             return Player(json_dict["first_name"], json_dict["family_name"], json_dict["birth_date"])

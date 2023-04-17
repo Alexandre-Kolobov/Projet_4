@@ -11,7 +11,7 @@ import random
 
 class Controller_game:
     def __init__(self):
-        self.tournament = Tournament()
+        # self.tournament = Tournament()
         self.view_tournament = View_tournament()
         self.view_player = View_player()
         self.view_match = View_match()
@@ -27,53 +27,69 @@ class Controller_game:
                 selected_tournament = self.view_tournament.select_tournament_from_database(database_tournois)
 
                 if selected_tournament != None:
-                    loaded_tournament = self.tournament.load_tournament(selected_tournament)
-                    break
+                    loaded_tournament = Tournament.load_tournament(selected_tournament)
+                    return loaded_tournament
 
 
             if answer == "Creer":
-
-                round_all = self.tournament.give_round_all_information()
+                tournament = Tournament()
+                round_all = tournament.give_round_all_information()
                 tournament_informations = self.view_tournament.get_tournament_start_informations(round_all, database_tournois)
                 name = tournament_informations[0]
                 place = tournament_informations[1]
                 round_all_update = tournament_informations[3]
                 date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
-                self.tournament.modify_start_information(name, place, date_start, round_all_update)
-                self.tournament.save_tournament()
-                break
+                tournament.modify_start_information(name, place, date_start, round_all_update)
+                tournament.save_tournament()
 
-        return self.tournament
+                players_list = []
+                round_list = []
 
-    def create_list_rounds(self):
+                return tournament, players_list, round_list
+
+    def create_list_rounds(self, tournament):
         """Création des rounds vides"""
-        rounds = self.tournament.give_round_all_information()
+        rounds = tournament.give_round_all_information()
         i = 1
 
         while i <= rounds:
-            round_name = self.tournament.generate_round_name(i)
+            round_name = tournament.generate_round_name(i)
             round = Round(name=round_name)
-            self.tournament.add_round(round)
+            tournament.add_round(round)
             i += 1
 
-    def play_rounds(self):
+        tournament.save_tournament()
+
+    def load_rounds_from_tournament(self, tournament, round_list):
+        if len(round_list) != 0:
+            for round in round_list:
+                round_to_load = Round(name=round["name"],
+                                      date_start=round["date_start"],
+                                      date_finish=round["date_finish"],
+                                      finish_status=round["finish_status"])
+
+                tournament.add_round(round_to_load)
+            tournament.save_tournament()
+
+    def play_rounds(self, tournament):
         """Joue les rounds"""
-        rounds = self.tournament.give_round_list()
+        rounds = tournament.give_round_list()
         for round in rounds:
             if not round.give_finish_status():
                 round.start_round()
                 round_name = round.give_round_name()
-                players = self.shuffle_players(round_name)
+                players = self.shuffle_players(round_name, tournament)
                 matchs = round.give_match_list()
 
                 if len(matchs) == 0:
                     # Si les matchs ne sont pas créer dans un round, on le créer et les joue
-                    self.create_pairs(players, round)
+                    self.create_pairs(players, round, tournament)
                     self.view_round.show_round(matchs, round_name)
                     matchs = round.give_match_list()
                     for match in matchs:
                         self.play_match(match)
+                        tournament.save_tournament()
                 else:
                     for match in matchs:
                         match_score_player_1 = match.give_player_1_score()
@@ -94,7 +110,7 @@ class Controller_game:
                             self.view_match.played_match(player_1_name, player_2_name, player_1_score, player_2_score)
 
             for player in players:
-                score = self.give_player_score(player)
+                score = self.give_player_score(player, tournament)
                 self.view_player.show_player_score(player, score)
 
             finish_status = self.view_round.get_finish_round(round_name)
@@ -116,26 +132,24 @@ class Controller_game:
 
         self.view_match.show_match_result(player_1_name, player_2_name, player_1_score, player_2_score)
 
-    def shuffle_players(self, round_name):
+    def shuffle_players(self, round_name, tournament):
         """Melange les joueurs"""
-        players = self.tournament.give_list_players()
-        print (players)
-        print ("TEST")
+        players = tournament.give_list_players()
 
         if round_name == "Round_1":
             random.shuffle(players)
         else:
-            players.sort(key=lambda p: self.give_player_score(p), reverse=True)  # p reprensent objet Player
+            players.sort(key=lambda p: self.give_player_score(p, tournament), reverse=True)  # p reprensent objet Player
         return players
 
-    def create_pairs(self, players, round):
+    def create_pairs(self, players, round, tournament):
         """Création des paires"""
         players_tmp = players[:]  # players_tmp = players.copy() - même signification
 
         for player_1 in players:
             for player_2 in players:
                 if player_1 in players_tmp and player_2 in players_tmp:
-                    if player_1 != player_2 and not self.check_alredy_played(player_1, player_2):
+                    if player_1 != player_2 and not self.check_alredy_played(player_1, player_2, tournament):
 
                         try:
                             index_player_1 = players_tmp.index(player_1)
@@ -165,9 +179,9 @@ class Controller_game:
         match = Match(match_name, player_1, player_2)
         round.add_match(match)
 
-    def check_alredy_played(self, player_1, player_2):
+    def check_alredy_played(self, player_1, player_2, tournament):
         """Verfication si les joueurs ont déja joué ensemble"""
-        for round in self.tournament.give_round_list():
+        for round in tournament.give_round_list():
             for match in round.give_match_list():
                 checked_player_1 = match.give_player_1()
                 checked_player_2 = match.give_player_2()
@@ -177,10 +191,10 @@ class Controller_game:
 
         return False
 
-    def give_player_score(self, player):
+    def give_player_score(self, player, tournament):
         """Donne le score d'un joueur"""
         player_score = 0
-        for round in self.tournament.give_round_list():
+        for round in tournament.give_round_list():
             for match in round.give_match_list():
                 checked_player_1 = match.give_player_1()
                 checked_player_2 = match.give_player_2()
@@ -192,9 +206,9 @@ class Controller_game:
 
         return player_score
 
-    def classement(self):
+    def classement(self, tournament):
         """Classment des joueurs par leur score - du plus élevé au plus petit"""
-        players = self.tournament.give_list_players()
+        players = tournament.give_list_players()
         players.sort(key=lambda p: self.give_player_score(p), reverse=True)
 
         place = 1

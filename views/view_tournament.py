@@ -101,9 +101,9 @@ class View_tournament():
             answer = input("Votre choix: ").strip()
             while True:
                 if answer in answers.values() and answer == answers["Oui"]:
-                    
-                        round_all = input("Combien de round voulez vous jouer?")
-
+                        print("----------------------------------------")
+                        print("Combien de round voulez vous jouer?")
+                        round_all = input("Nombre des rounds: ")
                         try:
                             int(round_all)
                             break
