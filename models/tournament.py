@@ -3,7 +3,7 @@ import os
 data_path = "data\\tournaments\\"
 
 class Tournament():
-    def __init__(self, name="", place="", date_start="", date_finish="", round_all=4, round_current="", description=""):
+    def __init__(self, name="", place="", date_start="", date_finish="", round_all=4, round_current=0, description=""):
         self.name = name
         self.place = place
         self.date_start = date_start
@@ -19,6 +19,12 @@ class Tournament():
         self.place = place
         self.date_start = date_start
         self.round_all = int(round_all)
+
+    def update_current_round(self):
+        self.round_current = self.round_current + 1
+
+    def give_current_round(self):
+        return self.round_current
 
     def add_player(self, player):
         self.players_list.append(player)
@@ -66,22 +72,22 @@ class Tournament():
         
         return(database_tournaments)
     
-    @classmethod
-    def load_tournament(cls, tournois):    
+    @staticmethod
+    def load_tournament(tournois):    
         with open (data_path + tournois) as myfile:
             json_dict = json.load(myfile)
-            loaded_tournament = Tournament(name=json_dict["name"],
-                                           place=json_dict["place"],
-                                           date_start=json_dict["date_start"],
-                                           date_finish=json_dict["date_finish"],
-                                           round_all=json_dict["round_all"],
-                                           round_current=json_dict["round_current"],
-                                           description=json_dict["description"])
+            # loaded_tournament = Tournament(name=json_dict["name"],
+            #                                place=json_dict["place"],
+            #                                date_start=json_dict["date_start"],
+            #                                date_finish=json_dict["date_finish"],
+            #                                round_all=json_dict["round_all"],
+            #                                round_current=json_dict["round_current"],
+            #                                description=json_dict["description"])
             
-            players_list = json_dict["players_list"]
-            round_list = json_dict["round_list"]
+            # players_list = json_dict["players_list"]
+            # round_list = json_dict["round_list"]
 
-            return loaded_tournament, players_list, round_list
+            return json_dict
 
         # self.name = json_dict["name"]
         # self.place = json_dict["place"]

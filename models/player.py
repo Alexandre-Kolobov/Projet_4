@@ -25,16 +25,22 @@ class Player():
         with open (data_path + file_name, "w") as json_file:
             json.dump(self.__dict__, json_file, indent=4)
 
-    @classmethod
-    def give_database_players(csl):
+    @staticmethod
+    def give_database_players():
         database_players = []
         for filename in os.listdir(data_path):
             database_players.append(filename)
         
         return(database_players)
     
-    @classmethod
-    def load_player(csl, player):
+    @staticmethod
+    def load_player(player):
         with open (data_path + player) as myfile:
             json_dict = json.load(myfile)
+            return json_dict
+        
+    @staticmethod
+    def load_player_from_dict(player):
+            json_dict = json.loads(player)
+            return json_dict
             return Player(json_dict["first_name"], json_dict["family_name"], json_dict["birth_date"])

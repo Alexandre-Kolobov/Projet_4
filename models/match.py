@@ -38,3 +38,8 @@ class Match:
             self.score_1 = equality_point
             self.score_2 = equality_point
 
+    def check_if_match_played(self):
+        if self.score_1 == 0 and self.score_2 == 0:
+            return False
+        else:
+            return True
