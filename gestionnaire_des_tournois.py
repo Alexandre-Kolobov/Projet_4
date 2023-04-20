@@ -11,7 +11,11 @@ def main():
     match_controller = Controller_match()
     tournament_controller = Controller_tournament(player_controller, round_controller, match_controller)
 
-    tournament_controller.run()
+    while True:
+        run_again = tournament_controller.run()
+        if run_again == False:
+            break
+        
     # tournament_informations = tournament_controller.create_tournament()
 
     # tournament = tournament_informations[0]

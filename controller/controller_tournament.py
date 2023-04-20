@@ -38,15 +38,19 @@ class Controller_tournament:
                     pass
 
                 if answer == "Ajouter":
-                    player = self.player_controller.select_player(players_in_turnament)
-                    tournament.add_player(player)
-                    tournament.save_tournament()
+                    one_more = True
+                    while one_more == True:
+                        retour_list = self.player_controller.select_player(players_in_turnament)
+                        player = retour_list[0]
+                        one_more = retour_list[1]
+                        tournament.add_player(player)
+                        tournament.save_tournament()
                 
                 if answer == "Creer":
                     self.player_controller.add_new_player()
 
 
-                if answer == "Finir":
+                if answer == "Demmarer":
                     participants_len = tournament.give_len_list_players()
                     round_all = tournament.give_round_all_information()
                     if self.player_controller.check_number_players(participants_len, round_all):
@@ -54,6 +58,9 @@ class Controller_tournament:
 
                 if answer == "Sauvegarder":
                     exit(0)
+                
+                if answer == "Revenir":
+                    return True
 
             round_all = tournament.give_round_all_information()
 

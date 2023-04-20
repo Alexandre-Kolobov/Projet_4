@@ -37,38 +37,25 @@ class Controller_player:
         answer = self.view_player.show_menu_player(database_players)
 
         return answer
-        # if answer == "Afficher":
-        #     pass
-
-        # if answer == "Selectionner":
-        #     player = self.select_player(tournament, database_players)
-        #     return player
-        
-        # if answer == "Ajouter":
-        #     player = self.add_new_player(database_players)
-        #     return True
-
-        # if answer == "Finir":
-        #     if self.check_number_players(tournament):
-        #         return None
-
-        # if answer == "Sauvegarder":
-        #     exit(0)
 
     def select_player(self, players_in_turnament):
         player_name_in_turnament = self.give_players_in_tournament(players_in_turnament)
+        if len(player_name_in_turnament) != 0:
+            self.view_player.show_players(player_name_in_turnament)
+
         database_players = Player.give_database_players()
-        selected_player = self.view_player.select_player_from_database(database_players, 
+        retour_list = self.view_player.select_player_from_database(database_players, 
                                                                         player_name_in_turnament)
+
+        selected_player = retour_list[0]
+        one_more = retour_list[1]
 
         if selected_player != None:
             loaded_player = Player.load_player(selected_player)
             loaded_player_to_add = Player(loaded_player["first_name"],
                                           loaded_player["family_name"],
                                           loaded_player["birth_date"])
-            return loaded_player_to_add
-            # tournament.add_player(loaded_player_to_add)
-            # tournament.save_tournament()
+            return loaded_player_to_add, one_more
 
     def add_new_player(self):
         database_players = Player.give_database_players()
@@ -93,8 +80,6 @@ class Controller_player:
 
     def check_number_players(self, participants_len, round_all):
         """Verifie la possibilité de jouer le nombre des rounds demandé"""
-        # participants_len = tournament.give_len_list_players()
-        # round_all = tournament.give_round_all_information()
 
         if (participants_len % 2) == 0:  # Si nombre des participant est paire il y a N-1 tours possibles
             max_round = participants_len - 1
@@ -104,8 +89,6 @@ class Controller_player:
             else:
                 self.view_round.show_round_negative_estimation(round_all)
                 return False
-                # self.get_player(tournament)
         else:  # Si nombre des participant est impaire, il faut ajouter des joueurs
             self.view_round.show_round_negative_estimation(round_all)
             return False
-            # self.get_player(tournament)
