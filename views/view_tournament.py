@@ -33,13 +33,6 @@ class View_tournament():
                         return key
 
                 return key
-                # print("----------------------------------------")
-                # print("Menu des joueurs:")
-                # print("    1. Afficher la liste des joueurs existants dans la base")
-                # print("    2. Sélectionner un joueur dans la base des joueurs existants pour l'ajouter au tournois")
-                # print("    3. Ajouter un nouveau joueur dans la base des joueurs")
-                # print("    4. Finir la selection des joueurs")
-                # print("    5. Sauvegarder et quitter")
 
             else:
                 answers_list = []
@@ -98,8 +91,9 @@ class View_tournament():
             answers = {"Oui":"1" ,
                        "Non":"2"}
                     
-            answer = input("Votre choix: ").strip()
+            
             while True:
+                answer = input("Votre choix: ").strip()
                 if answer in answers.values() and answer == answers["Oui"]:
                         print("----------------------------------------")
                         print("Combien de round voulez vous jouer?")

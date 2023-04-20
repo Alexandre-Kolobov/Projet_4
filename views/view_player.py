@@ -99,13 +99,6 @@ class View_player():
                         return key
 
                 return key
-                # print("----------------------------------------")
-                # print("Menu des joueurs:")
-                # print("    1. Afficher la liste des joueurs existants dans la base")
-                # print("    2. Sélectionner un joueur dans la base des joueurs existants pour l'ajouter au tournois")
-                # print("    3. Ajouter un nouveau joueur dans la base des joueurs")
-                # print("    4. Finir la selection des joueurs")
-                # print("    5. Sauvegarder et quitter")
 
             else:
                 answers_list = []

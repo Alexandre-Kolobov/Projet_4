@@ -30,12 +30,6 @@ class Round:
         round_date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.date_finish = round_date_finish
 
-    def generate_match_name(self):
-        global match_counter
-        match_counter += 1
-        name = "Match_" + str(match_counter)
-        return name
-
     def start_round(self):
         round_date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.date_start = round_date_start

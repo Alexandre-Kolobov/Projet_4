@@ -26,35 +26,38 @@ class Controller_player:
         
         tournament.save_tournament()
     
-    def get_players(self, tournament):
+    def get_player(self, players_in_turnament):
         """Création des participants"""
 
-        while True:
-            player_name_in_turnament = self.give_players_in_tournament(tournament)
-            if len(player_name_in_turnament) != 0:
-                self.view_player.show_players(player_name_in_turnament)
+        player_name_in_turnament = self.give_players_in_tournament(players_in_turnament)
+        if len(player_name_in_turnament) != 0:
+            self.view_player.show_players(player_name_in_turnament)
 
-            database_players = Player.give_database_players()
-            answer = self.view_player.show_menu_player(database_players)
+        database_players = Player.give_database_players()
+        answer = self.view_player.show_menu_player(database_players)
 
-            if answer == "Afficher":
-                pass
+        return answer
+        # if answer == "Afficher":
+        #     pass
 
-            if answer == "Selectionner":
-                self.select_player(tournament, database_players)
+        # if answer == "Selectionner":
+        #     player = self.select_player(tournament, database_players)
+        #     return player
+        
+        # if answer == "Ajouter":
+        #     player = self.add_new_player(database_players)
+        #     return True
 
-            if answer == "Ajouter":
-                self.add_new_player(database_players)
+        # if answer == "Finir":
+        #     if self.check_number_players(tournament):
+        #         return None
 
-            if answer == "Finir":
-                if self.check_number_players(tournament):
-                    break
+        # if answer == "Sauvegarder":
+        #     exit(0)
 
-            if answer == "Sauvegarder":
-                exit(0)
-
-    def select_player(self, tournament, database_players):
-        player_name_in_turnament = self.give_players_in_tournament(tournament)
+    def select_player(self, players_in_turnament):
+        player_name_in_turnament = self.give_players_in_tournament(players_in_turnament)
+        database_players = Player.give_database_players()
         selected_player = self.view_player.select_player_from_database(database_players, 
                                                                         player_name_in_turnament)
 
@@ -63,10 +66,12 @@ class Controller_player:
             loaded_player_to_add = Player(loaded_player["first_name"],
                                           loaded_player["family_name"],
                                           loaded_player["birth_date"])
-            tournament.add_player(loaded_player_to_add)
-            tournament.save_tournament()
+            return loaded_player_to_add
+            # tournament.add_player(loaded_player_to_add)
+            # tournament.save_tournament()
 
-    def add_new_player(self, database_players):
+    def add_new_player(self):
+        database_players = Player.give_database_players()
         player_informations = self.view_player.get_player_informations(database_players)
 
         if player_informations != None:
@@ -77,9 +82,8 @@ class Controller_player:
             player_to_save = Player(first_name, family_name, birth_date)
             player_to_save.save_player()
 
-    def give_players_in_tournament(self, tournament):
+    def give_players_in_tournament(self, players_in_turnament):
         """Affiche la liste des joueurs en temps réel"""
-        players_in_turnament = tournament.give_list_players()
         player_name_in_turnament = []
         for player in players_in_turnament:
             name = player.give_player_name()
@@ -87,10 +91,10 @@ class Controller_player:
         
         return player_name_in_turnament
 
-    def check_number_players(self, tournament):
+    def check_number_players(self, participants_len, round_all):
         """Verifie la possibilité de jouer le nombre des rounds demandé"""
-        participants_len = tournament.give_len_list_players()
-        round_all = tournament.give_round_all_information()
+        # participants_len = tournament.give_len_list_players()
+        # round_all = tournament.give_round_all_information()
 
         if (participants_len % 2) == 0:  # Si nombre des participant est paire il y a N-1 tours possibles
             max_round = participants_len - 1
@@ -99,7 +103,9 @@ class Controller_player:
                 return True
             else:
                 self.view_round.show_round_negative_estimation(round_all)
-                self.get_players(tournament)
+                return False
+                # self.get_player(tournament)
         else:  # Si nombre des participant est impaire, il faut ajouter des joueurs
             self.view_round.show_round_negative_estimation(round_all)
-            self.get_players(tournament)
+            return False
+            # self.get_player(tournament)

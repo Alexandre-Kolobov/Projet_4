@@ -43,4 +43,3 @@ class Player():
     def load_player_from_dict(player):
             json_dict = json.loads(player)
             return json_dict
-            return Player(json_dict["first_name"], json_dict["family_name"], json_dict["birth_date"])
