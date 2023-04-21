@@ -148,32 +148,35 @@ class View_player():
                         answers_list.append(i)
                     answers_list.sort()
                     print(f"Merci de reesayer en choissisant parmis {answers_list}")
+
+            return player_selected
+            
+    def add_one_more_player(self):
+        print("----------------------------------------")
+        print("Voulez vous selectionner un autre joueur?")
+        print("----------------------------------------")
+        print("    1. Oui")
+        print("    2. Non")
+
+        answers = {"Oui":"1" ,
+                   "Non":"2"}
+
+        while True:
+            answer = input("Votre choix: ").strip()
+            if answer in answers.values() and answer == answers["Oui"]:
+                for key, item in answers.items():
+                    if item == answer:
+                        return key
+
+            elif answer in answers.values() and answer == answers["Non"]:
+                print("----------------------------------------")
+                print("Retour au menu des joueurs")
+                for key, item in answers.items():
+                    if item == answer:
+                        return key
             else:
-                print("----------------------------------------")
-                print("Voulez vous selectionner un autre joueur?")
-                print("----------------------------------------")
-                print("    1. Oui")
-                print("    2. Non")
-
-                answers = {"Oui":"1" ,
-                           "Non":"2"}
-
-                while True:
-                    answer = input("Votre choix: ").strip()
-                    if answer in answers.values() and answer == answers["Oui"]:
-                        slect_one_more = True
-                        break
-
-                    elif answer in answers.values() and answer == answers["Non"]:
-                        print("----------------------------------------")
-                        print("Retour au menu des joueurs")
-                        slect_one_more = False
-                        break
-                    else:
-                        answers_list = []
-                        for i in answers.values():
-                            answers_list.append(i)
-                        answers_list.sort()
-                        print(f"Merci de reesayer en choissisant parmis {answers_list}")
-
-                return player_selected, slect_one_more 
+                answers_list = []
+                for i in answers.values():
+                    answers_list.append(i)
+                answers_list.sort()
+                print(f"Merci de reesayer en choissisant parmis {answers_list}")

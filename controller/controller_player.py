@@ -40,18 +40,23 @@ class Controller_player:
             self.view_player.show_players(player_name_in_turnament)
 
         database_players = Player.give_database_players()
-        retour_list = self.view_player.select_player_from_database(database_players, 
+        selected_player = self.view_player.select_player_from_database(database_players, 
                                                                         player_name_in_turnament)
 
-        selected_player = retour_list[0]
-        one_more = retour_list[1]
+        # selected_player = retour_list[0]
+        # one_more = retour_list[1]
 
         if selected_player != None:
             loaded_player = Player.load_player(selected_player)
             loaded_player_to_add = Player(loaded_player["first_name"],
                                           loaded_player["family_name"],
                                           loaded_player["birth_date"])
-            return loaded_player_to_add, one_more
+            # return loaded_player_to_add, one_more
+            return loaded_player_to_add
+        
+    def add_one_more_player(self):
+        answer = self.view_player.add_one_more_player()
+        return answer
 
     def add_new_player(self):
         database_players = Player.give_database_players()
@@ -91,5 +96,7 @@ class Controller_player:
         
     def player_name_to_check(self, player_name, player):
         if player_name == player.give_player_name():
-            print (f"TESTAKO {player_name} and {player.give_player_name}")
             return player
+        
+    def give_player_name(self, player):
+        return player.give_player_name()

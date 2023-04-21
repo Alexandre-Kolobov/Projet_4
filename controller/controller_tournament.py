@@ -38,17 +38,23 @@ class Controller_tournament:
                 players_in_turnament = tournament.give_list_players()
                 answer = self.player_controller.get_player(players_in_turnament)
 
-                if answer == "Afficher":
-                    pass
+                # if answer == "Afficher":
+                #     pass
 
                 if answer == "Ajouter":
-                    one_more = True
-                    while one_more == True:
-                        retour_list = self.player_controller.select_player(players_in_turnament)
-                        player = retour_list[0]
-                        one_more = retour_list[1]
-                        tournament.add_player(player)
-                        tournament.save_tournament()
+                    player = self.player_controller.select_player(players_in_turnament)
+                    tournament.add_player(player)
+                    tournament.save_tournament()
+
+                    
+                    while True:
+                        answer_one_more = self.player_controller.add_one_more_player()
+                        if answer_one_more == "Oui":
+                            player = self.player_controller.select_player(players_in_turnament)
+                            tournament.add_player(player)
+                            tournament.save_tournament()
+                        else:
+                            break
                 
                 if answer == "Creer":
                     self.player_controller.add_new_player()
@@ -112,7 +118,13 @@ class Controller_tournament:
  
                 matchs_list_to_play = self.round_controller.give_list_matchs(round)
                 for match_to_play in matchs_list_to_play:
-                    self.match_controller.play_match(match_to_play)
+                    players_match_dict = self.match_controller.give_dict_players(match_to_play)
+                    players = list(players_match_dict)
+
+                    player_1_name = self.player_controller.give_player_name(players[0])
+                    player_2_name = self.player_controller.give_player_name(players[1])
+
+                    self.match_controller.play_match(player_1_name, player_2_name, match_to_play)
                     tournament.save_tournament()
 
                 self.round_controller.finish_round(round)
@@ -157,7 +169,12 @@ class Controller_tournament:
                         for match_to_play in matchs_list_to_play:
                             
                             if self.match_controller.check_if_match_played(match_to_play) == False:
-                                self.match_controller.play_match(match_to_play)
+                                players_match_dict = self.match_controller.give_dict_players(match_to_play)
+                                players = list(players_match_dict)
+                                player_1_name = self.player_controller.give_player_name(players[0])
+                                player_2_name = self.player_controller.give_player_name(players[1])
+                                self.match_controller.play_match(player_1_name, player_2_name, match_to_play)
+
                                 tournament.save_tournament()
 
                         self.round_controller.finish_round(round_to_load)
@@ -168,6 +185,7 @@ class Controller_tournament:
                         # to refactoring ==== 
                         current_round = tournament.give_current_round()
                         rounds_to_check = tournament.give_round_list()
+                        players = tournament.give_list_players()
                         played_matchs = []
                         for round_to_check in rounds_to_check:
 
@@ -183,6 +201,8 @@ class Controller_tournament:
                         players = self.shuffle_players(players, current_round, played_pairs)
                         played_pairs_list = list(played_pairs)  # played_pairs est un dictionnaire contenant tous matchs(jouers/score)
                         pairs = self.create_pairs(players, played_pairs_list)
+                        print (players)
+                        print (played_pairs_list)
 
                         m = 1
                         for pair in pairs:
@@ -195,7 +215,12 @@ class Controller_tournament:
 
                         matchs_list_to_play = self.round_controller.give_list_matchs(round_to_load)
                         for match_to_play in matchs_list_to_play:
-                            self.match_controller.play_match(match_to_play)
+                            players_match_dict = self.match_controller.give_dict_players(match_to_play)
+                            players = list(players_match_dict)
+                            player_1_name = self.player_controller.give_player_name(players[0])
+                            player_2_name = self.player_controller.give_player_name(players[1])
+                            self.match_controller.play_match(player_1_name, player_2_name, match_to_play)
+
                             tournament.save_tournament()
 
                         self.round_controller.finish_round(round_to_load)

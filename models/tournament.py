@@ -48,8 +48,8 @@ class Tournament():
     def add_date_finish(self, date_finish):
         self.date_finish = date_finish
 
-    def give_tournament_name(self):
-        return self.name
+    # def give_tournament_name(self):
+    #     return self.name
     
     def save_tournament(self):
         # Si on dans l'objet qu'on serialize, on rencontre des objets imbriqués, method dumps ne sais pas le traiter.
@@ -60,8 +60,9 @@ class Tournament():
         with open (data_path + file_name, "w") as json_file:
             json.dump(self.__dict__, json_file, default=lambda o: o.__dict__, indent=4)
 
-    @classmethod
-    def give_database_tournaments(csl):
+
+    @staticmethod
+    def give_database_tournaments():
         database_tournaments = []
         for filename in os.listdir(data_path):
             database_tournaments.append(filename)

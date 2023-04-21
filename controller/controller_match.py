@@ -21,14 +21,15 @@ class Controller_match:
         """Création de match"""
         match = Match(match_name, player_1, player_2)
         return match
-    
-    def play_match(self, match):
-        """Joue le match"""
-        player_1 = match.give_player_1()
-        player_2 = match.give_player_2()
 
-        player_1_name = player_1.give_player_name()
-        player_2_name = player_2.give_player_name()
+    
+    def play_match(self, player_1_name, player_2_name, match):
+        """Joue le match"""
+        # player_1 = match.give_player_1()
+        # player_2 = match.give_player_2()
+
+        # player_1_name = player_1.give_player_name()
+        # player_2_name = player_2.give_player_name()
 
         match_result = self.view_match.play_match(player_1_name, player_2_name)
         match.update_match_score(player_1_name, player_2_name, match_result)
