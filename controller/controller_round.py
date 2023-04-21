@@ -22,17 +22,13 @@ class Controller_round:
         round = Round(name=round_name)
         return round
     
-    def load_round(self, tournament, round):
+    def load_round(self, round):
         round_to_load = Round(name=round["name"],
                               date_start=round["date_start"],
                               date_finish=round["date_finish"],
                               finish_status=round["finish_status"])
         
         matchs = round["matchs"]
-
-        tournament.add_round(round_to_load)
-        tournament.save_tournament()
-
         return round_to_load, matchs
 
     def finish_round(self, round):
@@ -51,3 +47,6 @@ class Controller_round:
     
     def add_match(self, round, match):
         round.add_match(match)
+
+    def check_finish_status(self, round):
+        return round.give_finish_status()

@@ -26,7 +26,11 @@ class Controller_tournament:
         current_round = tournament_informations[3]
 
         # On charge les joueurs s'ils existent dans le tournois
-        self.player_controller.load_players_from_tournament(tournament, players_list)
+        if len(players_list) != 0:
+            for player in players_list:
+                player_to_add = self.player_controller.load_players_from_tournament(player)
+                tournament.add_player(player_to_add)
+                tournament.save_tournament()
 
         #  Si les rounds n'ont pas été commencé (on continue la création des joueurs)
         if current_round == 0:
@@ -75,6 +79,7 @@ class Controller_tournament:
             rounds = tournament.give_round_list()
             for round in rounds:
                 tournament.update_current_round()
+                tournament.save_tournament()
                 players = tournament.give_list_players()
                 current_round = tournament.give_current_round()
 
@@ -117,6 +122,90 @@ class Controller_tournament:
             tournament.add_date_finish(date_finish)
             tournament.save_tournament()
             self.classement(tournament, played_pairs)
+
+        else:
+
+            for round in round_list:
+                round_informations = self.round_controller.load_round(round)
+                round_to_load = round_informations[0]
+                matchs = round_informations[1]
+                tournament.add_round(round_to_load)
+                tournament.save_tournament()
+
+                for match in matchs:
+                    players = tournament.give_list_players()
+                    players_names = self.match_controller.players_names_to_check(match) 
+                    player_1_name = players_names[0]
+                    player_2_name = players_names[1]
+
+                    for player in players:
+                        if self.player_controller.player_name_to_check(player_1_name, player) != None:
+                            player_1 = self.player_controller.player_name_to_check(player_1_name, player)
+                        
+                        if self.player_controller.player_name_to_check(player_2_name, player) != None:
+                            player_2 = self.player_controller.player_name_to_check(player_2_name, player)
+    
+                    loaded_match = self.match_controller.load_match(player_1, player_2, match)
+                    self.round_controller.add_match(round_to_load, loaded_match)
+                    tournament.save_tournament()
+            
+                if self.round_controller.check_finish_status(round_to_load) == False:
+                    matchs_list_to_play = self.round_controller.give_list_matchs(round_to_load)
+                    # Continuer tournament à partir d'un round (les matchs sont crées mais pas joués compeltement)
+                    if len(matchs_list_to_play) != 0:
+                        matchs_list_to_play = self.round_controller.give_list_matchs(round_to_load)
+                        for match_to_play in matchs_list_to_play:
+                            
+                            if self.match_controller.check_if_match_played(match_to_play) == False:
+                                self.match_controller.play_match(match_to_play)
+                                tournament.save_tournament()
+
+                        self.round_controller.finish_round(round_to_load)
+                        tournament.save_tournament()
+                    
+                    # Les match n'ot pas été crée (se joue aprés le round repris)
+                    if len(matchs_list_to_play) == 0:
+                        # to refactoring ==== 
+                        current_round = tournament.give_current_round()
+                        rounds_to_check = tournament.give_round_list()
+                        played_matchs = []
+                        for round_to_check in rounds_to_check:
+
+                            matchs_list = self.round_controller.give_list_matchs(round_to_check)
+                            for match_in_list in matchs_list:
+                                played_matchs.append(match_in_list)
+                            
+                            played_pairs = []
+                            for played_match in played_matchs:
+                                players_dict = self.match_controller.give_dict_players(played_match)
+                                played_pairs.append(players_dict)
+                
+                        players = self.shuffle_players(players, current_round, played_pairs)
+                        played_pairs_list = list(played_pairs)  # played_pairs est un dictionnaire contenant tous matchs(jouers/score)
+                        pairs = self.create_pairs(players, played_pairs_list)
+
+                        m = 1
+                        for pair in pairs:
+                            match_name = "Match_" + str(m)
+                            m += 1
+                        
+                            match = self.match_controller.create_match(match_name, pair[0], pair[1])
+                            self.round_controller.add_match(round_to_load, match)
+                            tournament.save_tournament()
+
+                        matchs_list_to_play = self.round_controller.give_list_matchs(round_to_load)
+                        for match_to_play in matchs_list_to_play:
+                            self.match_controller.play_match(match_to_play)
+                            tournament.save_tournament()
+
+                        self.round_controller.finish_round(round_to_load)
+                        tournament.save_tournament()
+            
+            date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            tournament.add_date_finish(date_finish)
+            tournament.save_tournament()
+            self.classement(tournament, played_pairs)
+
 
     def create_tournament(self):
         """Initialise un tournois"""
@@ -241,7 +330,6 @@ class Controller_tournament:
 
     def check_alredy_played(self, player_1, player_2, played_pairs):
         """Verfication si les joueurs ont déja joué ensemble"""
-        print(played_pairs)
         for pairs in played_pairs:
             list_played_pairs = list(pairs)
             if player_1 == list_played_pairs[0] or player_1 == list_played_pairs[1]:

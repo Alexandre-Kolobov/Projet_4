@@ -12,19 +12,15 @@ class Controller_player:
         self.view_match = View_match()
         self.view_round = View_round()
 
-    def load_players_from_tournament(self, tournament, players_list):
-        if len(players_list) != 0:
-            for player in players_list:
-                database_players = Player.give_database_players()
-                player_name = (player["first_name"] + " " + player["family_name"])
-                player_to_load = Player.load_player(player_name)
-                player_to_add = Player(player_to_load["first_name"],
-                                       player_to_load["family_name"],
-                                       player_to_load["birth_date"])
+    def load_players_from_tournament(self, player):
+        # database_players = Player.give_database_players()
+        player_name = (player["first_name"] + " " + player["family_name"])
+        player_to_load = Player.load_player(player_name)
+        player_to_add = Player(player_to_load["first_name"],
+                                player_to_load["family_name"],
+                                player_to_load["birth_date"])
                 
-                tournament.add_player(player_to_add)
-        
-        tournament.save_tournament()
+        return player_to_add
     
     def get_player(self, players_in_turnament):
         """Création des participants"""
@@ -92,3 +88,8 @@ class Controller_player:
         else:  # Si nombre des participant est impaire, il faut ajouter des joueurs
             self.view_round.show_round_negative_estimation(round_all)
             return False
+        
+    def player_name_to_check(self, player_name, player):
+        if player_name == player.give_player_name():
+            print (f"TESTAKO {player_name} and {player.give_player_name}")
+            return player
