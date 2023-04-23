@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 class View_player():
-    def get_player_informations(self, database_players):
+    def get_player_informations(self, database_players, counter):
         while True:
             print("----------------------------------------")
             while True:
@@ -52,7 +52,7 @@ class View_player():
                     print("Retour au menu des joueurs")
                     return None
             else:
-                print(f"Le joueur {first_name} {family_name} a été ajouté dans la base des joueurs")
+                print(f"Le joueur {first_name} {family_name} a été ajouté dans la base des joueurs avec id {counter}")
                 return first_name, family_name, birth_date
 
     def show_players(self, players):
@@ -119,20 +119,56 @@ class View_player():
                 print(player)
 
             print("----------------------------------------")
-            player_selected = input("Merci de selectionner un joueur: ").strip()
-            for i in range(len(player_name_in_turnament)):
-                player_name_in_turnament[i] = player_name_in_turnament[i].lower()
+            player_selected = input("Merci de selectionner un joueur par son nom, prenom et id: ").strip()
 
-            if player_selected.lower() in player_name_in_turnament:
+            database_players_lower = database_players[:]
+            for i in range(len(database_players_lower)):
+                database_players_lower[i] = database_players_lower[i].lower()
+
+            player_name_in_turnament_lower = player_name_in_turnament[:]
+            for i in range(len(player_name_in_turnament_lower)):
+                player_name_in_turnament_lower[i] = player_name_in_turnament_lower[i].lower()
+
+            if player_selected.lower() in database_players_lower:
+                if player_selected.lower() in player_name_in_turnament_lower:
+                    print("----------------------------------------")
+                    print(f"Le joueur {player_selected} participe déja à ce tournois")
+                    print("Voulez vous selectionner un autre joueur?")
+                    print("----------------------------------------")
+                    print("    1. Oui")
+                    print("    2. Non")
+
+                    answers = {"Oui":"1" ,
+                            "Non":"2"}
+                    
+                    answer = input("Votre choix: ").strip()
+                    if answer in answers.values() and answer == answers["Oui"]:
+                        pass
+
+                    elif answer in answers.values() and answer == answers["Non"]:
+                        print("----------------------------------------")
+                        print("Retour au menu des joueurs")
+                        return None
+                    else:
+                        answers_list = []
+                        for i in answers.values():
+                            answers_list.append(i)
+                        answers_list.sort()
+                        print(f"Merci de reesayer en choissisant parmis {answers_list}")
+                else:
+                    print("----------------------------------------")
+                    print(f"Le joueur {player_selected} est ajouté au tournois")
+                    return player_selected  
+            else:
                 print("----------------------------------------")
-                print(f"Le joueur {player_selected} participe déja à ce tournois")
+                print(f"Le joueur {player_selected} n'existe pas dans la base des joueurs")
                 print("Voulez vous selectionner un autre joueur?")
                 print("----------------------------------------")
                 print("    1. Oui")
                 print("    2. Non")
 
                 answers = {"Oui":"1" ,
-                           "Non":"2"}
+                        "Non":"2"}
                 
                 answer = input("Votre choix: ").strip()
                 if answer in answers.values() and answer == answers["Oui"]:
@@ -148,8 +184,64 @@ class View_player():
                         answers_list.append(i)
                     answers_list.sort()
                     print(f"Merci de reesayer en choissisant parmis {answers_list}")
+            
 
-            return player_selected
+            # if any(player_selected.lower() in p for p in database_players):
+            #     if any(player_selected.lower() in p for p in player_name_in_turnament):
+            #         player_matching = [p for p in player_name_in_turnament if player_selected.lower() in p]
+            #         print("----------------------------------------")
+            #         print(f"Le joueur {player_matching[0]} participe déja à ce tournois")
+            #         print("Voulez vous selectionner un autre joueur?")
+            #         print("----------------------------------------")
+            #         print("    1. Oui")
+            #         print("    2. Non")
+
+            #         answers = {"Oui":"1" ,
+            #                 "Non":"2"}
+                    
+            #         answer = input("Votre choix: ").strip()
+            #         if answer in answers.values() and answer == answers["Oui"]:
+            #             pass
+
+            #         elif answer in answers.values() and answer == answers["Non"]:
+            #             print("----------------------------------------")
+            #             print("Retour au menu des joueurs")
+            #             return None
+            #         else:
+            #             answers_list = []
+            #             for i in answers.values():
+            #                 answers_list.append(i)
+            #             answers_list.sort()
+            #             print(f"Merci de reesayer en choissisant parmis {answers_list}")
+            #     else:
+            #         return player_selected
+            # else:
+            #     print("----------------------------------------")
+            #     print(f"Le joueur avec id{player_selected} n'existe pas")
+            #     print("Voulez vous selectionner un autre joueur?")
+            #     print("----------------------------------------")
+            #     print("    1. Oui")
+            #     print("    2. Non")
+
+            #     answers = {"Oui":"1" ,
+            #             "Non":"2"}
+                
+            #     answer = input("Votre choix: ").strip()
+            #     if answer in answers.values() and answer == answers["Oui"]:
+            #         pass
+
+            #     elif answer in answers.values() and answer == answers["Non"]:
+            #         print("----------------------------------------")
+            #         print("Retour au menu des joueurs")
+            #         return None
+            #     else:
+            #         answers_list = []
+            #         for i in answers.values():
+            #             answers_list.append(i)
+            #         answers_list.sort()
+            #         print(f"Merci de reesayer en choissisant parmis {answers_list}")
+
+
             
     def add_one_more_player(self):
         print("----------------------------------------")

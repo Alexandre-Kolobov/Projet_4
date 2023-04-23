@@ -19,6 +19,7 @@ class Controller_tournament:
         self.match_controller = match_controller
 
     def run(self):
+        self.view_tournament.show_welcome()
         tournament_informations = self.create_tournament()
         tournament = tournament_informations[0]
         players_list = tournament_informations[1]
@@ -43,18 +44,23 @@ class Controller_tournament:
 
                 if answer == "Ajouter":
                     player = self.player_controller.select_player(players_in_turnament)
-                    tournament.add_player(player)
-                    tournament.save_tournament()
 
-                    
-                    while True:
-                        answer_one_more = self.player_controller.add_one_more_player()
-                        if answer_one_more == "Oui":
-                            player = self.player_controller.select_player(players_in_turnament)
-                            tournament.add_player(player)
-                            tournament.save_tournament()
-                        else:
-                            break
+                    if player != None:
+                        tournament.add_player(player)
+                        tournament.save_tournament()
+
+                        
+                        while True:
+                            answer_one_more = self.player_controller.add_one_more_player()
+                            if answer_one_more == "Oui":
+                                player = self.player_controller.select_player(players_in_turnament)
+                                if player != None:
+                                    tournament.add_player(player)
+                                    tournament.save_tournament()
+                                else:
+                                    break
+                            else:
+                                break
                 
                 if answer == "Creer":
                     self.player_controller.add_new_player()

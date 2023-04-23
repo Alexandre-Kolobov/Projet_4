@@ -1,19 +1,26 @@
 import json
 import os
 data_path = "data\\players\\"
+counter_path = "data\\counter\\"
+counter_filename = "id_counter.txt"
+
+
 
 
 class Player():
-    def __init__(self, first_name, family_name, birth_date):
+    counter = 0
+
+    def __init__(self, first_name, family_name, birth_date, counter):
         self.first_name = first_name
         self.family_name = family_name
         self.birth_date = birth_date
+        self.counter = counter
 
     def __repr__(self):
-        return (f"{self.first_name} {self.family_name}")
+        return (f"{self.first_name} {self.family_name} id{self.counter}")
 
     def give_player_name(self):
-        return (f"{self.first_name} {self.family_name}")
+        return (f"{self.first_name} {self.family_name} id{self.counter}")
     
     def save_player(self):
         # Si on dans l'objet qu'on serialize, on rencontre des objets imbriqués, method dumps ne sais pas le traiter.
@@ -21,7 +28,7 @@ class Player():
         # o represente l'objet imbriqué
         # json_string = json.dumps(self.tournament, default=lambda o: o.__dict__, indent=4)
 
-        file_name = (self.first_name + " " + self.family_name)
+        file_name = (self.first_name + " " + self.family_name + " " + "id" + str(self.counter))
         with open (data_path + file_name, "w") as json_file:
             json.dump(self.__dict__, json_file, indent=4)
 
@@ -34,12 +41,34 @@ class Player():
         return(database_players)
     
     @staticmethod
-    def load_player(player):
-        with open (data_path + player) as myfile:
-            json_dict = json.load(myfile)
-            return json_dict
+    def load_player(id):
+        for file_name in os.listdir(data_path):
+            if id in file_name:
+                with open (data_path + file_name) as myfile:
+                    json_dict = json.load(myfile)
+                    return json_dict
         
     @staticmethod
     def load_player_from_dict(player):
             json_dict = json.loads(player)
             return json_dict
+    
+    @classmethod
+    def increment_counter(cls):
+        cls.counter = cls.counter + 1
+        filename = (counter_path + counter_filename)
+        with open (filename, "w") as myfile:
+            myfile.write(str(cls.counter))
+
+    @classmethod
+    def load_counter(cls):
+        filename = (counter_path + counter_filename)
+        if os.path.exists(filename):
+            with open (filename, "r") as myfile:
+                cls.counter = int(myfile.read())
+        else:
+            os.mkdir(counter_path)
+            filename = (counter_path + counter_filename)
+            with open (filename, "w") as myfile:
+                myfile.write(str(cls.counter))
+        return cls.counter

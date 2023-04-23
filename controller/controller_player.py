@@ -18,7 +18,8 @@ class Controller_player:
         player_to_load = Player.load_player(player_name)
         player_to_add = Player(player_to_load["first_name"],
                                 player_to_load["family_name"],
-                                player_to_load["birth_date"])
+                                player_to_load["birth_date"],
+                                player_to_load["counter"])
                 
         return player_to_add
     
@@ -46,11 +47,14 @@ class Controller_player:
         # selected_player = retour_list[0]
         # one_more = retour_list[1]
 
-        if selected_player != None:
+        if selected_player == None:
+            return None
+        else:
             loaded_player = Player.load_player(selected_player)
             loaded_player_to_add = Player(loaded_player["first_name"],
                                           loaded_player["family_name"],
-                                          loaded_player["birth_date"])
+                                          loaded_player["birth_date"],
+                                          loaded_player["counter"])
             # return loaded_player_to_add, one_more
             return loaded_player_to_add
         
@@ -59,16 +63,17 @@ class Controller_player:
         return answer
 
     def add_new_player(self):
+        counter = Player.load_counter()
         database_players = Player.give_database_players()
-        player_informations = self.view_player.get_player_informations(database_players)
+        player_informations = self.view_player.get_player_informations(database_players, counter)
 
         if player_informations != None:
             first_name = player_informations[0]
             family_name = player_informations[1]
             birth_date = player_informations[2]
-
-            player_to_save = Player(first_name, family_name, birth_date)
+            player_to_save = Player(first_name, family_name, birth_date, counter)
             player_to_save.save_player()
+        Player.increment_counter()
 
     def give_players_in_tournament(self, players_in_turnament):
         """Affiche la liste des joueurs en temps réel"""
