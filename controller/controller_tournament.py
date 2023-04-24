@@ -25,6 +25,7 @@ class Controller_tournament:
         players_list = tournament_informations[1]
         round_list = tournament_informations[2]
         current_round = tournament_informations[3]
+        self.tournament_status(tournament)
 
         # On charge les joueurs s'ils existent dans le tournois
         if len(players_list) != 0:
@@ -38,9 +39,6 @@ class Controller_tournament:
             while True:
                 players_in_turnament = tournament.give_list_players()
                 answer = self.player_controller.get_player(players_in_turnament)
-
-                # if answer == "Afficher":
-                #     pass
 
                 if answer == "Ajouter":
                     player = self.player_controller.select_player(players_in_turnament)
@@ -92,6 +90,7 @@ class Controller_tournament:
             for round in rounds:
                 tournament.update_current_round()
                 tournament.save_tournament()
+                self.tournament_status(tournament)
                 players = tournament.give_list_players()
                 current_round = tournament.give_current_round()
 
@@ -123,6 +122,7 @@ class Controller_tournament:
                     tournament.save_tournament()
  
                 matchs_list_to_play = self.round_controller.give_list_matchs(round)
+                self.round_controller.show_matchs(matchs_list_to_play, current_round)
                 for match_to_play in matchs_list_to_play:
                     players_match_dict = self.match_controller.give_dict_players(match_to_play)
                     players = list(players_match_dict)
@@ -142,36 +142,40 @@ class Controller_tournament:
             self.classement(tournament, played_pairs)
 
         else:
-
+            matchs_par_round = {}
             for round in round_list:
                 round_informations = self.round_controller.load_round(round)
                 round_to_load = round_informations[0]
                 matchs = round_informations[1]
+                matchs_par_round[round_to_load] = matchs
                 tournament.add_round(round_to_load)
                 tournament.save_tournament()
 
+            rounds = tournament.give_round_list()
+            for round in rounds:
+                matchs = matchs_par_round[round]
                 for match in matchs:
                     players = tournament.give_list_players()
                     players_names = self.match_controller.players_names_to_check(match) 
                     player_1_name = players_names[0]
                     player_2_name = players_names[1]
-
                     for player in players:
                         if self.player_controller.player_name_to_check(player_1_name, player) != None:
                             player_1 = self.player_controller.player_name_to_check(player_1_name, player)
-                        
                         if self.player_controller.player_name_to_check(player_2_name, player) != None:
-                            player_2 = self.player_controller.player_name_to_check(player_2_name, player)
-    
+                            player_2 = self.player_controller.player_name_to_check(player_2_name, player)    
+
+
                     loaded_match = self.match_controller.load_match(player_1, player_2, match)
-                    self.round_controller.add_match(round_to_load, loaded_match)
+                    self.round_controller.add_match(round, loaded_match)
                     tournament.save_tournament()
             
-                if self.round_controller.check_finish_status(round_to_load) == False:
-                    matchs_list_to_play = self.round_controller.give_list_matchs(round_to_load)
+                if self.round_controller.check_finish_status(round) == False:
+                    matchs_list_to_play = self.round_controller.give_list_matchs(round)
+                    self.round_controller.show_matchs(matchs_list_to_play, round)
                     # Continuer tournament à partir d'un round (les matchs sont crées mais pas joués compeltement)
                     if len(matchs_list_to_play) != 0:
-                        matchs_list_to_play = self.round_controller.give_list_matchs(round_to_load)
+                        matchs_list_to_play = self.round_controller.give_list_matchs(round)
                         for match_to_play in matchs_list_to_play:
                             
                             if self.match_controller.check_if_match_played(match_to_play) == False:
@@ -183,7 +187,7 @@ class Controller_tournament:
 
                                 tournament.save_tournament()
 
-                        self.round_controller.finish_round(round_to_load)
+                        self.round_controller.finish_round(round)
                         tournament.save_tournament()
                     
                     # Les match n'ot pas été crée (se joue aprés le round repris)
@@ -207,8 +211,6 @@ class Controller_tournament:
                         players = self.shuffle_players(players, current_round, played_pairs)
                         played_pairs_list = list(played_pairs)  # played_pairs est un dictionnaire contenant tous matchs(jouers/score)
                         pairs = self.create_pairs(players, played_pairs_list)
-                        print (players)
-                        print (played_pairs_list)
 
                         m = 1
                         for pair in pairs:
@@ -216,10 +218,10 @@ class Controller_tournament:
                             m += 1
                         
                             match = self.match_controller.create_match(match_name, pair[0], pair[1])
-                            self.round_controller.add_match(round_to_load, match)
+                            self.round_controller.add_match(round, match)
                             tournament.save_tournament()
 
-                        matchs_list_to_play = self.round_controller.give_list_matchs(round_to_load)
+                        matchs_list_to_play = self.round_controller.give_list_matchs(round)
                         for match_to_play in matchs_list_to_play:
                             players_match_dict = self.match_controller.give_dict_players(match_to_play)
                             players = list(players_match_dict)
@@ -229,7 +231,7 @@ class Controller_tournament:
 
                             tournament.save_tournament()
 
-                        self.round_controller.finish_round(round_to_load)
+                        self.round_controller.finish_round(round)
                         tournament.save_tournament()
             
             date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
@@ -251,6 +253,9 @@ class Controller_tournament:
             if answer == "Creer":
                 tournament_informations = self.new_tournament(database_tournois)
                 return tournament_informations
+            
+            if answer == "Quitter":
+                exit(0)
             
     def load_tournament(self, database_tournois):
         selected_tournament = self.view_tournament.select_tournament_from_database(database_tournois)
@@ -368,3 +373,14 @@ class Controller_tournament:
                     return True
 
         return False
+    
+    
+    def tournament_status(self, tournament):
+        tournament_status_dict = tournament.tournament_status()
+
+        tournament_name = tournament_status_dict["name"]
+        tournament_start = tournament_status_dict["date_start"]
+        tournament_finish = tournament_status_dict["date_finish"]
+        tournament_round_current = tournament_status_dict["round_current"]
+
+        self.view_tournament.tournament_status(tournament_name, tournament_start, tournament_finish, tournament_round_current)

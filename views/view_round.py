@@ -11,8 +11,9 @@ class View_round():
         print(f"Avec ce nombre de joueur il n'est pas possible de faire: {round_all} rounds")
         print("Merci d'ajouter d'autres participants")
 
-    def show_round(self, matchs, name):
-        print(f"Voici les paires dans {name}:")
+    def show_round(self, matchs, current_round):
+        print("----------------------------------------")
+        print(f"Voici les matchs prevu pour le Round {current_round} :")
         for i in matchs:
             print(i)
 

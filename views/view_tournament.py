@@ -8,12 +8,14 @@ class View_tournament():
         print("    1. Afficher la liste des tournois existants dans la base")
         print("    2. Sélectionner un tournois dans la base des tournois")
         print("    3. Créer un nouveau tournois")
+        print("    4. Quitter le logiciel")
         answers = {}
 
         while True:
             answers = {"Afficher":"1" ,
                        "Selectionner":"2",
-                       "Creer":"3"}
+                       "Creer":"3",
+                       "Quitter":"4"}
             print("----------------------------------------")
             answer = input("Votre choix: ").strip()
             if answer in answers.values() and answer != answers["Afficher"]:
@@ -136,7 +138,7 @@ class View_tournament():
 
             if tournois_selected.lower() in database_tournois:
                 print("----------------------------------------")
-                print(f"Vous avez slectionné le tournois {tournois_selected}")
+                print(f"Vous avez selectionné le tournois {tournois_selected}")
                 return tournois_selected
             else:
                 print("----------------------------------------")
@@ -198,3 +200,13 @@ class View_tournament():
         print(" (====)  (=====)  (=====)  (======)  (======)  (=======) ")
         print(" }===={  }====={  }====={  }======{  }======{  }======={ ")
         print("(______)(_______)(_______)(________)(________)(_________)")
+
+    def tournament_status(self, tournament_name, tournament_start, tournament_finish, tournament_round_current):
+        print("----------------------------------------")
+        if tournament_finish =="":
+            if tournament_round_current == 0: 
+                print(f"Tournoi - {tournament_name} ---- Statut - En cours ---- Date du début - {tournament_start} ---- Round en cours - non commencé")
+            else:
+                print(f"Tournoi - {tournament_name} ---- Statut - En cours ---- Date du début - {tournament_start} ---- Round en cours - Round {tournament_round_current}")
+        else:
+            print(f"Tournoi - {tournament_name} ---- Statut - Términé ---- Date du début - {tournament_start} ---- Date de fin - {tournament_finish}")

@@ -13,7 +13,11 @@ class Tournament():
         self.players_list = []
         self.description = description
         self.round_all = round_all
-
+    
+    def tournament_status(self):
+        tournament_dict = {"name":self.name, "date_start":self.date_start, "date_finish":self.date_finish, "round_current":self.round_current}
+        return tournament_dict
+    
     def modify_start_information(self, name, place, date_start, description, round_all):
         self.name = name
         self.place = place

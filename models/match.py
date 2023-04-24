@@ -13,7 +13,8 @@ class Match:
         self.score_2 = score_2
 
     def __repr__(self):
-        return f"([{self.player_1},{self.score_1}], [{self.player_2},{self.score_2}])"
+        # return f"([{self.player_1},{self.score_1}], [{self.player_2},{self.score_2}])"
+        return (f"{self.player_1} contre {self.player_2}")
 
     def give_player_1(self):
         return self.player_1

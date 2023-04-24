@@ -14,8 +14,9 @@ class Controller_player:
 
     def load_players_from_tournament(self, player):
         # database_players = Player.give_database_players()
-        player_name = (player["first_name"] + " " + player["family_name"])
+        player_name = (player["first_name"] + " " + player["family_name"] + " " + "id" + str(player["counter"]))
         player_to_load = Player.load_player(player_name)
+
         player_to_add = Player(player_to_load["first_name"],
                                 player_to_load["family_name"],
                                 player_to_load["birth_date"],

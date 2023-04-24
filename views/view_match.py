@@ -3,7 +3,7 @@
 
 class View_match():
     def play_match(self, player_1_name, player_2_name):
-        print("\n")
+        print("----------------------------------------")
         print(f"{player_1_name} et {player_2_name} jouent.")
 
         while True:

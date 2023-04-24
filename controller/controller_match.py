@@ -50,8 +50,8 @@ class Controller_match:
         return match_to_load
             
     def players_names_to_check(self, match):
-        player_1_to_load = (match["player_1"]["first_name"] + " " + match["player_1"]["family_name"])
-        player_2_to_load = (match["player_2"]["first_name"] + " " + match["player_2"]["family_name"])
+        player_1_to_load = (match["player_1"]["first_name"] + " " + match["player_1"]["family_name"] + " " + "id" + str(match["player_1"]["counter"]))
+        player_2_to_load = (match["player_2"]["first_name"] + " " + match["player_2"]["family_name"] + " " + "id" + str(match["player_2"]["counter"]))
 
         return player_1_to_load, player_2_to_load
 
@@ -65,3 +65,4 @@ class Controller_match:
 
     def check_if_match_played(self, match):
         return match.check_if_match_played()
+    

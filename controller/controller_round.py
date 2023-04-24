@@ -50,3 +50,6 @@ class Controller_round:
 
     def check_finish_status(self, round):
         return round.give_finish_status()
+    
+    def show_matchs(self, matchs_list_to_play ,current_round):
+        self.view_round.show_round(matchs_list_to_play, current_round)
