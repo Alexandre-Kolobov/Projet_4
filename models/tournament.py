@@ -15,7 +15,12 @@ class Tournament():
         self.round_all = round_all
     
     def tournament_status(self):
-        tournament_dict = {"name":self.name, "date_start":self.date_start, "date_finish":self.date_finish, "round_current":self.round_current}
+        tournament_dict = {"name":self.name,
+                           "date_start":self.date_start,
+                           "date_finish":self.date_finish,
+                           "round_current":self.round_current,
+                           "round_all":self.round_all}
+        
         return tournament_dict
     
     def modify_start_information(self, name, place, date_start, description, round_all):

@@ -201,11 +201,11 @@ class View_tournament():
         print(" }===={  }====={  }====={  }======{  }======{  }======={ ")
         print("(______)(_______)(_______)(________)(________)(_________)")
 
-    def tournament_status(self, tournament_name, tournament_start, tournament_finish, tournament_round_current):
+    def tournament_status(self, tournament_name, tournament_start, tournament_finish, tournament_round_current, tournament_round_all):
         print("----------------------------------------")
         if tournament_finish =="":
             if tournament_round_current == 0: 
-                print(f"Tournoi - {tournament_name} ---- Statut - En cours ---- Date du début - {tournament_start} ---- Round en cours - non commencé")
+                print(f"Tournoi - {tournament_name} de {tournament_round_all} rounds ---- Statut - En cours ---- Date du début - {tournament_start} ---- Round en cours - non commencé")
             else:
                 print(f"Tournoi - {tournament_name} ---- Statut - En cours ---- Date du début - {tournament_start} ---- Round en cours - Round {tournament_round_current}")
         else:

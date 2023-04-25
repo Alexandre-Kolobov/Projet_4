@@ -10,7 +10,7 @@ def main():
     round_controller = Controller_round()
     match_controller = Controller_match()
     tournament_controller = Controller_tournament(player_controller, round_controller, match_controller)
-
+    tournament_controller.view_tournament.show_welcome()
     while True:
         run_again = tournament_controller.run()
         if run_again == False:

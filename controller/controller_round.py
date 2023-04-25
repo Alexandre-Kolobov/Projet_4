@@ -33,8 +33,15 @@ class Controller_round:
 
     def finish_round(self, round):
         round_name = round.give_round_name()
-        finish_status = self.view_round.get_finish_round(round_name)
-        round.update_finish_status(finish_status)
+        answer = self.view_round.get_finish_round(round_name)
+        if answer == "Continuer":
+            round.update_finish_status(True)
+        
+        if answer == "Revenir":
+            return False
+
+        if answer == "Quitter":
+            exit(0)
 
     def generate_match_name(self):
         match_counter += 1

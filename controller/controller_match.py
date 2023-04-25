@@ -66,3 +66,14 @@ class Controller_match:
     def check_if_match_played(self, match):
         return match.check_if_match_played()
     
+    def finish_match(self):
+        answer = self.view_match.get_finish_match()
+        if answer == "Oui":
+            pass
+        
+        if answer == "Revenir":
+            return False
+
+        if answer == "Quitter":
+            exit(0)
+    
