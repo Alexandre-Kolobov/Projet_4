@@ -184,6 +184,11 @@ class View_tournament():
         print (f"{player} - {score}")
 
     def show_welcome(self):
+        print("\n")
+        print("\n")
+        print("\n")
+        print("\n")
+        print("\n")
         print("                                                  _:_    ")
         print("                                                 '-.-'   ")
         print("                                        ()      __.'.__  ")
