@@ -1,7 +1,7 @@
 data_path = "data\\tournaments\\"
 winer_point = 1
 loser_point = 0
-equality_point = 0,5
+equality_point = 0.5
 
 
 class Match:
