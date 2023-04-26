@@ -15,7 +15,7 @@ class View_round():
         print("----------------------------------------")
         print(f"Voici les matchs prevu pour le Round {current_round} :")
         for i in matchs:
-            print(i)
+            print(f"    {i}")
 
     def get_finish_round(self, round_name):
         # while True:

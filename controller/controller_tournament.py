@@ -133,7 +133,6 @@ class Controller_tournament:
             date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             tournament.add_date_finish(date_finish)
             tournament.save_tournament()
-            # self.classement(tournament, played_pairs)
 
         else:
             matchs_par_round = {}
@@ -191,7 +190,6 @@ class Controller_tournament:
                     
                     # Les match n'ot pas été crée (se joue aprés le round repris)
                     if len(matchs_list_to_play) == 0:
-                        # to refactoring ==== 
                         current_round = tournament.give_current_round()
                         players = tournament.give_list_players()
                         played_pairs = self.played_pairs(tournament)
@@ -227,21 +225,24 @@ class Controller_tournament:
                             return True
                         tournament.save_tournament()
 
-                tournament_status_dict = tournament.tournament_status()
-                if tournament_status_dict["date_finish"] == "":
-                    date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-                    tournament.add_date_finish(date_finish)
-                    tournament.save_tournament()
+            tournament_status_dict = tournament.tournament_status()
+            if tournament_status_dict["date_finish"] == "":
+                date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                tournament.add_date_finish(date_finish)
+                tournament.save_tournament()
 
         played_pairs = self.played_pairs(tournament)
         self.classement(tournament, played_pairs)
+
+        self.tournament_finish_informations(tournament)
 
 
     def create_tournament(self):
         """Initialise un tournois"""
         while True:
             database_tournois = Tournament.give_database_tournaments()
-            answer = self.view_tournament.show_menu_tournament(database_tournois)
+            database_players = self.player_controller.give_database_players()
+            answer = self.view_tournament.show_menu_tournament(database_tournois, database_players)
             
             if answer == "Selectionner":
                 tournament_informations = self.load_tournament(database_tournois)
@@ -387,11 +388,13 @@ class Controller_tournament:
     def played_pairs(self, tournament):
         rounds_to_check = tournament.give_round_list()
         played_matchs = []
+        
         for round_to_check in rounds_to_check:
-
             matchs_list = self.round_controller.give_list_matchs(round_to_check)
             for match_in_list in matchs_list:
                 played_matchs.append(match_in_list)
+            
+
             
             played_pairs = []
             for played_match in played_matchs:
@@ -399,3 +402,26 @@ class Controller_tournament:
                 played_pairs.append(players_dict)
         
         return played_pairs
+        
+    def tournament_finish_informations(self, tournament):
+        while True:
+            answer = self.view_tournament.show_menu_post_tournament()
+            if answer == "Joueurs":
+                    players_in_turnament = tournament.give_list_players()
+                    self.player_controller.show_players(players_in_turnament)
+
+            if answer == "Matchs":
+                rounds_to_check = tournament.give_round_list()
+                
+                for round_to_check in rounds_to_check:
+                    matchs_list = self.round_controller.give_list_matchs(round_to_check)
+                    self.round_controller.show_matchs(matchs_list, round_to_check)
+            
+            if answer == "Revenir":
+                return True
+            
+            if answer =="Quitter":
+                exit(0)
+
+
+          

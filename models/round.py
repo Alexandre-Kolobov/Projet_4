@@ -11,7 +11,7 @@ class Round:
         self.finish_status = finish_status
 
     def __repr__(self):
-        return f"{self.name}"
+        return f"{self.name[6:]}"
 
     def add_match(self, match):
         self.matchs.append(match)

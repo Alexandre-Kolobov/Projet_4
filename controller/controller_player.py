@@ -28,11 +28,11 @@ class Controller_player:
         """Création des participants"""
 
         player_name_in_turnament = self.give_players_in_tournament(players_in_turnament)
-        if len(player_name_in_turnament) != 0:
-            self.view_player.show_players(player_name_in_turnament)
+        # if len(player_name_in_turnament) != 0:
+        #     self.view_player.show_players(player_name_in_turnament)
 
         database_players = Player.give_database_players()
-        answer = self.view_player.show_menu_player(database_players)
+        answer = self.view_player.show_menu_player(database_players, player_name_in_turnament)
 
         return answer
 
@@ -106,3 +106,12 @@ class Controller_player:
         
     def give_player_name(self, player):
         return player.give_player_name()
+    
+    def give_database_players(self):
+        database_players = Player.give_database_players()
+        return database_players
+    
+    def show_players(self, players_in_turnament):
+        player_name_in_turnament = self.give_players_in_tournament(players_in_turnament)
+        if len(player_name_in_turnament) != 0:
+            self.view_player.show_players(player_name_in_turnament)

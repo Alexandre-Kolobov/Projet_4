@@ -17,7 +17,7 @@ class View_match():
         return match_result
 
     def show_match_result(self, player_1_name, player_2_name, player_1_score, player_2_score):
-        print(f"Match: {player_1_name} vs {player_2_name} ---- Score {player_1_score}:{player_2_score}")
+        print(f"    Match: {player_1_name} vs {player_2_name} ---- Score {player_1_score}:{player_2_score}")
         
     def played_match(player_1_name, player_2_name, player_1_score, player_2_score):
 
