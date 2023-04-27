@@ -3,6 +3,7 @@ winer_point = 1
 loser_point = 0
 equality_point = 0.5
 
+# ([player_1, score_1],[player_2, score_2])
 
 class Match:
     def __init__(self, name, player_1, player_2, score_1=0, score_2=0):

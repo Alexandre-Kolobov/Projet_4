@@ -2,53 +2,81 @@
 
 
 class View_tournament():
+    # def show_menu_tournament(self, database_tournois, database_players):
+    #     print("----------------------------------------")
+    #     print("Menu du tournois:")
+    #     print("    1. Afficher la liste des tournois existant dans la base")
+    #     print("    2. Afficher la liste des joueurs existant dans la base")
+    #     print("    3. Sélectionner un tournois dans la base des tournois")
+    #     print("    4. Créer un nouveau tournois")
+    #     print("    5. Quitter le logiciel")
+    #     answers = {}
+
+    #     while True:
+    #         answers = {"Afficher":"1" ,
+    #                    "Joueurs":"2",
+    #                    "Selectionner":"3",
+    #                    "Creer":"4",
+    #                    "Quitter":"5"}
+    #         print("----------------------------------------")
+    #         answer = input("Votre choix: ").strip()
+    #         if answer in answers.values() and answer != answers["Afficher"] and answer != answers["Joueurs"]:
+    #             for key, item in answers.items():
+    #                 if item == answer:
+    #                     return key
+            
+    #         if answer in answers.values() and answer == answers["Afficher"]:
+    #             print("----------------------------------------")
+    #             print("Voici la list des tournois existants dans la base:")
+
+    #             for tournois in database_tournois:
+    #                 print(tournois)
+
+    #             for key, item in answers.items():
+    #                 if item == answer:
+    #                     return key
+
+    #             return key
+
+    #         if answer in answers.values() and answer == answers["Joueurs"]:
+    #             print("----------------------------------------")
+    #             print("Voici la list des joueurs existants dans la base:")
+    #             for player in database_players:
+    #                 print(player)
+
+    #             for key, item in answers.items():
+    #                 if item == answer:
+    #                     return key
+
+    #             return key
+
+    #         else:
+    #             answers_list = []
+    #             for i in answers.values():
+    #                 answers_list.append(i)
+    #             answers_list.sort()
+    #             print(f"Merci de reesayer en choissisant parmis {answers_list}")
+
     def show_menu_tournament(self, database_tournois, database_players):
         print("----------------------------------------")
         print("Menu du tournois:")
-        print("    1. Afficher la liste des tournois existant dans la base")
-        print("    2. Afficher la liste des joueurs existant dans la base")
-        print("    3. Sélectionner un tournois dans la base des tournois")
-        print("    4. Créer un nouveau tournois")
-        print("    5. Quitter le logiciel")
+        print("    1. Rapports")
+        print("    2. Sélectionner un tournois dans la base des tournois")
+        print("    3. Créer un nouveau tournois")
+        print("    4. Quitter le logiciel")
         answers = {}
 
         while True:
-            answers = {"Afficher":"1" ,
-                       "Joueurs":"2",
-                       "Selectionner":"3",
-                       "Creer":"4",
-                       "Quitter":"5"}
+            answers = {"Rapports":"1" ,
+                       "Selectionner":"2",
+                       "Creer":"3",
+                       "Quitter":"4"}
             print("----------------------------------------")
             answer = input("Votre choix: ").strip()
-            if answer in answers.values() and answer != answers["Afficher"] and answer != answers["Joueurs"]:
+            if answer in answers.values():
                 for key, item in answers.items():
                     if item == answer:
                         return key
-            
-            if answer in answers.values() and answer == answers["Afficher"]:
-                print("----------------------------------------")
-                print("Voici la list des tournois existants dans la base:")
-
-                for tournois in database_tournois:
-                    print(tournois)
-
-                for key, item in answers.items():
-                    if item == answer:
-                        return key
-
-                return key
-
-            if answer in answers.values() and answer == answers["Joueurs"]:
-                print("----------------------------------------")
-                print("Voici la list des joueurs existants dans la base:")
-                for player in database_players:
-                    print(player)
-
-                for key, item in answers.items():
-                    if item == answer:
-                        return key
-
-                return key
 
             else:
                 answers_list = []
@@ -135,15 +163,23 @@ class View_tournament():
         return name, place, description, round_all
 
 
-    def select_tournament_from_database(self, database_tournois):
+    def select_tournament_from_database(self, database_tournois, tournois_info_dict):
         """Selectionne un tournois dans la db"""
-        database_to_print = database_tournois[:]
+        # database_to_print = database_tournois[:]
         while True:
             print("----------------------------------------")
             print("Voici la list des tournois existants dans la base:")
 
-            for tournois in database_to_print:
-                print(tournois)
+            for tournois in database_tournois:
+                # print(f"Tournoi: {tournois_info_dict[tournois]["name"]}")
+                if tournois_info_dict[tournois]['date_finish'] =="":
+                    if tournois_info_dict[tournois]['round_current'] == 0: 
+                        print(f"    {tournois_info_dict[tournois]['name']} de {tournois_info_dict[tournois]['round_all']} rounds ---- Statut - En cours ---- Date du début - {tournois_info_dict[tournois]['date_start']} ---- Round en cours - non commencé")
+                    else:
+                        print(f"    {tournois_info_dict[tournois]['name']} de {tournois_info_dict[tournois]['round_all']} rounds ---- Statut - En cours ---- Date du début - {tournois_info_dict[tournois]['date_start']} ---- Round en cours - Round {tournois_info_dict[tournois]['round_current']}")
+                else:
+                    print(f"    {tournois_info_dict[tournois]['name']} de {tournois_info_dict[tournois]['round_all']} rounds ---- Statut - Términé ---- Date du début - {tournois_info_dict[tournois]['date_start']} ---- Date de fin - {tournois_info_dict[tournois]['date_finish']}")
+
 
             print("----------------------------------------")
             tournois_selected = input("Merci de selectionner un tournois: ").strip()
@@ -236,7 +272,7 @@ class View_tournament():
         print("----------------------------------------")
         print("Que voulez vous faire:")
         print("    1. Afficher les joeurs participants au tournoi")
-        print("    2. Afficher matchs")
+        print("    2. Afficher les matchs")
         print("    3. Revenir au menu des tournois")
         print("    4. Quitter le logiciel")
         answers = {}

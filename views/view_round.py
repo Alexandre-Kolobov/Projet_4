@@ -13,7 +13,7 @@ class View_round():
 
     def show_round(self, matchs, current_round):
         print("----------------------------------------")
-        print(f"Voici les matchs prevu pour le Round {current_round} :")
+        print(f"Voici les matchs prevu du Round {current_round} :")
         for i in matchs:
             print(f"    {i}")
 

@@ -2,6 +2,7 @@ from views.view_tournament import View_tournament
 from views.view_player import View_player
 from views.view_match import View_match
 from views.view_round import View_round
+from views.view_rapport import View_rapport
 from models.tournament import Tournament
 from datetime import datetime
 import random
@@ -14,6 +15,7 @@ class Controller_tournament:
         self.view_player = View_player()
         self.view_match = View_match()
         self.view_round = View_round()
+        self.view_rapport = View_rapport()
         self.player_controller = player_controller
         self.round_controller = round_controller
         self.match_controller = match_controller
@@ -241,11 +243,38 @@ class Controller_tournament:
         """Initialise un tournois"""
         while True:
             database_tournois = Tournament.give_database_tournaments()
+            tournois_info_dict = {}
+            for tournois in database_tournois:
+                tournois_info = Tournament.load_tournament(tournois)
+                tournois_info_dict[tournois] = tournois_info
+
+
             database_players = self.player_controller.give_database_players()
             answer = self.view_tournament.show_menu_tournament(database_tournois, database_players)
+            if answer == "Rapports":
+                while True:
+                    answer_rapport = self.view_rapport.show_menu_rapports(database_tournois, database_players, tournois_info_dict)
+                    if answer_rapport == "Details":
+                        select_tournament = self.view_rapport.select_tournament(database_tournois, tournois_info_dict)
+                        if select_tournament != None:
+                            while True:
+                                answer_details = self.view_rapport.show_menu_details(tournois_info_dict, select_tournament)
+                                if answer_details == "Revenir":
+                                    break
+
+                                if answer_details == "Quitter":
+                                    exit(0)
+                        
+                            
+                    
+                    if answer_rapport == "Revenir":
+                        break
+
+                    if answer_rapport == "Quitter":
+                        exit(0)
             
             if answer == "Selectionner":
-                tournament_informations = self.load_tournament(database_tournois)
+                tournament_informations = self.load_tournament(database_tournois, tournois_info_dict)
                 return tournament_informations
 
             if answer == "Creer":
@@ -255,8 +284,8 @@ class Controller_tournament:
             if answer == "Quitter":
                 exit(0)
             
-    def load_tournament(self, database_tournois):
-        selected_tournament = self.view_tournament.select_tournament_from_database(database_tournois)
+    def load_tournament(self, database_tournois, tournois_info_dict):
+        selected_tournament = self.view_tournament.select_tournament_from_database(database_tournois, tournois_info_dict)
 
         if selected_tournament != None:
             selected_to_load_tournament = Tournament.load_tournament(selected_tournament)
