@@ -341,7 +341,8 @@ class Controller_tournament:
         for pair in played_pairs:
             for player_in_pair in pair:
                 if player_in_pair == player:
-                    player_score = int(player_score) + int(pair[player_in_pair])
+                    player_score = float(player_score) + float(pair[player_in_pair])
+
 
         return player_score
 

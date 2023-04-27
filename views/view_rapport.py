@@ -61,42 +61,44 @@ class View_rapport():
         print("----------------------------------------")
         print("Voici la list des tournois existants dans la base:")
 
+        # database_tournois_lower = database_tournois[:]
         for tournois in database_tournois:
             self.show_tournament_informations(tournois_info_dict, tournois)
         print("----------------------------------------")
-        tournois_selected = input("Merci de selectionner un tournois: ").strip()
-        for i in range(len(database_tournois)):
-            database_tournois[i] = database_tournois[i].lower()
+        while True:
+            tournois_selected = input("Merci de selectionner un tournois: ").strip()
+            # for i in range(len(database_tournois_lower)):
+            #     database_tournois_lower[i] = database_tournois_lower[i].lower()
 
-        if tournois_selected.lower() in database_tournois:
-            print("----------------------------------------")
-            print(f"Vous avez selectionné le tournois {tournois_selected}")
-            return tournois_selected
-        else:
-            print("----------------------------------------")
-            print(f"Le tournois {tournois_selected} n'existe pas dans la base")
-            print("Voulez vous selectionner un autre tournois?")
-            print("----------------------------------------")
-            print("    1. Oui")
-            print("    2. Non")
-
-            answers = {"Oui":"1" ,
-                        "Non":"2"}
-            
-            answer = input("Votre choix: ").strip()
-            if answer in answers.values() and answer == answers["Oui"]:
-                pass
-
-            elif answer in answers.values() and answer == answers["Non"]:
+            if tournois_selected in database_tournois:
                 print("----------------------------------------")
-                print("Retour au menu des tournois")
-                return None
+                print(f"Vous avez selectionné le tournois {tournois_selected}")
+                return tournois_selected
             else:
-                answers_list = []
-                for i in answers.values():
-                    answers_list.append(i)
-                answers_list.sort()
-                print(f"Merci de reesayer en choissisant parmis {answers_list}")
+                print("----------------------------------------")
+                print(f"Le tournois {tournois_selected} n'existe pas dans la base")
+                print("Voulez vous selectionner un autre tournois?")
+                print("----------------------------------------")
+                print("    1. Oui")
+                print("    2. Non")
+
+                answers = {"Oui":"1" ,
+                            "Non":"2"}
+                
+                answer = input("Votre choix: ").strip()
+                if answer in answers.values() and answer == answers["Oui"]:
+                    pass
+
+                elif answer in answers.values() and answer == answers["Non"]:
+                    print("----------------------------------------")
+                    print("Retour au menu des tournois")
+                    return None
+                else:
+                    answers_list = []
+                    for i in answers.values():
+                        answers_list.append(i)
+                    answers_list.sort()
+                    print(f"Merci de reesayer en choissisant parmis {answers_list}")
 
     def show_menu_details(self, tournois_info_dict, select_tournament):
         print("----------------------------------------")
