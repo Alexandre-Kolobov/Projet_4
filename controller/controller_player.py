@@ -1,54 +1,46 @@
-from views.view_tournament import View_tournament
 from views.view_player import View_player
-from views.view_match import View_match
 from views.view_round import View_round
 from models.player import Player
 
+
 class Controller_player:
     def __init__(self):
-        # self.tournament = tournament
-        self.view_tournament = View_tournament()
         self.view_player = View_player()
-        self.view_match = View_match()
         self.view_round = View_round()
 
     def load_players_from_tournament(self, player):
-        # database_players = Player.give_database_players()
+        """Chargement d'un joueur dans une instance de classe"""
         player_name = (player["first_name"] + " " + player["family_name"] + " " + "id" + str(player["counter"]))
         player_to_load = Player.load_player(player_name)
 
         player_to_add = Player(player_to_load["first_name"],
-                                player_to_load["family_name"],
-                                player_to_load["birth_date"],
-                                player_to_load["counter"])
-                
+                               player_to_load["family_name"],
+                               player_to_load["birth_date"],
+                               player_to_load["counter"])
+
         return player_to_add
-    
+
     def get_player(self, players_in_turnament):
         """Création des participants"""
 
         player_name_in_turnament = self.give_players_in_tournament(players_in_turnament)
-        # if len(player_name_in_turnament) != 0:
-        #     self.view_player.show_players(player_name_in_turnament)
-
         database_players = Player.give_database_players()
         answer = self.view_player.show_menu_player(database_players, player_name_in_turnament)
 
         return answer
 
     def select_player(self, players_in_turnament):
+        """Selection d'un joueur à partir de la base des données"""
+
         player_name_in_turnament = self.give_players_in_tournament(players_in_turnament)
         if len(player_name_in_turnament) != 0:
             self.view_player.show_players(player_name_in_turnament)
 
         database_players = Player.give_database_players()
-        selected_player = self.view_player.select_player_from_database(database_players, 
-                                                                        player_name_in_turnament)
+        selected_player = self.view_player.select_player_from_database(database_players,
+                                                                       player_name_in_turnament)
 
-        # selected_player = retour_list[0]
-        # one_more = retour_list[1]
-
-        if selected_player == None:
+        if selected_player is None:
             return None
         else:
             loaded_player = Player.load_player(selected_player)
@@ -56,19 +48,20 @@ class Controller_player:
                                           loaded_player["family_name"],
                                           loaded_player["birth_date"],
                                           loaded_player["counter"])
-            # return loaded_player_to_add, one_more
             return loaded_player_to_add
-        
+
     def add_one_more_player(self):
+        """Demande de selectionenr un joueur supplementaire"""
         answer = self.view_player.add_one_more_player()
         return answer
 
     def add_new_player(self):
+        """Création d'un nouveau joueur"""
         counter = Player.load_counter()
         database_players = Player.give_database_players()
         player_informations = self.view_player.get_player_informations(database_players, counter)
 
-        if player_informations != None:
+        if player_informations is not None:
             first_name = player_informations[0]
             family_name = player_informations[1]
             birth_date = player_informations[2]
@@ -82,7 +75,7 @@ class Controller_player:
         for player in players_in_turnament:
             name = player.give_player_name()
             player_name_in_turnament.append(name)
-        
+
         return player_name_in_turnament
 
     def check_number_players(self, participants_len, round_all):
@@ -99,19 +92,23 @@ class Controller_player:
         else:  # Si nombre des participant est impaire, il faut ajouter des joueurs
             self.view_round.show_round_negative_estimation(round_all)
             return False
-        
+
     def player_name_to_check(self, player_name, player):
+        """Verfication d'un nom sous forme de string avec une instace de classe player"""
         if player_name == player.give_player_name():
             return player
-        
+
     def give_player_name(self, player):
+        """Donne le nom d'un joueur"""
         return player.give_player_name()
-    
+
     def give_database_players(self):
+        """Donne la liste des joueurs dans la base"""
         database_players = Player.give_database_players()
         return database_players
-    
+
     def show_players(self, players_in_turnament):
+        """Affiche la liste des joueurs participants au tournoi"""
         player_name_in_turnament = self.give_players_in_tournament(players_in_turnament)
         if len(player_name_in_turnament) != 0:
             self.view_player.show_players(player_name_in_turnament)

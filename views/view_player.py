@@ -4,6 +4,7 @@ from datetime import datetime
 
 class View_player():
     def get_player_informations(self, database_players, counter):
+        """Recuprer les infos d'un joueur à créer"""
         while True:
             print("----------------------------------------")
             while True:
@@ -39,8 +40,8 @@ class View_player():
                 print("    1. Réessayer le saisie")
                 print("    2. Revenir dans le menu des joueurs")
 
-                answers = {"Reessayer":"1" ,
-                           "Revenir":"2"}
+                answers = {"Reessayer": "1",
+                           "Revenir": "2"}
 
                 answer = input("Votre choix: ").strip()
 
@@ -56,16 +57,15 @@ class View_player():
                 return first_name, family_name, birth_date
 
     def show_players(self, players):
+        """Affiche les joueur participants"""
         print("----------------------------------------")
         print("Voici la liste des joueurs participants:")
         sorted_players = sorted(players)
         for i in sorted_players:
             print(f"    {i}")
 
-    def show_player_score(self, player, score):
-        print (f"{player} - {score}")
-
     def show_menu_player(self, database_players, players_in_turnament):
+        """Affiche le menu des joueurs"""
         print("----------------------------------------")
         print("Menu des joueurs:")
         print("    1. Afficher la liste des joueurs existant dans la base")
@@ -78,20 +78,20 @@ class View_player():
         answers = {}
 
         while True:
-            answers = {"Afficher":"1" ,
-                       "Joueurs":"2",
-                       "Ajouter":"3",
-                       "Creer":"4",
-                       "Demmarer":"5", 
-                       "Sauvegarder":"6",
-                       "Revenir":"7"}
+            answers = {"Afficher": "1",
+                       "Joueurs": "2",
+                       "Ajouter": "3",
+                       "Creer": "4",
+                       "Demmarer": "5",
+                       "Sauvegarder": "6",
+                       "Revenir": "7"}
             print("----------------------------------------")
             answer = input("Votre choix: ").strip()
             if answer in answers.values() and answer != answers["Afficher"] and answer != answers["Joueurs"]:
                 for key, item in answers.items():
                     if item == answer:
                         return key
-            
+
             if answer in answers.values() and answer == answers["Afficher"]:
                 print("----------------------------------------")
                 print("Voici la list des joueurs existants dans la base:")
@@ -146,9 +146,9 @@ class View_player():
                     print("    1. Oui")
                     print("    2. Non")
 
-                    answers = {"Oui":"1" ,
-                            "Non":"2"}
-                    
+                    answers = {"Oui": "1",
+                               "Non": "2"}
+
                     answer = input("Votre choix: ").strip()
                     if answer in answers.values() and answer == answers["Oui"]:
                         pass
@@ -166,7 +166,7 @@ class View_player():
                 else:
                     print("----------------------------------------")
                     print(f"Le joueur {player_selected} est ajouté au tournois")
-                    return player_selected  
+                    return player_selected
             else:
                 print("----------------------------------------")
                 print(f"Le joueur {player_selected} n'existe pas dans la base des joueurs")
@@ -175,9 +175,9 @@ class View_player():
                 print("    1. Oui")
                 print("    2. Non")
 
-                answers = {"Oui":"1" ,
-                        "Non":"2"}
-                
+                answers = {"Oui": "1",
+                           "Non": "2"}
+
                 answer = input("Votre choix: ").strip()
                 if answer in answers.values() and answer == answers["Oui"]:
                     pass
@@ -200,8 +200,8 @@ class View_player():
         print("    1. Oui")
         print("    2. Non")
 
-        answers = {"Oui":"1" ,
-                   "Non":"2"}
+        answers = {"Oui": "1",
+                   "Non": "2"}
 
         while True:
             answer = input("Votre choix: ").strip()

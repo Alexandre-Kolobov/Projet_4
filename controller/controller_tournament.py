@@ -1,7 +1,4 @@
 from views.view_tournament import View_tournament
-from views.view_player import View_player
-from views.view_match import View_match
-from views.view_round import View_round
 from views.view_rapport import View_rapport
 from models.tournament import Tournament
 from datetime import datetime
@@ -12,16 +9,13 @@ class Controller_tournament:
     def __init__(self, player_controller, round_controller, match_controller):
         # self.tournament = Tournament()
         self.view_tournament = View_tournament()
-        self.view_player = View_player()
-        self.view_match = View_match()
-        self.view_round = View_round()
         self.view_rapport = View_rapport()
         self.player_controller = player_controller
         self.round_controller = round_controller
         self.match_controller = match_controller
 
     def run(self):
-        
+        """Lance le programme"""
         tournament_informations = self.create_tournament()
         tournament = tournament_informations[0]
         players_list = tournament_informations[1]
@@ -45,26 +39,24 @@ class Controller_tournament:
                 if answer == "Ajouter":
                     player = self.player_controller.select_player(players_in_turnament)
 
-                    if player != None:
+                    if player is not None:
                         tournament.add_player(player)
                         tournament.save_tournament()
 
-                        
                         while True:
                             answer_one_more = self.player_controller.add_one_more_player()
                             if answer_one_more == "Oui":
                                 player = self.player_controller.select_player(players_in_turnament)
-                                if player != None:
+                                if player is not None:
                                     tournament.add_player(player)
                                     tournament.save_tournament()
                                 else:
                                     break
                             else:
                                 break
-                
+
                 if answer == "Creer":
                     self.player_controller.add_new_player()
-
 
                 if answer == "Demmarer":
                     participants_len = tournament.give_len_list_players()
@@ -74,7 +66,7 @@ class Controller_tournament:
 
                 if answer == "Sauvegarder":
                     exit(0)
-                
+
                 if answer == "Revenir":
                     return True
 
@@ -96,21 +88,21 @@ class Controller_tournament:
                 players = tournament.give_list_players()
                 current_round = tournament.give_current_round()
                 played_pairs = self.played_pairs(tournament)
-                
-                players = self.shuffle_players(players, current_round, played_pairs)
 
-                played_pairs_list = list(played_pairs)  # played_pairs est un dictionnaire contenant tous matchs(jouers/score)
+                players = self.shuffle_players(players, current_round, played_pairs)
+                # played_pairs est un dictionnaire contenant tous matchs(jouers/score)
+                played_pairs_list = list(played_pairs)
                 pairs = self.create_pairs(players, played_pairs_list)
 
                 m = 1
                 for pair in pairs:
                     match_name = "Match_" + str(m)
                     m += 1
-                
+
                     match = self.match_controller.create_match(match_name, pair[0], pair[1])
                     self.round_controller.add_match(round, match)
                     tournament.save_tournament()
- 
+
                 matchs_list_to_play = self.round_controller.give_list_matchs(round)
                 self.round_controller.show_matchs(matchs_list_to_play, current_round)
                 for match_to_play in matchs_list_to_play:
@@ -124,14 +116,14 @@ class Controller_tournament:
                     tournament.save_tournament()
 
                     if match_to_play != matchs_list_to_play[-1]:
-                        if self.match_controller.finish_match() == False:
+                        if self.match_controller.finish_match() is False:
                             return True
 
-                if self.round_controller.finish_round(round) == False:
+                if self.round_controller.finish_round(round) is False:
                     return True
-                
+
                 tournament.save_tournament()
-            
+
             date_finish = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
             tournament.add_date_finish(date_finish)
             tournament.save_tournament()
@@ -151,29 +143,28 @@ class Controller_tournament:
                 matchs = matchs_par_round[round]
                 for match in matchs:
                     players = tournament.give_list_players()
-                    players_names = self.match_controller.players_names_to_check(match) 
+                    players_names = self.match_controller.players_names_to_check(match)
                     player_1_name = players_names[0]
                     player_2_name = players_names[1]
                     for player in players:
-                        if self.player_controller.player_name_to_check(player_1_name, player) != None:
+                        if self.player_controller.player_name_to_check(player_1_name, player) is not None:
                             player_1 = self.player_controller.player_name_to_check(player_1_name, player)
-                        if self.player_controller.player_name_to_check(player_2_name, player) != None:
-                            player_2 = self.player_controller.player_name_to_check(player_2_name, player)    
-
+                        if self.player_controller.player_name_to_check(player_2_name, player) is not None:
+                            player_2 = self.player_controller.player_name_to_check(player_2_name, player)
 
                     loaded_match = self.match_controller.load_match(player_1, player_2, match)
                     self.round_controller.add_match(round, loaded_match)
                     tournament.save_tournament()
-            
-                if self.round_controller.check_finish_status(round) == False:
+
+                if self.round_controller.check_finish_status(round) is False:
                     matchs_list_to_play = self.round_controller.give_list_matchs(round)
                     self.round_controller.show_matchs(matchs_list_to_play, round)
                     # Continuer tournament à partir d'un round (les matchs sont crées mais pas joués compeltement)
                     if len(matchs_list_to_play) != 0:
                         matchs_list_to_play = self.round_controller.give_list_matchs(round)
                         for match_to_play in matchs_list_to_play:
-                            
-                            if self.match_controller.check_if_match_played(match_to_play) == False:
+
+                            if self.match_controller.check_if_match_played(match_to_play) is False:
                                 players_match_dict = self.match_controller.give_dict_players(match_to_play)
                                 players = list(players_match_dict)
                                 player_1_name = self.player_controller.give_player_name(players[0])
@@ -183,27 +174,28 @@ class Controller_tournament:
                                 tournament.save_tournament()
 
                                 if match_to_play != matchs_list_to_play[-1]:
-                                    if self.match_controller.finish_match() == False:
+                                    if self.match_controller.finish_match() is False:
                                         return True
 
-                        if self.round_controller.finish_round(round) == False:
+                        if self.round_controller.finish_round(round) is False:
                             return True
                         tournament.save_tournament()
-                    
-                    # Les match n'ot pas été crée (se joue aprés le round repris)
+
+                    # Les match n'ont pas été crée (se joue aprés le round repris)
                     if len(matchs_list_to_play) == 0:
                         current_round = tournament.give_current_round()
                         players = tournament.give_list_players()
                         played_pairs = self.played_pairs(tournament)
                         players = self.shuffle_players(players, current_round, played_pairs)
-                        played_pairs_list = list(played_pairs)  # played_pairs est un dictionnaire contenant tous matchs(jouers/score)
+                        # played_pairs est un dictionnaire contenant tous matchs(jouers/score)
+                        played_pairs_list = list(played_pairs)
                         pairs = self.create_pairs(players, played_pairs_list)
 
                         m = 1
                         for pair in pairs:
                             match_name = "Match_" + str(m)
                             m += 1
-                        
+
                             match = self.match_controller.create_match(match_name, pair[0], pair[1])
                             self.round_controller.add_match(round, match)
                             tournament.save_tournament()
@@ -220,10 +212,10 @@ class Controller_tournament:
                             tournament.save_tournament()
 
                             if match_to_play != matchs_list_to_play[-1]:
-                                if self.match_controller.finish_match() == False:
+                                if self.match_controller.finish_match() is False:
                                     return True
 
-                        if self.round_controller.finish_round(round) == False:
+                        if self.round_controller.finish_round(round) is False:
                             return True
                         tournament.save_tournament()
 
@@ -238,7 +230,6 @@ class Controller_tournament:
 
         self.tournament_finish_informations(tournament)
 
-
     def create_tournament(self):
         """Initialise un tournois"""
         while True:
@@ -248,31 +239,32 @@ class Controller_tournament:
                 tournois_info = Tournament.load_tournament(tournois)
                 tournois_info_dict[tournois] = tournois_info
 
-
             database_players = self.player_controller.give_database_players()
-            answer = self.view_tournament.show_menu_tournament(database_tournois, database_players)
+            answer = self.view_tournament.show_menu_tournament()
             if answer == "Rapports":
                 while True:
-                    answer_rapport = self.view_rapport.show_menu_rapports(database_tournois, database_players, tournois_info_dict)
+                    answer_rapport = self.view_rapport.show_menu_rapports(database_tournois,
+                                                                          database_players,
+                                                                          tournois_info_dict)
                     if answer_rapport == "Details":
-                        select_tournament = self.view_rapport.select_tournament(database_tournois, tournois_info_dict)
-                        if select_tournament != None:
+                        select_tournament = self.view_rapport.select_tournament(database_tournois,
+                                                                                tournois_info_dict)
+                        if select_tournament is not None:
                             while True:
-                                answer_details = self.view_rapport.show_menu_details(tournois_info_dict, select_tournament)
+                                answer_details = self.view_rapport.show_menu_details(tournois_info_dict,
+                                                                                     select_tournament)
                                 if answer_details == "Revenir":
                                     break
 
                                 if answer_details == "Quitter":
                                     exit(0)
-                        
-                            
-                    
+
                     if answer_rapport == "Revenir":
                         break
 
                     if answer_rapport == "Quitter":
                         exit(0)
-            
+
             if answer == "Selectionner":
                 tournament_informations = self.load_tournament(database_tournois, tournois_info_dict)
                 return tournament_informations
@@ -280,14 +272,16 @@ class Controller_tournament:
             if answer == "Creer":
                 tournament_informations = self.new_tournament(database_tournois)
                 return tournament_informations
-            
+
             if answer == "Quitter":
                 exit(0)
-            
-    def load_tournament(self, database_tournois, tournois_info_dict):
-        selected_tournament = self.view_tournament.select_tournament_from_database(database_tournois, tournois_info_dict)
 
-        if selected_tournament != None:
+    def load_tournament(self, database_tournois, tournois_info_dict):
+        """Charge un tournois"""
+        selected_tournament = self.view_tournament.select_tournament_from_database(database_tournois,
+                                                                                   tournois_info_dict)
+
+        if selected_tournament is not None:
             selected_to_load_tournament = Tournament.load_tournament(selected_tournament)
             tournament = Tournament(name=selected_to_load_tournament["name"],
                                     place=selected_to_load_tournament["place"],
@@ -296,13 +290,14 @@ class Controller_tournament:
                                     round_all=selected_to_load_tournament["round_all"],
                                     round_current=selected_to_load_tournament["round_current"],
                                     description=selected_to_load_tournament["description"])
-            
+
             players_list = selected_to_load_tournament["players_list"]
             round_list = selected_to_load_tournament["round_list"]
             current_round = selected_to_load_tournament["round_current"]
             return tournament, players_list, round_list, current_round
-        
+
     def new_tournament(self, database_tournois):
+        """Créer un nouveau tournois"""
         tournament = Tournament()
         round_all = tournament.give_round_all_information()
         tournament_informations = self.view_tournament.get_tournament_start_informations(round_all, database_tournois)
@@ -343,18 +338,17 @@ class Controller_tournament:
                 if player_in_pair == player:
                     player_score = float(player_score) + float(pair[player_in_pair])
 
-
         return player_score
 
     def shuffle_players(self, players, current_round, played_pairs):
         """Melange les joueurs"""
-
         if current_round == 1:
             random.shuffle(players)
         else:
-            players.sort(key=lambda p: self.give_player_score(p, played_pairs), reverse=True)  # p reprensent objet Player
+            # p reprensent objet Player
+            players.sort(key=lambda p: self.give_player_score(p, played_pairs), reverse=True)
         return players
-    
+
     def create_pairs(self, players, played_pairs):
         """Création des paires"""
         players_tmp = players[:]  # players_tmp = players.copy() - même signification
@@ -380,7 +374,6 @@ class Controller_tournament:
                             pass
 
                         pairs.append((player_1, player_2))
-                        
 
         if len(players_tmp) != 0:
             i = 0
@@ -401,57 +394,56 @@ class Controller_tournament:
                     return True
 
         return False
-    
-    
-    def tournament_status(self, tournament):
-        tournament_status_dict = tournament.tournament_status()
 
+    def tournament_status(self, tournament):
+        """Affiche le statut d'un tournois en temps réel"""
+        tournament_status_dict = tournament.tournament_status()
         tournament_name = tournament_status_dict["name"]
         tournament_start = tournament_status_dict["date_start"]
         tournament_finish = tournament_status_dict["date_finish"]
         tournament_round_current = tournament_status_dict["round_current"]
         tournament_round_all = tournament_status_dict["round_all"]
 
-
-        self.view_tournament.tournament_status(tournament_name, tournament_start, tournament_finish, tournament_round_current, tournament_round_all)
+        self.view_tournament.tournament_status(tournament_name,
+                                               tournament_start,
+                                               tournament_finish,
+                                               tournament_round_current,
+                                               tournament_round_all)
 
     def played_pairs(self, tournament):
+        """Return unen liste des paires déja joué dans le tournoi"""
         rounds_to_check = tournament.give_round_list()
         played_matchs = []
-        
+
         for round_to_check in rounds_to_check:
             matchs_list = self.round_controller.give_list_matchs(round_to_check)
             for match_in_list in matchs_list:
                 played_matchs.append(match_in_list)
-            
 
-            
             played_pairs = []
             for played_match in played_matchs:
                 players_dict = self.match_controller.give_dict_players(played_match)
                 played_pairs.append(players_dict)
-        
+
         return played_pairs
-        
+
     def tournament_finish_informations(self, tournament):
+        """Les actions à la fin d'un tournois"""
         while True:
             answer = self.view_tournament.show_menu_post_tournament()
             if answer == "Joueurs":
-                    players_in_turnament = tournament.give_list_players()
-                    self.player_controller.show_players(players_in_turnament)
+                players_in_turnament = tournament.give_list_players()
+                self.player_controller.show_players(players_in_turnament)
 
             if answer == "Matchs":
                 rounds_to_check = tournament.give_round_list()
-                
+
                 for round_to_check in rounds_to_check:
                     matchs_list = self.round_controller.give_list_matchs(round_to_check)
                     self.round_controller.show_matchs(matchs_list, round_to_check)
-            
+
             if answer == "Revenir":
                 return True
-            
-            if answer =="Quitter":
+
+            if answer == "Quitter":
                 exit(0)
-
-
-          

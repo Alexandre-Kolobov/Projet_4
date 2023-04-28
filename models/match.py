@@ -3,7 +3,6 @@ winer_point = 1
 loser_point = 0
 equality_point = 0.5
 
-# ([player_1, score_1],[player_2, score_2])
 
 class Match:
     def __init__(self, name, player_1, player_2, score_1=0, score_2=0):
@@ -14,22 +13,26 @@ class Match:
         self.score_2 = score_2
 
     def __repr__(self):
-        # return f"([{self.player_1},{self.score_1}], [{self.player_2},{self.score_2}])"
         return (f"Match: {self.player_1} vs {self.player_2} ---- Score {self.score_1}:{self.score_2}")
 
     def give_player_1(self):
+        """Return player 1"""
         return self.player_1
 
     def give_player_2(self):
+        """Return player 2"""
         return self.player_2
 
     def give_player_1_score(self):
+        """Return le score de player 1"""
         return self.score_1
 
     def give_player_2_score(self):
+        """Return le score de player 2"""
         return self.score_2
 
     def update_match_score(self, player_1_name, player_2_name, match_result):
+        """Mise à jour d'un match"""
         if match_result == player_1_name:
             self.score_1 = winer_point
             self.score_2 = loser_point
@@ -41,6 +44,7 @@ class Match:
             self.score_2 = equality_point
 
     def check_if_match_played(self):
+        """Virfiication si le match prevu a déja été joué"""
         if self.score_1 == 0 and self.score_2 == 0:
             return False
         else:
