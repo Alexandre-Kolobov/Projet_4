@@ -14,6 +14,7 @@ How to run the program:
 	
 How to use it:
 	The program has three main menus with its submenus:
+	
 	1. Rapports - this choice will allow you to consult rapports for each tournament
 		1. Afficher la liste des tournois existant dans la base - show all saved tournaments 
 		2. Afficher la liste des joueurs existant dans la base - show all saved players 
