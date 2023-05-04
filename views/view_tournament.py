@@ -1,21 +1,51 @@
 """View tournament"""
-
+from datetime import datetime
+import time
 
 class View_tournament():
-    def show_menu_tournament(self):
+    def show_main_manu(self):
         """Affiche menu du logiciel"""
         print("----------------------------------------")
-        print("Menu du tournois:")
+        print("Menu:")
         print("    1. Rapports")
-        print("    2. Sélectionner un tournois dans la base des tournois")
-        print("    3. Créer un nouveau tournois")
+        print("    2. Joueurs")
+        print("    3. Tournois")
         print("    4. Quitter le logiciel")
         answers = {}
 
         while True:
             answers = {"Rapports": "1",
-                       "Selectionner": "2",
-                       "Creer": "3",
+                       "Joueurs": "2",
+                       "Tournois": "3",
+                       "Quitter": "4"}
+            print("----------------------------------------")
+            answer = input("Votre choix: ").strip()
+            if answer in answers.values():
+                for key, item in answers.items():
+                    if item == answer:
+                        return key
+
+            else:
+                answers_list = []
+                for i in answers.values():
+                    answers_list.append(i)
+                answers_list.sort()
+                print(f"Merci de reesayer en choissisant parmis {answers_list}")
+
+    def show_tournament_menu(self):
+        """Affiche menu du logiciel"""
+        print("----------------------------------------")
+        print("Menu des tournois:")
+        print("    1. Reprendre un tournois dans la base des tournois")
+        print("    2. Créer un nouveau tournois")
+        print("    3. Revenir au menu principal")
+        print("    4. Quitter le logiciel")
+        answers = {}
+
+        while True:
+            answers = {"Reprendre": "1",
+                       "Creer": "2",
+                       "Revenir": "3",
                        "Quitter": "4"}
             print("----------------------------------------")
             answer = input("Votre choix: ").strip()
@@ -35,6 +65,7 @@ class View_tournament():
         """Input des information pour créer un tournoi"""
         while True:
             while True:
+                print("----------------------------------------")
                 name = input("Entrer le titre du tournoi: ").strip()
                 if len(name) >= 1:
                     tournament_name = name.lower()
@@ -66,14 +97,43 @@ class View_tournament():
                     print("Le titre du tournoi ne dois pas être vide. Merci de le reinsegner.")
 
             while True:
-                place = input("Entrer l'endroit du tournoi: ").strip()
+                print("----------------------------------------")
+                place = input(f"Entrer l'endroit du tournoi {name}: ").strip()
                 if len(place) >= 1:
                     break
                 else:
                     print("L'endroit du tournoi ne dois pas être vide. Merci de le reinsegner.")
 
-            description = input("Entrer la description du tournoi: ").strip()
+            while True:
+                print("----------------------------------------")
+                date_start_schedule = input(f"Entrer la date et l'heure du début du tournoi {name} (DD/MM/YYYY HH:MM): ").strip()
+                date_start_schedule = date_start_schedule + ":00"
+                try:
+                    datetime.strptime(date_start_schedule, "%d/%m/%Y %H:%M:%S")
+                    break
+                except (ValueError, TypeError):
+                    print("La date de début du tournoi doit être au format DD/MM/YYYY HH:MM")
 
+            while True:
+                print("----------------------------------------")
+                date_finish_schedule = input(f"Entrer la date et l'heure de la fin du tournoi {name} (DD/MM/YYYY HH:MM): ").strip()
+                date_finish_schedule = date_finish_schedule + ":00"
+                try:
+                    datetime.strptime(date_finish_schedule, "%d/%m/%Y %H:%M:%S")
+                    first = datetime.strptime(date_start_schedule, "%d/%m/%Y %H:%M:%S")
+                    second = datetime.strptime(date_finish_schedule, "%d/%m/%Y %H:%M:%S")
+                    if first >= second:
+                        print("La date de début du tournoi ne doit pas être superieur ou égale à la date de fin")
+                    else:
+                        break
+
+                except (ValueError, TypeError):
+                    print("La date de début du tournoi doit être au format DD/MM/YYYY HH:MM")
+
+            print("----------------------------------------")
+            description = input(f"Entrer la description du tournoi {name}: ").strip()
+
+            print("----------------------------------------")
             print(f"Le nombre des rounds par defaut est {round_all}")
             print("Voulez vous modifier ce paramètre?")
             print("    1. Oui")
@@ -106,7 +166,7 @@ class View_tournament():
 
             break
 
-        return name, place, description, round_all
+        return name, place, description, round_all, date_start_schedule, date_finish_schedule
 
     def select_tournament_from_database(self, database_tournois, tournois_info_dict):
         """Selectionne un tournois dans la db"""
@@ -120,13 +180,15 @@ class View_tournament():
                         print(f"    {tournois_info_dict[tournois]['name']} de "
                               f"{tournois_info_dict[tournois]['round_all']} rounds ---- "
                               "Statut - En cours ---- "
-                              f"Date du début - {tournois_info_dict[tournois]['date_start']} ---- "
+                              f"Date du début - {tournois_info_dict[tournois]['date_start_schedule']} ---- "
+                              f"Date de fin - {tournois_info_dict[tournois]['date_finish_schedule']} ---- "
                               "Round en cours - non commencé")
                     else:
                         print(f"    {tournois_info_dict[tournois]['name']} de "
                               f"{tournois_info_dict[tournois]['round_all']} rounds ---- "
                               "Statut - En cours ---- "
                               f"Date du début - {tournois_info_dict[tournois]['date_start']} ---- "
+                              f"Date de fin - {tournois_info_dict[tournois]['date_finish_schedule']} ---- "
                               f"Round en cours - Round {tournois_info_dict[tournois]['round_current']}")
                 else:
                     print(f"    {tournois_info_dict[tournois]['name']} de "
@@ -211,22 +273,26 @@ class View_tournament():
                           tournament_start,
                           tournament_finish,
                           tournament_round_current,
-                          tournament_round_all):
+                          tournament_round_all,
+                          tournament_start_shedule,
+                          tournament_finish_shedule):
         """Affiche le statut d'un tournois en temps réel"""
         print("----------------------------------------")
         if tournament_finish == "":
             if tournament_round_current == 0:
                 print(f"Tournoi - {tournament_name} de {tournament_round_all} rounds ---- "
-                      f"Statut - En cours ---- Date du début - {tournament_start} ---- "
+                      f"Statut - En cours ---- Date du début - {tournament_start_shedule} ---- "
+                      f"Date de fin - {tournament_finish_shedule} ---- "
                       "Round en cours - non commencé")
             else:
                 print(f"Tournoi - {tournament_name} ---- Statut - En cours ---- "
                       f"Date du début - {tournament_start} ---- "
+                      f"Date de fin - {tournament_finish_shedule} ---- "
                       f"Round en cours - Round {tournament_round_current}")
         else:
-            print(f"Tournoi - {tournament_name} ---- Statut - Términé ---- "
-                  f"Date du début - {tournament_start} ---- "
-                  f"Date de fin - {tournament_finish}")
+                print(f"Tournoi - {tournament_name} ---- Statut - Términé ---- "
+                f"Date du début - {tournament_start} ---- "
+                f"Date de fin - {tournament_finish}")
 
     def show_menu_post_tournament(self):
         """Affiche les actions à faire àpres le tournois"""
@@ -234,7 +300,7 @@ class View_tournament():
         print("Que voulez vous faire:")
         print("    1. Afficher les joeurs participants au tournoi")
         print("    2. Afficher les matchs")
-        print("    3. Revenir au menu des tournois")
+        print("    3. Revenir au menu principal")
         print("    4. Quitter le logiciel")
         answers = {}
 

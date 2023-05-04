@@ -26,7 +26,7 @@ class View_round():
         print(f"Tous les matchs du {round_name} sont joués.")
         print("Que voulez vous faire?")
         print("    1. Continuer le tournois")
-        print("    2. Sauvegarder et revenir au menu des tournois")
+        print("    2. Sauvegarder et revenir au menu prencipal")
         print("    3. Sauvegarder et quitter")
 
         answers = {}

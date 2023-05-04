@@ -4,7 +4,7 @@ data_path = "data\\tournaments\\"
 
 
 class Tournament():
-    def __init__(self, name="", place="", date_start="", date_finish="", round_all=4, round_current=0, description=""):
+    def __init__(self, name="", place="", date_start="", date_finish="", round_all=4, round_current=0, description="" , date_start_schedule = "", date_finish_schedule = ""):
         self.name = name
         self.place = place
         self.date_start = date_start
@@ -14,6 +14,9 @@ class Tournament():
         self.players_list = []
         self.description = description
         self.round_all = round_all
+        self.date_start_schedule = date_start_schedule
+        self.date_finish_schedule = date_finish_schedule
+
 
     def tournament_status(self):
         """Statut d'un tournoi"""
@@ -21,21 +24,29 @@ class Tournament():
                            "date_start": self.date_start,
                            "date_finish": self.date_finish,
                            "round_current": self.round_current,
-                           "round_all": self.round_all}
+                           "round_all": self.round_all,
+                           "date_start_schedule": self.date_start_schedule,
+                           "date_finish_schedule": self.date_finish_schedule,
+                           }
 
         return tournament_dict
 
-    def modify_start_information(self, name, place, date_start, description, round_all):
+    def modify_start_information(self, name, place, date_start, description, round_all, date_start_schedule, date_finish_schedule):
         """Mise à jour des infos d'un tournoi"""
         self.name = name
         self.place = place
         self.date_start = date_start
         self.description = description
         self.round_all = int(round_all)
+        self.date_start_schedule = date_start_schedule
+        self.date_finish_schedule = date_finish_schedule
 
     def update_current_round(self):
         """Mise à jour du round en cours"""
         self.round_current = self.round_current + 1
+
+    def update_start_date(self, date_start_real):
+        self.date_start = date_start_real
 
     def give_current_round(self):
         """Return le round en cours"""

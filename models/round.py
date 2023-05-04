@@ -39,3 +39,7 @@ class Round:
         """Debut d'un round"""
         round_date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.date_start = round_date_start
+
+    def give_date_start(self):
+        """Donne date de début d'un round"""
+        return self.date_start

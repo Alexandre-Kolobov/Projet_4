@@ -8,7 +8,7 @@ class View_rapport():
         print("    1. Afficher la liste des tournois existant dans la base")
         print("    2. Afficher la liste des joueurs existant dans la base")
         print("    3. Afficher les informations detaillées d'un tournois")
-        print("    4. Revenir au menu des tournois")
+        print("    4. Revenir au menu principal")
         print("    5. Quitter le logiciel")
         answers = {}
 
@@ -168,13 +168,15 @@ class View_rapport():
                 print(f"    {tournois_info_dict[select_tournament]['name']} de "
                       f"{tournois_info_dict[select_tournament]['round_all']} rounds ---- "
                       "Statut - En cours ---- "
-                      f"Date du début - {tournois_info_dict[select_tournament]['date_start']} ---- "
+                      f"Date du début - {tournois_info_dict[select_tournament]['date_start_schedule']} ---- "
+                      f"Date de fin - {tournois_info_dict[select_tournament]['date_finish_schedule']} ---- "
                       "Round en cours - non commencé")
             else:
                 print(f"    {tournois_info_dict[select_tournament]['name']} de "
                       f"{tournois_info_dict[select_tournament]['round_all']} rounds ---- "
                       "Statut - En cours ---- "
                       f"Date du début - {tournois_info_dict[select_tournament]['date_start']} ---- "
+                      f"Date de fin - {tournois_info_dict[select_tournament]['date_finish_schedule']} ---- "
                       f"Round en cours - Round {tournois_info_dict[select_tournament]['round_current']}")
         else:
             print(f"    {tournois_info_dict[select_tournament]['name']} de "

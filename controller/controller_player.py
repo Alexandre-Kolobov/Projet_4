@@ -19,13 +19,19 @@ class Controller_player:
                                player_to_load["counter"])
 
         return player_to_add
+    
+    def players_menu(self):
+        database_players = Player.give_database_players()
+        answer = self.view_player.show_menu_players(database_players)
+
+        return answer
 
     def get_player(self, players_in_turnament):
         """Création des participants"""
 
         player_name_in_turnament = self.give_players_in_tournament(players_in_turnament)
         database_players = Player.give_database_players()
-        answer = self.view_player.show_menu_player(database_players, player_name_in_turnament)
+        answer = self.view_player.show_menu_tournament(database_players, player_name_in_turnament)
 
         return answer
 
@@ -68,6 +74,11 @@ class Controller_player:
             player_to_save = Player(first_name, family_name, birth_date, counter)
             player_to_save.save_player()
         Player.increment_counter()
+    
+    def add_one_more_new_player(self):
+        """Demande d'ajouter' un joueur supplementaire"""
+        answer = self.view_player.add_one_more__new_player()
+        return answer
 
     def give_players_in_tournament(self, players_in_turnament):
         """Affiche la liste des joueurs en temps réel"""

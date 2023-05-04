@@ -50,3 +50,12 @@ class Controller_round:
     def show_matchs(self, matchs_list_to_play, current_round):
         """Affiche les matchs d'un round"""
         self.view_round.show_round(matchs_list_to_play, current_round)
+
+    def give_round_date_start(self, round):
+        return round.give_date_start()
+
+    def update_start_round_date(self, round):
+        round.start_round()
+
+    def give_round_name(self, round):
+        return round.give_round_name()
