@@ -196,6 +196,11 @@ class View_tournament():
                         print(f"    Round en cours - Round {tournois_info_dict[tournois]['round_current']}")
 
             print("----------------------------------------")
+            if len(database_tournois) == 0:
+                print("Il n'y a pas de tournoi dans la base")
+                print("Retour au menu des tournois")
+                return None
+
             tournois_selected = input("Merci de selectionner un tournois: ").strip()
 
             if tournois_selected in database_tournois and tournois_info_dict[tournois_selected]['date_finish'] == "":

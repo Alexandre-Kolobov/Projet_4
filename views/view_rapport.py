@@ -67,7 +67,7 @@ class View_rapport():
         print("----------------------------------------")
         if len(database_tournois) == 0:
             print("Il n'y a pas de tournoi dans la base")
-            print("Retour au menu des tournois")
+            print("Retour au menu des rapports")
             return None
         else:
             print("Voici la liste des tournois existant dans la base:")
@@ -178,7 +178,7 @@ class View_rapport():
                 print(f"Tournoi - {tournois_info_dict[select_tournament]['name']}")
                 print(f"    Nombre de rounds: {tournois_info_dict[select_tournament]['round_all']}")
                 print(f"    Participants {tournois_info_dict[select_tournament]['nomber_tournament_players']} "
-                      "/ {tournois_info_dict[select_tournament]['tournament_min_players']} (min nécessaire)")
+                      f"/ {tournois_info_dict[select_tournament]['tournament_min_players']} (min nécessaire)")
                 print("    Statut - En préparation")
                 print(f"    Date du début - {tournois_info_dict[select_tournament]['date_start_schedule']}")
                 print(f"    Date de fin - {tournois_info_dict[select_tournament]['date_finish_schedule']}")
@@ -187,7 +187,7 @@ class View_rapport():
                 print(f"Tournoi - {tournois_info_dict[select_tournament]['name']}")
                 print(f"    Nombre de rounds: {tournois_info_dict[select_tournament]['round_all']}")
                 print(f"    Participants {tournois_info_dict[select_tournament]['nomber_tournament_players']} "
-                      "/ {tournois_info_dict[select_tournament]['tournament_min_players']} (min nécessaire)")
+                      f"/ {tournois_info_dict[select_tournament]['tournament_min_players']} (min nécessaire)")
                 print("    Statut - En cours")
                 print(f"    Date du début - {tournois_info_dict[select_tournament]['date_start']}")
                 print(f"    Date de fin - {tournois_info_dict[select_tournament]['date_finish_schedule']}")
