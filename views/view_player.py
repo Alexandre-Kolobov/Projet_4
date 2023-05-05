@@ -100,10 +100,13 @@ class View_player():
 
             if answer in answers.values() and answer == answers["Afficher"]:
                 print("----------------------------------------")
-                print("Voici la list des joueurs existants dans la base:")
+                if len(database_players) == 0:
+                    print("Il n'y a pas de joueurs dans la base")
+                else:
+                    print("Voici la liste des joueurs existant dans la base:")
 
-                for player in database_players:
-                    print(player)
+                    for player in database_players:
+                        print(player)
 
                 for key, item in answers.items():
                     if item == answer:
