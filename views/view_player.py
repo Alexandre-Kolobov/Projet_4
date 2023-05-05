@@ -195,7 +195,8 @@ class View_player():
 
                 print("----------------------------------------")
                 players_selected_id = input("Vous pouvez sélectionner des joueurs par leurs identifiants "
-                                            "(p1, p2, etc.) ou sélectionner tous les joueurs en écrivant \"all\": ").strip()
+                                            "(p1, p2, etc.) ou sélectionner tous les joueurs en "
+                                            "écrivant \"all\": ").strip()
 
                 if players_selected_id == "all":
                     players_selected_id_splitted = []
@@ -225,12 +226,12 @@ class View_player():
                             else:
                                 print("----------------------------------------")
                                 print(f"Le joueur avec identifiant p{player_selected_id_splitted} "
-                                    "n'existe pas dans la base des joueurs")
+                                      "n'existe pas dans la base des joueurs")
 
                     if flag_test_player_existance is False:
                         print("----------------------------------------")
                         print(f"Le joueur avec identifiant p{player_selected_id_splitted} "
-                            "n'existe pas dans la base des joueurs")
+                              "n'existe pas dans la base des joueurs")
 
             return players_to_return
 

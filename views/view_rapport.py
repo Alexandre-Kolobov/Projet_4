@@ -167,7 +167,7 @@ class View_rapport():
                                     pass
                                 else:
                                     print(f"            Match: {player_1_name} vs {player_2_name} ---- "
-                                        f"Score {player_1_score}:{player_2_score}")
+                                          f"Score {player_1_score}:{player_2_score}")
 
                 for key, item in answers.items():
                     if item == answer:
