@@ -4,7 +4,16 @@ data_path = "data\\tournaments\\"
 
 
 class Tournament():
-    def __init__(self, name="", place="", date_start="", date_finish="", round_all=4, round_current=0, description="" , date_start_schedule = "", date_finish_schedule = ""):
+    def __init__(self, name="",
+                 place="",
+                 date_start="",
+                 date_finish="",
+                 round_all=4,
+                 round_current=0,
+                 description="",
+                 date_start_schedule="",
+                 date_finish_schedule=""):
+
         self.name = name
         self.place = place
         self.date_start = date_start
@@ -16,7 +25,6 @@ class Tournament():
         self.round_all = round_all
         self.date_start_schedule = date_start_schedule
         self.date_finish_schedule = date_finish_schedule
-
 
     def tournament_status(self):
         """Statut d'un tournoi"""
@@ -31,7 +39,14 @@ class Tournament():
 
         return tournament_dict
 
-    def modify_start_information(self, name, place, date_start, description, round_all, date_start_schedule, date_finish_schedule):
+    def modify_start_information(self,
+                                 name,
+                                 place,
+                                 date_start,
+                                 description,
+                                 round_all,
+                                 date_start_schedule,
+                                 date_finish_schedule):
         """Mise à jour des infos d'un tournoi"""
         self.name = name
         self.place = place
@@ -87,7 +102,7 @@ class Tournament():
         # json_string = json.dumps(self.tournament, default=lambda o: o.__dict__, indent=4)
         if not os.path.exists(data_path):
             os.makedirs(data_path)
-            
+
         file_name = (self.name)
         with open(data_path + file_name, "w") as json_file:
             json.dump(self.__dict__, json_file, default=lambda o: o.__dict__, indent=4)
@@ -96,7 +111,7 @@ class Tournament():
     def give_number_min_players(round_all):
         """Donne le nombre minimum des joueurs pour faire un tournoi"""
         if (round_all % 2) == 0:
-            min_players = round_all + 2 
+            min_players = round_all + 2
         else:
             min_players = round_all + 1
 

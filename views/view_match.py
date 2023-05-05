@@ -23,10 +23,10 @@ class View_match():
 
         if match_result == player_1_id:
             return player_1_name
-        
+
         if match_result == player_2_id:
             return player_2_name
-        
+
         if match_result == "égalité":
             return match_result
 

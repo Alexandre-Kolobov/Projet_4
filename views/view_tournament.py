@@ -1,6 +1,6 @@
 """View tournament"""
 from datetime import datetime
-import time
+
 
 class View_tournament():
     def show_main_manu(self):
@@ -104,7 +104,8 @@ class View_tournament():
 
             while True:
                 print("----------------------------------------")
-                date_start_schedule = input(f"Entrer la date et l'heure du début du tournoi {name} (DD/MM/YYYY HH:MM): ").strip()
+                date_start_schedule = input("Entrer la date et l'heure du début du "
+                                            f"tournoi {name} (DD/MM/YYYY HH:MM): ").strip()
                 date_start_schedule = date_start_schedule + ":00"
                 try:
                     datetime.strptime(date_start_schedule, "%d/%m/%Y %H:%M:%S")
@@ -114,7 +115,8 @@ class View_tournament():
 
             while True:
                 print("----------------------------------------")
-                date_finish_schedule = input(f"Entrer la date et l'heure de la fin du tournoi {name} (DD/MM/YYYY HH:MM): ").strip()
+                date_finish_schedule = input("Entrer la date et l'heure de la fin du "
+                                             f"tournoi {name} (DD/MM/YYYY HH:MM): ").strip()
                 date_finish_schedule = date_finish_schedule + ":00"
                 try:
                     datetime.strptime(date_finish_schedule, "%d/%m/%Y %H:%M:%S")
@@ -177,28 +179,21 @@ class View_tournament():
                     if tournois_info_dict[tournois]['round_current'] == 0:
                         print(f"Tournoi - {tournois_info_dict[tournois]['name']}")
                         print(f"    Nombre de rounds: {tournois_info_dict[tournois]['round_all']}")
-                        print(f"    Participants {tournois_info_dict[tournois]['nomber_tournament_players']} / {tournois_info_dict[tournois]['tournament_min_players']} (min nécessaire)")
-                        print(f"    Statut - En préparation")
+                        print(f"    Participants {tournois_info_dict[tournois]['nomber_tournament_players']} "
+                              f"/ {tournois_info_dict[tournois]['tournament_min_players']} (min nécessaire)")
+                        print("    Statut - En préparation")
                         print(f"    Date du début - {tournois_info_dict[tournois]['date_start_schedule']}")
                         print(f"    Date de fin - {tournois_info_dict[tournois]['date_finish_schedule']}")
                         print("    Round en cours - non commencé")
                     else:
                         print(f"Tournoi - {tournois_info_dict[tournois]['name']}")
                         print(f"    Nombre de rounds: {tournois_info_dict[tournois]['round_all']}")
-                        print(f"    Participants {tournois_info_dict[tournois]['nomber_tournament_players']} / {tournois_info_dict[tournois]['tournament_min_players']} (min nécessaire)")
-                        print(f"    Statut - En cours")
+                        print(f"    Participants {tournois_info_dict[tournois]['nomber_tournament_players']} "
+                              f"/ {tournois_info_dict[tournois]['tournament_min_players']} (min nécessaire)")
+                        print("    Statut - En cours")
                         print(f"    Date du début - {tournois_info_dict[tournois]['date_start']}")
                         print(f"    Date de fin - {tournois_info_dict[tournois]['date_finish_schedule']}")
                         print(f"    Round en cours - Round {tournois_info_dict[tournois]['round_current']}")
-                else:
-                    pass
-                    # print(f"Tournoi - {tournois_info_dict[tournois]['name']}")
-                    # print(f"    Nombre de rounds: {tournois_info_dict[tournois]['round_all']}")
-                    # print(f"    Participants {tournois_info_dict[tournois]['nomber_tournament_players']} / {tournois_info_dict[tournois]['tournament_min_players']} (min nécessaire)")
-                    # print(f"    Statut - Terminé")
-                    # print(f"    Date du début - {tournois_info_dict[tournois]['date_start']}")
-                    # print(f"    Date de fin - {tournois_info_dict[tournois]['date_finish']}")
-                    # print("    Round en cours - Terminé")
 
             print("----------------------------------------")
             tournois_selected = input("Merci de selectionner un tournois: ").strip()
@@ -207,11 +202,13 @@ class View_tournament():
                 print("----------------------------------------")
                 print(f"Vous avez selectionné le tournois {tournois_selected}")
                 return tournois_selected
-            else:            
-                if tournois_selected in database_tournois and tournois_info_dict[tournois_selected]['date_finish'] != "":
+            else:
+                if (tournois_selected in database_tournois and
+                   tournois_info_dict[tournois_selected]['date_finish'] != ""):
+
                     print("----------------------------------------")
                     print(f"Il n'est pas possible de sélectionner un tournoi finit {tournois_selected}.")
-                    print(f"Si vous souhaitez consulter ses informations, veuillez utiliser le menu \"Rapports\".")
+                    print("Si vous souhaitez consulter ses informations, veuillez utiliser le menu \"Rapports\".")
                 else:
                     print("----------------------------------------")
                     print(f"Le tournois {tournois_selected} n'existe pas dans la base")
@@ -222,7 +219,7 @@ class View_tournament():
                 print("    2. Non")
 
                 answers = {"Oui": "1",
-                        "Non": "2"}
+                           "Non": "2"}
 
                 answer = input("Votre choix: ").strip()
                 if answer in answers.values() and answer == answers["Oui"]:
@@ -294,7 +291,7 @@ class View_tournament():
                 print(f"Tournoi - {tournament_name}")
                 print(f"    Nombre de rounds: {tournament_round_all}")
                 print(f"    Participants {tournament_players} / {tournament_min_players} (min nécessaire)")
-                print(f"    Statut - En préparation")
+                print("    Statut - En préparation")
                 print(f"    Date du début - {tournament_start_shedule}")
                 print(f"    Date de fin - {tournament_finish_shedule}")
                 print("    Round en cours - non commencé")
@@ -302,18 +299,18 @@ class View_tournament():
                 print(f"Tournoi - {tournament_name}")
                 print(f"    Nombre de rounds: {tournament_round_all}")
                 print(f"    Participants {tournament_players} / {tournament_min_players} (min nécessaire)")
-                print(f"    Statut - En cours")
+                print("    Statut - En cours")
                 print(f"    Date du début - {tournament_start}")
                 print(f"    Date de fin - {tournament_finish_shedule}")
                 print(f"    Round en cours - Round {tournament_round_current}")
         else:
-                print(f"Tournoi - {tournament_name}")
-                print(f"    Nombre de rounds: {tournament_round_all}")
-                print(f"    Participants {tournament_players} / {tournament_min_players} (min nécessaire)")
-                print(f"    Statut - Terminé")
-                print(f"    Date du début - {tournament_start}")
-                print(f"    Date de fin - {tournament_finish}")
-                print("    Round en cours - Terminé")
+            print(f"Tournoi - {tournament_name}")
+            print(f"    Nombre de rounds: {tournament_round_all}")
+            print(f"    Participants {tournament_players} / {tournament_min_players} (min nécessaire)")
+            print("    Statut - Terminé")
+            print(f"    Date du début - {tournament_start}")
+            print(f"    Date de fin - {tournament_finish}")
+            print("    Round en cours - Terminé")
 
     def show_menu_post_tournament(self):
         """Affiche les actions à faire àpres le tournois"""

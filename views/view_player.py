@@ -54,7 +54,8 @@ class View_player():
                     print("Retour au menu des joueurs")
                     return None
             else:
-                print(f"Le joueur {first_name} {family_name} a été ajouté dans la base des joueurs avec identifiant p{counter}")
+                print(f"Le joueur {first_name} {family_name} "
+                      "a été ajouté dans la base des joueurs avec identifiant p{counter}")
                 return first_name, family_name, birth_date
 
     def show_players(self, players):
@@ -79,7 +80,7 @@ class View_player():
         print("    5. Démarrer le tournoi")
         print("    6. Revenir au menu des tournois")
         print("    7. Sauvegarder et quitter")
- 
+
         answers = {}
 
         while True:
@@ -156,7 +157,7 @@ class View_player():
                         return key
 
                 return key
-            
+
             else:
                 answers_list = []
                 for i in answers.values():
@@ -173,7 +174,6 @@ class View_player():
             for player in database_players:
                 print(f"    {player}")
 
-
             database_players_lower = database_players[:]
             for i in range(len(database_players_lower)):
                 database_players_lower[i] = database_players_lower[i].lower()
@@ -183,8 +183,9 @@ class View_player():
                 player_name_in_turnament_lower[i] = player_name_in_turnament_lower[i].lower()
 
             print("----------------------------------------")
-            players_selected_id = input("Vous pouvez sélectionner des joueurs par leurs identifiants (p1, p2, etc.) ou sélectionner tous les joueurs en écrivant \"all\": ").strip()
-            
+            players_selected_id = input("Vous pouvez sélectionner des joueurs par leurs identifiants "
+                                        "(p1, p2, etc.) ou sélectionner tous les joueurs en écrivant \"all\": ").strip()
+
             if players_selected_id == "all":
                 players_selected_id_splitted = []
                 for player in database_players:
@@ -193,7 +194,7 @@ class View_player():
             else:
                 players_selected_id = re.sub(r"\s+", "", players_selected_id)
                 players_selected_id_splitted = players_selected_id.split(",")
-            
+
             players_to_return = []
 
             for player_selected_id_splitted in players_selected_id_splitted:
@@ -214,11 +215,13 @@ class View_player():
                                 print(f"Le joueur {player_selected} est ajouté au tournois")
                         else:
                             print("----------------------------------------")
-                            print(f"Le joueur avec identifiant p{player_selected_id_splitted} n'existe pas dans la base des joueurs")
-                
-                if flag_test_player_existance == False:
+                            print(f"Le joueur avec identifiant p{player_selected_id_splitted} "
+                                  "n'existe pas dans la base des joueurs")
+
+                if flag_test_player_existance is False:
                     print("----------------------------------------")
-                    print(f"Le joueur avec identifiant p{player_selected_id_splitted} n'existe pas dans la base des joueurs")
+                    print(f"Le joueur avec identifiant p{player_selected_id_splitted} "
+                          "n'existe pas dans la base des joueurs")
 
             return players_to_return
 
@@ -281,4 +284,3 @@ class View_player():
                     answers_list.append(i)
                 answers_list.sort()
                 print(f"Merci de reesayer en choissisant parmis {answers_list}")
-

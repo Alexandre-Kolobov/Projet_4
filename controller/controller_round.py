@@ -59,7 +59,7 @@ class Controller_round:
 
     def give_round_name(self, round):
         return round.give_round_name()
-    
+
     def check_number_players(self, participants_len, round_all):
         """Verifie la possibilité de jouer le nombre des rounds demandé"""
 
@@ -74,4 +74,3 @@ class Controller_round:
         else:  # Si nombre des participant est impaire, il faut ajouter des joueurs
             self.view_round.show_round_negative_estimation(round_all)
             return False
-        

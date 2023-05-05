@@ -43,7 +43,6 @@ class Controller_tournament:
                         tournament.add_player(player)
                         tournament.save_tournament()
 
-
                     while True:
                         players_in_turnament = tournament.give_list_players()
                         players_in_database = self.player_controller.give_database_players()
@@ -259,13 +258,12 @@ class Controller_tournament:
             for tournois in database_tournois:
                 tournois_info = Tournament.load_tournament(tournois)
                 tournois_info_dict[tournois] = tournois_info
-                
+
                 tournament_min_players = Tournament.give_number_min_players(tournois_info["round_all"])
                 tournois_info_dict[tournois]["tournament_min_players"] = tournament_min_players
 
                 nomber_tournament_players = len(tournois_info["players_list"])
                 tournois_info_dict[tournois]["nomber_tournament_players"] = nomber_tournament_players
-
 
             answer = self.view_tournament.show_main_manu()
             if answer == "Rapports":
@@ -292,7 +290,7 @@ class Controller_tournament:
 
                     if answer_rapport == "Quitter":
                         exit(0)
-            
+
             if answer == "Joueurs":
                 while True:
                     answer_player = self.player_controller.players_menu()
@@ -328,7 +326,7 @@ class Controller_tournament:
                             pass
                         else:
                             return tournament_informations
-                    
+
                     if answer_tournament == "Revenir":
                         break
 
@@ -352,8 +350,8 @@ class Controller_tournament:
                                     round_all=selected_to_load_tournament["round_all"],
                                     round_current=selected_to_load_tournament["round_current"],
                                     description=selected_to_load_tournament["description"],
-                                    date_start_schedule = selected_to_load_tournament["date_start_schedule"],
-                                    date_finish_schedule = selected_to_load_tournament["date_finish_schedule"])
+                                    date_start_schedule=selected_to_load_tournament["date_start_schedule"],
+                                    date_finish_schedule=selected_to_load_tournament["date_finish_schedule"])
 
             players_list = selected_to_load_tournament["players_list"]
             round_list = selected_to_load_tournament["round_list"]
@@ -373,10 +371,16 @@ class Controller_tournament:
         description = tournament_informations[2]
         round_all_update = tournament_informations[3]
         date_start = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        date_start_schedule  = tournament_informations[4]
+        date_start_schedule = tournament_informations[4]
         date_finish_schedule = tournament_informations[5]
 
-        tournament.modify_start_information(name, place, date_start, description, round_all_update, date_start_schedule, date_finish_schedule)
+        tournament.modify_start_information(name,
+                                            place,
+                                            date_start,
+                                            description,
+                                            round_all_update,
+                                            date_start_schedule,
+                                            date_finish_schedule)
         tournament.save_tournament()
 
         round_all = tournament.give_round_all_information()

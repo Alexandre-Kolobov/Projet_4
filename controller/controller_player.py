@@ -17,7 +17,7 @@ class Controller_player:
                                player_to_load["counter"])
 
         return player_to_add
-    
+
     def players_menu(self):
         database_players = Player.give_database_players()
         answer = self.view_player.show_menu_players(database_players)
@@ -41,7 +41,7 @@ class Controller_player:
 
         database_players = Player.give_database_players()
         selected_players = self.view_player.select_player_from_database(database_players,
-                                                                       player_name_in_turnament)
+                                                                        player_name_in_turnament)
         loaded_players_list = []
         for player in selected_players:
             loaded_player = Player.load_player(player)
@@ -49,7 +49,7 @@ class Controller_player:
                                           loaded_player["family_name"],
                                           loaded_player["birth_date"],
                                           loaded_player["counter"])
-            
+
             loaded_players_list.append(loaded_player_to_add)
         return loaded_players_list
 
@@ -73,7 +73,7 @@ class Controller_player:
         Player.increment_counter()
 
         return player_to_save
-    
+
     def add_one_more_new_player(self):
         """Demande d'ajouter' un joueur supplementaire"""
         answer = self.view_player.add_one_more__new_player()
