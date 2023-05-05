@@ -65,7 +65,12 @@ class View_rapport():
 
     def select_tournament(self, database_tournois, tournois_info_dict):
         print("----------------------------------------")
-        print("Voici la liste des tournois existant dans la base:")
+        if len(database_tournois) == 0:
+            print("Il n'y a pas de tournoi dans la base")
+            print("Retour au menu des tournois")
+            return None
+        else:
+            print("Voici la liste des tournois existant dans la base:")
 
         for tournois in database_tournois:
             self.show_tournament_informations(tournois_info_dict, tournois)
