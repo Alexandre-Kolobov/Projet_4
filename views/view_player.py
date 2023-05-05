@@ -147,10 +147,13 @@ class View_player():
 
             if answer in answers.values() and answer == answers["Afficher"]:
                 print("----------------------------------------")
-                print("Voici la liste des joueurs existant dans la base:")
 
-                for player in database_players:
-                    print(player)
+                if len(database_players) == 0:
+                    print("Il n'y a pas de joueurs dans la base")
+                else:
+                    print("Voici la liste des joueurs existant dans la base:")
+                    for player in database_players:
+                        print(f"    {player}")
 
                 for key, item in answers.items():
                     if item == answer:
@@ -169,59 +172,62 @@ class View_player():
         """Selectionne un joueur dans la db et verifie s'il ne participe pas déja dans ce tournois"""
         while True:
             print("----------------------------------------")
-            print("Voici la liste des joueurs existant dans la base:")
-
-            for player in database_players:
-                print(f"    {player}")
-
-            database_players_lower = database_players[:]
-            for i in range(len(database_players_lower)):
-                database_players_lower[i] = database_players_lower[i].lower()
-
-            player_name_in_turnament_lower = player_name_in_turnament[:]
-            for i in range(len(player_name_in_turnament_lower)):
-                player_name_in_turnament_lower[i] = player_name_in_turnament_lower[i].lower()
-
-            print("----------------------------------------")
-            players_selected_id = input("Vous pouvez sélectionner des joueurs par leurs identifiants "
-                                        "(p1, p2, etc.) ou sélectionner tous les joueurs en écrivant \"all\": ").strip()
-
-            if players_selected_id == "all":
-                players_selected_id_splitted = []
-                for player in database_players:
-                    player_splitted = player.split()
-                    players_selected_id_splitted.append(player_splitted[2])
-            else:
-                players_selected_id = re.sub(r"\s+", "", players_selected_id)
-                players_selected_id_splitted = players_selected_id.split(",")
-
             players_to_return = []
 
-            for player_selected_id_splitted in players_selected_id_splitted:
-                flag_test_player_existance = False
+            if len(database_players) == 0:
+                print("Il n'y a pas de joueurs dans la base")
+            else:
+                print("Voici la liste des joueurs existant dans la base:")
+
                 for player in database_players:
-                    player_split = player.split()
-                    if player_split[2] == player_selected_id_splitted:
-                        player_selected = player
-                        flag_test_player_existance = True
+                    print(f"    {player}")
 
-                        if player_selected.lower() in database_players_lower:
-                            if player_selected.lower() in player_name_in_turnament_lower:
-                                print("----------------------------------------")
-                                print(f"Le joueur {player_selected} participe déja à ce tournois")
+                database_players_lower = database_players[:]
+                for i in range(len(database_players_lower)):
+                    database_players_lower[i] = database_players_lower[i].lower()
+
+                player_name_in_turnament_lower = player_name_in_turnament[:]
+                for i in range(len(player_name_in_turnament_lower)):
+                    player_name_in_turnament_lower[i] = player_name_in_turnament_lower[i].lower()
+
+                print("----------------------------------------")
+                players_selected_id = input("Vous pouvez sélectionner des joueurs par leurs identifiants "
+                                            "(p1, p2, etc.) ou sélectionner tous les joueurs en écrivant \"all\": ").strip()
+
+                if players_selected_id == "all":
+                    players_selected_id_splitted = []
+                    for player in database_players:
+                        player_splitted = player.split()
+                        players_selected_id_splitted.append(player_splitted[2])
+                else:
+                    players_selected_id = re.sub(r"\s+", "", players_selected_id)
+                    players_selected_id_splitted = players_selected_id.split(",")
+
+                for player_selected_id_splitted in players_selected_id_splitted:
+                    flag_test_player_existance = False
+                    for player in database_players:
+                        player_split = player.split()
+                        if player_split[2] == player_selected_id_splitted:
+                            player_selected = player
+                            flag_test_player_existance = True
+
+                            if player_selected.lower() in database_players_lower:
+                                if player_selected.lower() in player_name_in_turnament_lower:
+                                    print("----------------------------------------")
+                                    print(f"Le joueur {player_selected} participe déja à ce tournois")
+                                else:
+                                    players_to_return.append(player_selected)
+                                    print("----------------------------------------")
+                                    print(f"Le joueur {player_selected} est ajouté au tournois")
                             else:
-                                players_to_return.append(player_selected)
                                 print("----------------------------------------")
-                                print(f"Le joueur {player_selected} est ajouté au tournois")
-                        else:
-                            print("----------------------------------------")
-                            print(f"Le joueur avec identifiant p{player_selected_id_splitted} "
-                                  "n'existe pas dans la base des joueurs")
+                                print(f"Le joueur avec identifiant p{player_selected_id_splitted} "
+                                    "n'existe pas dans la base des joueurs")
 
-                if flag_test_player_existance is False:
-                    print("----------------------------------------")
-                    print(f"Le joueur avec identifiant p{player_selected_id_splitted} "
-                          "n'existe pas dans la base des joueurs")
+                    if flag_test_player_existance is False:
+                        print("----------------------------------------")
+                        print(f"Le joueur avec identifiant p{player_selected_id_splitted} "
+                            "n'existe pas dans la base des joueurs")
 
             return players_to_return
 
