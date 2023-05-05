@@ -9,14 +9,26 @@ class View_match():
         print(f"Match {player_1_name} contre {player_2_name}")
 
         while True:
-            match_result = input("Entrer nom et prenom du gagnat ou \"égalité\": ").strip()
+            player_1_name_splited = player_1_name.split()
+            player_1_id = player_1_name_splited[2]
 
-            if match_result in [player_1_name, player_2_name, "égalité"]:
+            player_2_name_splited = player_2_name.split()
+            player_2_id = player_2_name_splited[2]
+            match_result = input("Entrer l'identifiant du gagnant ou \"égalité\": ").strip()
+
+            if match_result in [player_1_id, player_2_id, "égalité"]:
                 break
             else:
                 print("Le resultat n'a pas été entré correctemment. Merci de reesayer.")
 
-        return match_result
+        if match_result == player_1_id:
+            return player_1_name
+        
+        if match_result == player_2_id:
+            return player_2_name
+        
+        if match_result == "égalité":
+            return match_result
 
     def show_match_result(self, player_1_name, player_2_name, player_1_score, player_2_score):
         """Affiche le resultat d'un match"""
@@ -25,7 +37,7 @@ class View_match():
     def get_finish_match(self):
         """Affiche les actions à proposer à la fin d'un match"""
         print("----------------------------------------")
-        print("Voulez vous jouer le match suivant?")
+        print("Voulez-vous jouer le match suivant?")
         print("    1. Oui")
         print("    2. Sauvegarder et revenir au menu des tournois")
         print("    3. Sauvegarder et quitter")

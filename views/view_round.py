@@ -5,12 +5,12 @@ class View_round():
     def show_round_estimation(self, round_all):
         """Confirme la possiblité de faire n round"""
         print("----------------------------------------")
-        print(f"Avec ce nombre de joueur il est possible de faire: {round_all} round")
+        print(f"Avec ce nombre de joueurs il est possible de faire: {round_all} round")
 
     def show_round_negative_estimation(self, round_all):
         """Confirme l'impossiblité de faire n round"""
         print("----------------------------------------")
-        print(f"Avec ce nombre de joueur il n'est pas possible de faire: {round_all} rounds")
+        print(f"Avec ce nombre de joueurs il n'est pas possible de faire: {round_all} rounds")
         print("Merci d'ajouter d'autres participants")
 
     def show_round(self, matchs, current_round):
@@ -23,10 +23,10 @@ class View_round():
     def get_finish_round(self, round_name):
         """Afiche les actions possibles à la fin d'un round"""
         print("----------------------------------------")
-        print(f"Tous les matchs du {round_name} sont joués.")
-        print("Que voulez vous faire?")
-        print("    1. Continuer le tournois")
-        print("    2. Sauvegarder et revenir au menu prencipal")
+        print(f"Tous les matchs du Round {round_name[6:]} sont joués.")
+        print("Que voulez-vous faire?")
+        print("    1. Continuer le tournoi")
+        print("    2. Sauvegarder et revenir au menu principal")
         print("    3. Sauvegarder et quitter")
 
         answers = {}

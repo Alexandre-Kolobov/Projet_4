@@ -15,11 +15,11 @@ class Player():
         self.counter = counter
 
     def __repr__(self):
-        return (f"{self.first_name} {self.family_name} id{self.counter}")
+        return (f"{self.first_name} {self.family_name} p{self.counter}")
 
     def give_player_name(self):
         """Renvoi le nom d'un joueur"""
-        return (f"{self.first_name} {self.family_name} id{self.counter}")
+        return (f"{self.first_name} {self.family_name} p{self.counter}")
 
     def save_player(self):
         """Sauvegarde d'un player sous format json"""
@@ -28,7 +28,7 @@ class Player():
         # o represente l'objet imbriqué
         # json_string = json.dumps(self.tournament, default=lambda o: o.__dict__, indent=4)
 
-        file_name = (self.first_name + " " + self.family_name + " " + "id" + str(self.counter))
+        file_name = (self.first_name + " " + self.family_name + " " + "p" + str(self.counter))
         with open(data_path + file_name, "w") as json_file:
             json.dump(self.__dict__, json_file, indent=4)
 

@@ -59,3 +59,19 @@ class Controller_round:
 
     def give_round_name(self, round):
         return round.give_round_name()
+    
+    def check_number_players(self, participants_len, round_all):
+        """Verifie la possibilité de jouer le nombre des rounds demandé"""
+
+        if (participants_len % 2) == 0:  # Si nombre des participant est paire il y a N-1 tours possibles
+            max_round = participants_len - 1
+            if max_round >= round_all:
+                self.view_round.show_round_estimation(round_all)
+                return True
+            else:
+                self.view_round.show_round_negative_estimation(round_all)
+                return False
+        else:  # Si nombre des participant est impaire, il faut ajouter des joueurs
+            self.view_round.show_round_negative_estimation(round_all)
+            return False
+        

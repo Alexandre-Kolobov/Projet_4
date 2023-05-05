@@ -90,6 +90,16 @@ class Tournament():
             json.dump(self.__dict__, json_file, default=lambda o: o.__dict__, indent=4)
 
     @staticmethod
+    def give_number_min_players(round_all):
+        """Donne le nombre minimum des joueurs pour faire un tournoi"""
+        if (round_all % 2) == 0:
+            min_players = round_all + 2 
+        else:
+            min_players = round_all + 1
+
+        return min_players
+
+    @staticmethod
     def give_database_tournaments():
         """Return la liste des tournois enregistrés"""
         database_tournaments = []

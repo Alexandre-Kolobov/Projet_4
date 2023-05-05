@@ -37,32 +37,47 @@ class Controller_tournament:
                 players_in_turnament = tournament.give_list_players()
                 answer = self.player_controller.get_player(players_in_turnament)
 
-                if answer == "Ajouter":
-                    player = self.player_controller.select_player(players_in_turnament)
-
-                    if player is not None:
+                if answer == "Selectionner":
+                    players = self.player_controller.select_player(players_in_turnament)
+                    for player in players:
                         tournament.add_player(player)
                         tournament.save_tournament()
 
-                        while True:
-                            answer_one_more = self.player_controller.add_one_more_player()
-                            if answer_one_more == "Oui":
-                                player = self.player_controller.select_player(players_in_turnament)
-                                if player is not None:
-                                    tournament.add_player(player)
-                                    tournament.save_tournament()
-                                else:
-                                    break
-                            else:
-                                break
+
+                    while True:
+                        players_in_turnament = tournament.give_list_players()
+                        players_in_database = self.player_controller.give_database_players()
+                        if len(players_in_turnament) >= len(players_in_database):
+                            break
+
+                        answer_one_more = self.player_controller.add_one_more_player()
+                        players_in_turnament = tournament.give_list_players()
+                        if answer_one_more == "Oui":
+                            players = self.player_controller.select_player(players_in_turnament)
+                            for player in players:
+                                tournament.add_player(player)
+                                tournament.save_tournament()
+                        else:
+                            break
 
                 if answer == "Creer":
-                    self.player_controller.add_new_player()
+                    player = self.player_controller.add_new_player()
+                    tournament.add_player(player)
+                    tournament.save_tournament()
+
+                    while True:
+                        answer_one_more = self.player_controller.add_one_more_new_player()
+                        if answer_one_more == "Oui":
+                            player = self.player_controller.add_new_player()
+                            tournament.add_player(player)
+                            tournament.save_tournament()
+                        else:
+                            break
 
                 if answer == "Demmarer":
                     participants_len = tournament.give_len_list_players()
                     round_all = tournament.give_round_all_information()
-                    if self.player_controller.check_number_players(participants_len, round_all):
+                    if self.round_controller.check_number_players(participants_len, round_all):
                         break
 
                 if answer == "Sauvegarder":
@@ -244,6 +259,13 @@ class Controller_tournament:
             for tournois in database_tournois:
                 tournois_info = Tournament.load_tournament(tournois)
                 tournois_info_dict[tournois] = tournois_info
+                
+                tournament_min_players = Tournament.give_number_min_players(tournois_info["round_all"])
+                tournois_info_dict[tournois]["tournament_min_players"] = tournament_min_players
+
+                nomber_tournament_players = len(tournois_info["players_list"])
+                tournois_info_dict[tournois]["nomber_tournament_players"] = nomber_tournament_players
+
 
             answer = self.view_tournament.show_main_manu()
             if answer == "Rapports":
@@ -299,7 +321,10 @@ class Controller_tournament:
 
                     if answer_tournament == "Creer":
                         tournament_informations = self.new_tournament(database_tournois)
-                        return tournament_informations
+                        if tournament_informations is None:
+                            pass
+                        else:
+                            return tournament_informations
                     
                     if answer_tournament == "Revenir":
                         break
@@ -337,6 +362,9 @@ class Controller_tournament:
         tournament = Tournament()
         round_all = tournament.give_round_all_information()
         tournament_informations = self.view_tournament.get_tournament_start_informations(round_all, database_tournois)
+        if tournament_informations is None:
+            return None
+
         name = tournament_informations[0]
         place = tournament_informations[1]
         description = tournament_informations[2]
@@ -444,13 +472,18 @@ class Controller_tournament:
         tournament_start_shedule = tournament_status_dict["date_start_schedule"]
         tournament_finish_shedule = tournament_status_dict["date_finish_schedule"]
 
+        tournament_players = tournament.give_len_list_players()
+        tournament_min_players = Tournament.give_number_min_players(tournament_round_all)
+
         self.view_tournament.tournament_status(tournament_name,
                                                tournament_start,
                                                tournament_finish,
                                                tournament_round_current,
                                                tournament_round_all,
                                                tournament_start_shedule,
-                                               tournament_finish_shedule)
+                                               tournament_finish_shedule,
+                                               tournament_players,
+                                               tournament_min_players)
 
     def played_pairs(self, tournament):
         """Return unen liste des paires déja joué dans le tournoi"""

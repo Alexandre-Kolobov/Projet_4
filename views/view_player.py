@@ -1,5 +1,6 @@
 """View player"""
 from datetime import datetime
+import re
 
 
 class View_player():
@@ -36,7 +37,7 @@ class View_player():
             if player_name_firstname in database_players:
                 print("----------------------------------------")
                 print(f"Le joueur {first_name} {family_name} existe déja dans la base des joueurs")
-                print("Que voulez vous faire?")
+                print("Que voulez-vous faire?")
                 print("    1. Réessayer le saisie")
                 print("    2. Revenir dans le menu des joueurs")
 
@@ -53,16 +54,19 @@ class View_player():
                     print("Retour au menu des joueurs")
                     return None
             else:
-                print(f"Le joueur {first_name} {family_name} a été ajouté dans la base des joueurs avec id {counter}")
+                print(f"Le joueur {first_name} {family_name} a été ajouté dans la base des joueurs avec identifiant p{counter}")
                 return first_name, family_name, birth_date
 
     def show_players(self, players):
         """Affiche les joueur participants"""
         print("----------------------------------------")
-        print("Voici la liste des joueurs participants:")
-        sorted_players = sorted(players)
-        for i in sorted_players:
-            print(f"    {i}")
+        if len(players) > 0:
+            print("Voici la liste des joueurs participant:")
+            sorted_players = sorted(players)
+            for i in sorted_players:
+                print(f"    {i}")
+        else:
+            print("Aucun joueur ne participe au tournoi")
 
     def show_menu_tournament(self, database_players, players_in_turnament):
         """Affiche le menu du tournoi"""
@@ -70,21 +74,22 @@ class View_player():
         print("Menu du tournoi:")
         print("    1. Afficher la liste des joueurs existant dans la base")
         print("    2. Afficher la liste des joueurs participant au tournoi")
-        print("    3. Ajouter un joueur au tournois")
-        print("    4. Créer un nouveau joueur")
-        print("    5. Démmarer le tournois")
-        print("    6. Sauvegarder et quitter")
-        print("    7. Revenir au menu des tournois")
+        print("    3. Sélectionner des joueurs")
+        print("    4. Créer un nouveau joueur et l'ajouter au tournoi")
+        print("    5. Démarrer le tournoi")
+        print("    6. Revenir au menu des tournois")
+        print("    7. Sauvegarder et quitter")
+ 
         answers = {}
 
         while True:
             answers = {"Afficher": "1",
                        "Joueurs": "2",
-                       "Ajouter": "3",
+                       "Selectionner": "3",
                        "Creer": "4",
                        "Demmarer": "5",
-                       "Sauvegarder": "6",
-                       "Revenir": "7"}
+                       "Revenir": "6",
+                       "Sauvegarder": "7"}
             print("----------------------------------------")
             answer = input("Votre choix: ").strip()
             if answer in answers.values() and answer != answers["Afficher"] and answer != answers["Joueurs"]:
@@ -141,7 +146,7 @@ class View_player():
 
             if answer in answers.values() and answer == answers["Afficher"]:
                 print("----------------------------------------")
-                print("Voici la list des joueurs existants dans la base:")
+                print("Voici la liste des joueurs existant dans la base:")
 
                 for player in database_players:
                     print(player)
@@ -163,13 +168,11 @@ class View_player():
         """Selectionne un joueur dans la db et verifie s'il ne participe pas déja dans ce tournois"""
         while True:
             print("----------------------------------------")
-            print("Voici la list des joueurs existants dans la base:")
+            print("Voici la liste des joueurs existant dans la base:")
 
             for player in database_players:
                 print(f"    {player}")
 
-            print("----------------------------------------")
-            player_selected = input("Merci de selectionner un joueur par son nom, prenom et id: ").strip()
 
             database_players_lower = database_players[:]
             for i in range(len(database_players_lower)):
@@ -179,65 +182,49 @@ class View_player():
             for i in range(len(player_name_in_turnament_lower)):
                 player_name_in_turnament_lower[i] = player_name_in_turnament_lower[i].lower()
 
-            if player_selected.lower() in database_players_lower:
-                if player_selected.lower() in player_name_in_turnament_lower:
-                    print("----------------------------------------")
-                    print(f"Le joueur {player_selected} participe déja à ce tournois")
-                    print("Voulez vous selectionner un autre joueur?")
-                    print("----------------------------------------")
-                    print("    1. Oui")
-                    print("    2. Non")
-
-                    answers = {"Oui": "1",
-                               "Non": "2"}
-
-                    answer = input("Votre choix: ").strip()
-                    if answer in answers.values() and answer == answers["Oui"]:
-                        pass
-
-                    elif answer in answers.values() and answer == answers["Non"]:
-                        print("----------------------------------------")
-                        print("Retour au menu des joueurs")
-                        return None
-                    else:
-                        answers_list = []
-                        for i in answers.values():
-                            answers_list.append(i)
-                        answers_list.sort()
-                        print(f"Merci de reesayer en choissisant parmis {answers_list}")
-                else:
-                    print("----------------------------------------")
-                    print(f"Le joueur {player_selected} est ajouté au tournois")
-                    return player_selected
+            print("----------------------------------------")
+            players_selected_id = input("Vous pouvez sélectionner des joueurs par leurs identifiants (p1, p2, etc.) ou sélectionner tous les joueurs en écrivant \"all\": ").strip()
+            
+            if players_selected_id == "all":
+                players_selected_id_splitted = []
+                for player in database_players:
+                    player_splitted = player.split()
+                    players_selected_id_splitted.append(player_splitted[2])
             else:
-                print("----------------------------------------")
-                print(f"Le joueur {player_selected} n'existe pas dans la base des joueurs")
-                print("Voulez vous selectionner un autre joueur?")
-                print("----------------------------------------")
-                print("    1. Oui")
-                print("    2. Non")
+                players_selected_id = re.sub(r"\s+", "", players_selected_id)
+                players_selected_id_splitted = players_selected_id.split(",")
+            
+            players_to_return = []
 
-                answers = {"Oui": "1",
-                           "Non": "2"}
+            for player_selected_id_splitted in players_selected_id_splitted:
+                flag_test_player_existance = False
+                for player in database_players:
+                    player_split = player.split()
+                    if player_split[2] == player_selected_id_splitted:
+                        player_selected = player
+                        flag_test_player_existance = True
 
-                answer = input("Votre choix: ").strip()
-                if answer in answers.values() and answer == answers["Oui"]:
-                    pass
-
-                elif answer in answers.values() and answer == answers["Non"]:
+                        if player_selected.lower() in database_players_lower:
+                            if player_selected.lower() in player_name_in_turnament_lower:
+                                print("----------------------------------------")
+                                print(f"Le joueur {player_selected} participe déja à ce tournois")
+                            else:
+                                players_to_return.append(player_selected)
+                                print("----------------------------------------")
+                                print(f"Le joueur {player_selected} est ajouté au tournois")
+                        else:
+                            print("----------------------------------------")
+                            print(f"Le joueur avec identifiant p{player_selected_id_splitted} n'existe pas dans la base des joueurs")
+                
+                if flag_test_player_existance == False:
                     print("----------------------------------------")
-                    print("Retour au menu des joueurs")
-                    return None
-                else:
-                    answers_list = []
-                    for i in answers.values():
-                        answers_list.append(i)
-                    answers_list.sort()
-                    print(f"Merci de reesayer en choissisant parmis {answers_list}")
+                    print(f"Le joueur avec identifiant p{player_selected_id_splitted} n'existe pas dans la base des joueurs")
+
+            return players_to_return
 
     def add_one_more_player(self):
         print("----------------------------------------")
-        print("Voulez vous selectionner un autre joueur?")
+        print("Voulez-vous selectionner un autre joueur?")
         print("----------------------------------------")
         print("    1. Oui")
         print("    2. Non")
@@ -267,7 +254,7 @@ class View_player():
 
     def add_one_more__new_player(self):
         print("----------------------------------------")
-        print("Voulez vous ajouter un autre joueur?")
+        print("Voulez-vous ajouter un autre joueur?")
         print("----------------------------------------")
         print("    1. Oui")
         print("    2. Non")

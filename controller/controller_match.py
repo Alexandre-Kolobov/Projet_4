@@ -35,11 +35,11 @@ class Controller_match:
         """Création du nom de joueur à partir d'un dictionnaire"""
         p1_first_name = match['player_1']['first_name']
         p1_family_name = match['player_1']['family_name']
-        p1_id = "id" + str(match['player_1']['counter'])
+        p1_id = "p" + str(match['player_1']['counter'])
 
         p2_first_name = match['player_2']['first_name']
         p2_family_name = match['player_2']['family_name']
-        p2_id = "id" + str(match['player_2']['counter'])
+        p2_id = "p" + str(match['player_2']['counter'])
 
         player_1_to_load = p1_first_name + " " + p1_family_name + " " + p1_id
         player_2_to_load = p2_first_name + " " + p2_family_name + " " + p2_id
