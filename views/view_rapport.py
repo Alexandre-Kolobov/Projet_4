@@ -126,11 +126,14 @@ class View_rapport():
             answer = input("Votre choix: ").strip()
             if answer in answers.values() and answer == answers["Joueurs"]:
                 print("----------------------------------------")
-                print("Voici la liste des joueurs existant dans la base:")
-
                 tournois_info_dict[select_tournament]['players_list'].sort(key=lambda d: d['first_name'])
-                for player in tournois_info_dict[select_tournament]['players_list']:
-                    print(f"    {player['first_name']} {player['family_name']} p{player['counter']}")
+
+                if len(tournois_info_dict[select_tournament]['players_list']) == 0:
+                    print("Il n'y a pas de joueurs participant à ce tournoi")
+                else:
+                    print("Voici la liste des joueurs participant:")
+                    for player in tournois_info_dict[select_tournament]['players_list']:
+                        print(f"    {player['first_name']} {player['family_name']} p{player['counter']}")
 
                 for key, item in answers.items():
                     if item == answer:
@@ -139,29 +142,32 @@ class View_rapport():
             if answer in answers.values() and answer == answers["Matchs"]:
                 self.show_tournament_informations(tournois_info_dict, select_tournament)
                 print("----------------------------------------")
-                print("Voici la liste des matchs du tournoi:")
-                for round in tournois_info_dict[select_tournament]['round_list']:
-                    if len(round['matchs']) != 0:
-                        print(f"        Round {round['name'][6:]} :")
-                        for match in round['matchs']:
-                            p1_first_name = match['player_1']['first_name']
-                            p1_family_name = match['player_1']['family_name']
-                            p1_id = "p" + str(match['player_1']['counter'])
+                if len(tournois_info_dict[select_tournament]['round_list']) == 0:
+                    print("Il n'y a pas eu de matchs pour ce tournoi")
+                else:
+                    print("Voici la liste des matchs du tournoi:")
+                    for round in tournois_info_dict[select_tournament]['round_list']:
+                        if len(round['matchs']) != 0:
+                            print(f"        Round {round['name'][6:]} :")
+                            for match in round['matchs']:
+                                p1_first_name = match['player_1']['first_name']
+                                p1_family_name = match['player_1']['family_name']
+                                p1_id = "p" + str(match['player_1']['counter'])
 
-                            p2_first_name = match['player_2']['first_name']
-                            p2_family_name = match['player_2']['family_name']
-                            p2_id = "p" + str(match['player_2']['counter'])
+                                p2_first_name = match['player_2']['first_name']
+                                p2_family_name = match['player_2']['family_name']
+                                p2_id = "p" + str(match['player_2']['counter'])
 
-                            player_1_name = p1_first_name + " " + p1_family_name + " " + p1_id
-                            player_2_name = p2_first_name + " " + p2_family_name + " " + p2_id
-                            player_1_score = match['score_1']
-                            player_2_score = match['score_2']
+                                player_1_name = p1_first_name + " " + p1_family_name + " " + p1_id
+                                player_2_name = p2_first_name + " " + p2_family_name + " " + p2_id
+                                player_1_score = match['score_1']
+                                player_2_score = match['score_2']
 
-                            if player_1_score == 0 and player_2_score == 0:
-                                pass
-                            else:
-                                print(f"            Match: {player_1_name} vs {player_2_name} ---- "
-                                      f"Score {player_1_score}:{player_2_score}")
+                                if player_1_score == 0 and player_2_score == 0:
+                                    pass
+                                else:
+                                    print(f"            Match: {player_1_name} vs {player_2_name} ---- "
+                                        f"Score {player_1_score}:{player_2_score}")
 
                 for key, item in answers.items():
                     if item == answer:
