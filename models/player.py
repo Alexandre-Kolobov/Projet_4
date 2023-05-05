@@ -27,6 +27,8 @@ class Player():
         # Le parametre "default" nous permet de definir une fonction pour ces objets imbriqués.
         # o represente l'objet imbriqué
         # json_string = json.dumps(self.tournament, default=lambda o: o.__dict__, indent=4)
+        if not os.path.exists(data_path):
+            os.mkdir(data_path)
 
         file_name = (self.first_name + " " + self.family_name + " " + "p" + str(self.counter))
         with open(data_path + file_name, "w") as json_file:
@@ -35,6 +37,9 @@ class Player():
     @staticmethod
     def give_database_players():
         """Return une list des joueurs existants"""
+        if not os.path.exists(data_path):
+            os.mkdir(data_path)
+
         database_players = []
         for filename in os.listdir(data_path):
             database_players.append(filename)
@@ -44,6 +49,9 @@ class Player():
     @staticmethod
     def load_player(id):
         """Charge un joueur"""
+        if not os.path.exists(data_path):
+            os.mkdir(data_path)
+
         for file_name in os.listdir(data_path):
             if id in file_name:
                 with open(data_path + file_name) as myfile:

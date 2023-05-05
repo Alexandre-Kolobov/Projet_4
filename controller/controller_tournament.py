@@ -317,7 +317,10 @@ class Controller_tournament:
                     answer_tournament = self.view_tournament.show_tournament_menu()
                     if answer_tournament == "Reprendre":
                         tournament_informations = self.load_tournament(database_tournois, tournois_info_dict)
-                        return tournament_informations
+                        if tournament_informations is None:
+                            pass
+                        else:
+                            return tournament_informations
 
                     if answer_tournament == "Creer":
                         tournament_informations = self.new_tournament(database_tournois)

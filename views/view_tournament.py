@@ -170,7 +170,7 @@ class View_tournament():
         """Selectionne un tournois dans la db"""
         while True:
             print("----------------------------------------")
-            print("Voici la liste des tournois existant dans la base:")
+            print("Voici la liste des tournois existant non terminé dans la base:")
 
             for tournois in database_tournois:
                 if tournois_info_dict[tournois]['date_finish'] == "":
@@ -191,31 +191,38 @@ class View_tournament():
                         print(f"    Date de fin - {tournois_info_dict[tournois]['date_finish_schedule']}")
                         print(f"    Round en cours - Round {tournois_info_dict[tournois]['round_current']}")
                 else:
-                        print(f"Tournoi - {tournois_info_dict[tournois]['name']}")
-                        print(f"    Nombre de rounds: {tournois_info_dict[tournois]['round_all']}")
-                        print(f"    Participants {tournois_info_dict[tournois]['nomber_tournament_players']} / {tournois_info_dict[tournois]['tournament_min_players']} (min nécessaire)")
-                        print(f"    Statut - Terminé")
-                        print(f"    Date du début - {tournois_info_dict[tournois]['date_start']}")
-                        print(f"    Date de fin - {tournois_info_dict[tournois]['date_finish']}")
-                        print("    Round en cours - Terminé")
+                    pass
+                    # print(f"Tournoi - {tournois_info_dict[tournois]['name']}")
+                    # print(f"    Nombre de rounds: {tournois_info_dict[tournois]['round_all']}")
+                    # print(f"    Participants {tournois_info_dict[tournois]['nomber_tournament_players']} / {tournois_info_dict[tournois]['tournament_min_players']} (min nécessaire)")
+                    # print(f"    Statut - Terminé")
+                    # print(f"    Date du début - {tournois_info_dict[tournois]['date_start']}")
+                    # print(f"    Date de fin - {tournois_info_dict[tournois]['date_finish']}")
+                    # print("    Round en cours - Terminé")
 
             print("----------------------------------------")
             tournois_selected = input("Merci de selectionner un tournois: ").strip()
 
-            if tournois_selected in database_tournois:
+            if tournois_selected in database_tournois and tournois_info_dict[tournois_selected]['date_finish'] == "":
                 print("----------------------------------------")
                 print(f"Vous avez selectionné le tournois {tournois_selected}")
                 return tournois_selected
-            else:
-                print("----------------------------------------")
-                print(f"Le tournois {tournois_selected} n'existe pas dans la base")
-                print("Voulez-vous selectionner un autre tournois?")
+            else:            
+                if tournois_selected in database_tournois and tournois_info_dict[tournois_selected]['date_finish'] != "":
+                    print("----------------------------------------")
+                    print(f"Il n'est pas possible de sélectionner un tournoi finit {tournois_selected}.")
+                    print(f"Si vous souhaitez consulter ses informations, veuillez utiliser le menu \"Rapports\".")
+                else:
+                    print("----------------------------------------")
+                    print(f"Le tournois {tournois_selected} n'existe pas dans la base")
+
+                print("Voulez-vous sélectionner un autre tournois?")
                 print("----------------------------------------")
                 print("    1. Oui")
                 print("    2. Non")
 
                 answers = {"Oui": "1",
-                           "Non": "2"}
+                        "Non": "2"}
 
                 answer = input("Votre choix: ").strip()
                 if answer in answers.values() and answer == answers["Oui"]:

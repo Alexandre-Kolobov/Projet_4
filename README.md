@@ -18,31 +18,41 @@ How to use it:
 	1. Rapports - this choice will allow you to consult rapports for each tournament
 		1. Afficher la liste des tournois existant dans la base - show all saved tournaments 
 		2. Afficher la liste des joueurs existant dans la base - show all saved players 
-		3. Afficher les informations detaillées d'un tournois - show detailed informations about one tournament
-		    1. Afficher les joueurs participants - show players in tournament
+		3. Afficher les informations détaillées d'un tournoi - show detailed informations about one tournament
+		    1. Afficher les joueurs participant - show players in tournament
 			2. Afficher les matchs joués - show played matchs
 			3. Revenir au menu des rapports - back to the main menu 
 			4. Quitter le logiciel - to close the program
 		4. Revenir au menu des tournois - back to the main menu
-		5. Quitter le logiciel - to close the program
-		
-
-	2. Sélectionner un tournois dans la base des tournois - this choice will allow you to load one tournament (you can continue the tournament or check its information if the tournament is finished)
-		If the tournament is finished you will see:
-			1. Afficher les joeurs participants au tournoi - show players in tournament
-			2. Afficher les matchs - show played matchs
-			3. Revenir au menu des tournois - back to the main menu
-			4. Quitter le logiciel - to close the program
-		If the tournament is not finished you will resume from the place it was saved
-		
-	3. Créer un nouveau tournois - this choice allow you to create a new tournament and also to create new players
-		After entering name, place and additional infromations of tournament, you will see this menu:
-		    1. Afficher la liste des joueurs existant dans la base  - show all saved tournaments 
-			2. Afficher la liste des joueurs participant au tournoi - show players in tournament
-			3. Ajouter un joueur au tournois - add player from the detabase to tournament
-			4. Créer un nouveau joueur - create a new player
-			5. Démmarer le tournois - start tournament
-			6. Sauvegarder et quitter - to close the program
-			7. Revenir au menu des tournois - back to the main menu
+		5. Quitter le logiciel - to save and close the program
 	
-	4. Quitter le logiciel - to close the program
+	2. Joueurs - this choice will allow you to consult players menu
+	    1. Afficher la liste des joueurs existant dans la base - show all saved tournaments  
+    	2. Ajouter un nouveau joueur dans la base - allow you to add new player
+    	3. Revenir au menu principal - back to the main menu
+    	4. Sauvegarder et quitter - to save and close the program
+
+	3. Tournois
+		1. Reprendre un tournoi dans la base des tournois - this choice will allow you to load one tournament
+			When the tournament is finished you will see:
+				1. Afficher les joeurs participants au tournoi - show players in tournament
+				2. Afficher les matchs - show played matchs
+				3. Revenir au menu des tournois - back to the main menu
+				4. Quitter le logiciel - to close the program
+		2. Créer un nouveau tournois - allow you to create a new tournament
+		    1. Afficher la liste des joueurs existant dans la base - show all saved players 
+			2. Afficher la liste des joueurs participant au tournoi - show players in tournament
+			3. Sélectionner des joueurs - allows you to choice and add saved players
+			4. Créer un nouveau joueur et l'ajouter au tournoi - allows you to create and add save a new player
+			5. Démarrer le tournoi - to start tournament
+				When the tournament is finished you will see:
+					1. Afficher les joeurs participants au tournoi - show players in tournament
+					2. Afficher les matchs - show played matchs
+					3. Revenir au menu des tournois - back to the main menu
+					4. Quitter le logiciel - to close the program
+			6. Revenir au menu des tournois - back to the tournament menu
+			7. Sauvegarder et quitter - to save and close the program 
+		3. Revenir au menu principal - back to the main menu
+		4. Quitter le logiciel - to save and close the program
+
+	4. Quitter le logiciel - to save and close the program

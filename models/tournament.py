@@ -85,6 +85,9 @@ class Tournament():
         # Le parametre "default" nous permet de definir une fonction pour ces objets imbriqués.
         # o represente l'objet imbriqué
         # json_string = json.dumps(self.tournament, default=lambda o: o.__dict__, indent=4)
+        if not os.path.exists(data_path):
+            os.mkdir(data_path)
+            
         file_name = (self.name)
         with open(data_path + file_name, "w") as json_file:
             json.dump(self.__dict__, json_file, default=lambda o: o.__dict__, indent=4)
@@ -102,6 +105,9 @@ class Tournament():
     @staticmethod
     def give_database_tournaments():
         """Return la liste des tournois enregistrés"""
+        if not os.path.exists(data_path):
+            os.mkdir(data_path)
+
         database_tournaments = []
         for filename in os.listdir(data_path):
             database_tournaments.append(filename)
@@ -111,6 +117,9 @@ class Tournament():
     @staticmethod
     def load_tournament(tournois):
         """Charge un tournois enregistré"""
+        if not os.path.exists(data_path):
+            os.mkdir(data_path)
+
         with open(data_path + tournois) as myfile:
             json_dict = json.load(myfile)
 
