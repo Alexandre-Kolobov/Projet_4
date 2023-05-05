@@ -28,7 +28,7 @@ class Player():
         # o represente l'objet imbriqué
         # json_string = json.dumps(self.tournament, default=lambda o: o.__dict__, indent=4)
         if not os.path.exists(data_path):
-            os.mkdir(data_path)
+            os.makedirs(data_path)
 
         file_name = (self.first_name + " " + self.family_name + " " + "p" + str(self.counter))
         with open(data_path + file_name, "w") as json_file:
@@ -38,7 +38,7 @@ class Player():
     def give_database_players():
         """Return une list des joueurs existants"""
         if not os.path.exists(data_path):
-            os.mkdir(data_path)
+            os.makedirs(data_path)
 
         database_players = []
         for filename in os.listdir(data_path):
@@ -50,7 +50,7 @@ class Player():
     def load_player(id):
         """Charge un joueur"""
         if not os.path.exists(data_path):
-            os.mkdir(data_path)
+            os.makedirs(data_path)
 
         for file_name in os.listdir(data_path):
             if id in file_name:
@@ -72,7 +72,7 @@ class Player():
             with open(filename, "r") as myfile:
                 cls.counter = int(myfile.read())
         else:
-            os.mkdir(counter_path)
+            os.makedirs(counter_path)
             filename = (counter_path + counter_filename)
             with open(filename, "w") as myfile:
                 myfile.write(str(cls.counter))
