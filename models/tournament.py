@@ -129,8 +129,6 @@ class Tournament():
 
             json_dict = cls.load_tournament(filename_without_extension)
             tournament_name = json_dict["name"]
-
-
             database_tournaments.append(tournament_name)
 
         return database_tournaments

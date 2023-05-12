@@ -46,7 +46,7 @@ class Player():
             filename_without_extension = filename[:-5]
 
             json_dict = cls.load_player(filename_without_extension)
-            player_name = json_dict["first_name"] + " " + json_dict["family_name"] + " " + "p" + str(json_dict["counter"])
+            player_name = f"{json_dict['first_name']} {json_dict['family_name']} p{str(json_dict['counter'])}"
 
             database_players.append(player_name)
 
