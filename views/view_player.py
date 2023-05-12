@@ -23,12 +23,12 @@ class View_player():
                     print("Le nom du joueur doit contenir que des lettres et ne pas être vide")
 
             while True:
-                birth_date = input("Entrer la date de naissance du joueur (DDMMYYYY): ").strip()
+                birth_date = input("Entrer la date de naissance du joueur (DD/MM/YYYY): ").strip()
                 try:
-                    datetime.strptime(birth_date, "%d%m%Y")
+                    datetime.strptime(birth_date, "%d/%m/%Y")
                     break
                 except (ValueError, TypeError):
-                    print("La date de naissance du joueur doit être au format DDMMYYYY")
+                    print("La date de naissance du joueur doit être au format DD/MM/YYYY")
 
             player_name_firstname = (first_name + " " + family_name).lower()
             for i in range(len(database_players)):
@@ -55,7 +55,7 @@ class View_player():
                     return None
             else:
                 print(f"Le joueur {first_name} {family_name} "
-                      "a été ajouté dans la base des joueurs avec identifiant p{counter}")
+                      f"a été ajouté dans la base des joueurs avec identifiant p{counter}")
                 return first_name, family_name, birth_date
 
     def show_players(self, players):
@@ -220,7 +220,7 @@ class View_player():
                                     print("----------------------------------------")
                                     print(f"Le joueur {player_selected} participe déja à ce tournois")
                                 else:
-                                    players_to_return.append(player_selected)
+                                    players_to_return.append(player_selected_id_splitted)
                                     print("----------------------------------------")
                                     print(f"Le joueur {player_selected} est ajouté au tournois")
                             else:

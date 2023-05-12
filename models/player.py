@@ -30,19 +30,25 @@ class Player():
         if not os.path.exists(data_path):
             os.makedirs(data_path)
 
-        file_name = (self.first_name + " " + self.family_name + " " + "p" + str(self.counter))
+        # file_name = (self.first_name + " " + self.family_name + " " + "p" + str(self.counter))
+        file_name = ("p" + str(self.counter) + ".json")
         with open(data_path + file_name, "w") as json_file:
             json.dump(self.__dict__, json_file, indent=4)
 
-    @staticmethod
-    def give_database_players():
+    @classmethod
+    def give_database_players(cls):
         """Return une list des joueurs existants"""
         if not os.path.exists(data_path):
             os.makedirs(data_path)
 
         database_players = []
         for filename in os.listdir(data_path):
-            database_players.append(filename)
+            filename_without_extension = filename[:-5]
+
+            json_dict = cls.load_player(filename_without_extension)
+            player_name = json_dict["first_name"] + " " + json_dict["family_name"] + " " + "p" + str(json_dict["counter"])
+
+            database_players.append(player_name)
 
         return database_players
 

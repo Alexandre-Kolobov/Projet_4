@@ -8,7 +8,7 @@ class Controller_player:
 
     def load_players_from_tournament(self, player):
         """Chargement d'un joueur dans une instance de classe"""
-        player_name = (player["first_name"] + " " + player["family_name"] + " " + "p" + str(player["counter"]))
+        player_name = ("p" + str(player["counter"]))
         player_to_load = Player.load_player(player_name)
 
         player_to_add = Player(player_to_load["first_name"],

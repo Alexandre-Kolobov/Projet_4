@@ -103,7 +103,7 @@ class Tournament():
         if not os.path.exists(data_path):
             os.makedirs(data_path)
 
-        file_name = (self.name)
+        file_name = (self.name + ".json")
         with open(data_path + file_name, "w") as json_file:
             json.dump(self.__dict__, json_file, default=lambda o: o.__dict__, indent=4)
 
@@ -117,15 +117,21 @@ class Tournament():
 
         return min_players
 
-    @staticmethod
-    def give_database_tournaments():
+    @classmethod
+    def give_database_tournaments(cls):
         """Return la liste des tournois enregistrés"""
         if not os.path.exists(data_path):
             os.makedirs(data_path)
 
         database_tournaments = []
         for filename in os.listdir(data_path):
-            database_tournaments.append(filename)
+            filename_without_extension = filename[:-5]
+
+            json_dict = cls.load_tournament(filename_without_extension)
+            tournament_name = json_dict["name"]
+
+
+            database_tournaments.append(tournament_name)
 
         return database_tournaments
 
@@ -135,7 +141,7 @@ class Tournament():
         if not os.path.exists(data_path):
             os.makedirs(data_path)
 
-        with open(data_path + tournois) as myfile:
+        with open(data_path + tournois + ".json") as myfile:
             json_dict = json.load(myfile)
 
             return json_dict
