@@ -56,3 +56,8 @@ How to use it:
 		4. Quitter le logiciel - to save and close the program
 
 	4. Quitter le logiciel - to save and close the program
+	
+How to generate and check an flake8 html report:
+	Please use this command in your prompt : flake8 --format=html --htmldir=flake8-report
+	This will generate a new html report in flake8-report repository.
+	To open it, plase use your web browser to open the file index.html
