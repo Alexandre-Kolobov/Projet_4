@@ -108,7 +108,6 @@ class Controller_tournament:
                 players = tournament.give_list_players()
                 current_round = tournament.give_current_round()
                 played_pairs = self.played_pairs(tournament)
-
                 players = self.shuffle_players(players, current_round, played_pairs)
                 # played_pairs est un dictionnaire contenant tous matchs(jouers/score)
                 played_pairs_list = list(played_pairs)
@@ -178,7 +177,6 @@ class Controller_tournament:
 
                 if self.round_controller.check_finish_status(round) is False:
                     matchs_list_to_play = self.round_controller.give_list_matchs(round)
-                    self.round_controller.show_matchs(matchs_list_to_play, round)
                     # Continuer tournament à partir d'un round (les matchs sont crées mais pas joués compeltement)
                     if len(matchs_list_to_play) != 0:
                         matchs_list_to_play = self.round_controller.give_list_matchs(round)
